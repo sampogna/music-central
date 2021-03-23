@@ -49,3 +49,7 @@ nav a{
 span.fas.fa-music {
     font-size: 3.6rem !important;
 }
+
+i{
+    cursor: pointer;
+}
