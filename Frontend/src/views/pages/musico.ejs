@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <%- include('../partials/head'); %>
+    </head>
+    <body>
+        <%- include('../partials/header'); %>
+        <div class="row justify-content-center mt-4">
+            <div class="col-12">
+                <div class="container p-3 body-page" style="height: 100%">
+                    <div class="row" style="padding: 1%;";>
+                        <button id="add" type="button" class="btn btn-success"><i class="fas fa-plus text-light">&nbsp;Adicionar novo usuário</i></button>
+                    </div>
+                    <hr>
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <td class="text-light text-center">#</td>
+                            <td class="text-light text-center">Nome</td>
+                            <td class="text-light text-center">Email</td>
+                            <td class="text-light text-center">Senha</td>
+                            <td class="text-light text-center">Login</td>
+                            <td class="text-light text-center">Estilos</td>
+                            <td class="text-light text-center">Instrumentos</td>
+                            <td class="text-light text-center">Opções</td>
+                        </thead>
+                        <tbody id="list">
+                            <tr>
+                                <td class="text-light text-center">1</td>
+                                <td class="text-light text-center">a</td>
+                                <td class="text-light text-center">a</td>
+                                <td class="text-light text-center">a</td>
+                                <td class="text-light text-center">a</td>
+                                <td class="text-light text-center">a</td>
+                                <td class="text-light text-center">a</td>
+                                <!-- <i onclick="console.log($(this).closest('td').closest('tr').find('td')[0].innerText);$(this).closest('td').closest('tr').remove()" class="text-warning fas fa-pencil-alt"></i> -->
+                                <td class="text-center"> 
+                                    <i onclick="editRegister($(this).closest('td').closest('tr'))" class="text-warning fas fa-pencil-alt"></i>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <i onclick="deleteRegister($(this).closest('td').closest('tr'))" class="text-danger fas fa-trash-alt"></i>
+                                </td>
+                            </tr>
+                            
+
+                        </tbody>
+                    </table>
+                    <!--  Inserir conteudo da pagina aqui -->
+                    <p> Inserir conteúdo aqui.  </p>
+
+                </div>
+            </div>
+        </div>
+        <%- include('../partials/scripts'); %>
+    </body>
+</html>
