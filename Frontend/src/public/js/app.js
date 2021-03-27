@@ -1,21 +1,21 @@
-const Id = null;
-const Nome = null;
-const Email = null;
-const Senha = null;
-const Login = null;
-const Descricao = null;
-const Telefone = null;
-const DataNascimento = null;
+var Id = null;
+var Nome = null;
+var Email = null;
+var Senha = null;
+var ConfSenha = null;
+var Login = null;
+var Descricao = null;
+var Telefone = null;
+var DataNascimento = null;
 
-const Status = null;
-const Tipo = null;
+var Status = null;
+var Tipo = null;
 
-const Endereco = null;
+var Endereco = null;
 
-const RedesSociais = null;
-
-const Estilos = [];
-const Instrumentos = [];
+var RedesSociais = [];
+var Estilos = [];
+var Instrumentos = [];
 
 var contRedesSociais = 1;
 var contEstilosMusicais = 1;
@@ -70,9 +70,9 @@ function novaRede(cont){
     return '<hr>'+
         '<div style="padding-top: 0px; class="RedesSociais">'+
             '<label style="padding-top: 10px;">Nome Rede social '+cont.toString()+' </label>' +
-            '<input class="form-control nomeRedeSocial">'+
+            '<input id="nomeRedeSocial'+contRedesSociais.toString()+'" class="form-control nomeRedeSocial">'+
             '<label style="padding-top: 10px;">Link Rede social '+contRedesSociais.toString()+' </label>' +
-            '<input class="form-control linkRedeSocial">'+
+            '<input id="linkRedeSocial'+contRedesSociais.toString()+'" class="form-control linkRedeSocial">'+
         '</div>';
 }
 
@@ -133,9 +133,25 @@ async function modalCreate(){
         '<input  id="confSenha" class="form-control">' +
         '<label style="padding-top: 10px;" for="login">Nome de usuário</label>' +
         '<input  id="login" class="form-control">'+
+        '<label style="padding-top: 10px;" for="desc">Sobre você</label>' +
+        '<input  id="desc" class="form-control">'+
+        '<label style="padding-top: 10px;" for="telefone">Telefone</label>' +
+        '<input  id="telefone" class="form-control">'+
         '<label style="padding-top: 10px;" for="dataNasc">Data Nascimento</label>' +
         '<input type="date" id="dataNasc" class="form-control">',
         confirmButtonText: 'Next &rarr;',
+        preConfirm: () => {
+            Nome = document.getElementById('nome').value;
+            Email = document.getElementById('email').value;
+            Senha = document.getElementById('senha').value;
+            ConfSenha = document.getElementById('confSenha').value;
+            Login = document.getElementById('login').value;
+            Descricao = document.getElementById('desc').value;
+            Telefone = document.getElementById('telefone').value;
+            DataNascimento = document.getElementById('dataNasc').value;
+            
+
+            }
         },
         {
             title:"Endereço",
@@ -143,7 +159,14 @@ async function modalCreate(){
             html:
             Estados+
             '<label style="padding-top: 10px;" for="cidade">Cidade</label>' +
-            '<input  id="cidade" class="form-control">'
+            '<input  id="cidade" class="form-control">',
+            preConfirm: () => {
+                Endereco = new Object();
+                Endereco.cidade = document.getElementById('cidade').value;
+                var e = document.getElementById("estados");
+                Endereco.UF = e.value;
+                Endereco.Estado = e.options[e.selectedIndex].text;
+            }
         },
         {
             title:"Redes Sociais",
@@ -152,13 +175,28 @@ async function modalCreate(){
             '<div id="socials">'+
                 '<div class="RedesSociais">'+
                     '<label style="padding-top: 10px;" for="cidade">Nome Rede social '+contRedesSociais.toString()+' </label>' +
-                    '<input class="form-control nomeRedeSocial">'+
+                    '<input id="nomeRedeSocial'+contRedesSociais.toString()+'" class="form-control nomeRedeSocial">'+
                     '<label style="padding-top: 10px;" for="cidade">Link Rede social '+contRedesSociais.toString()+' </label>' +
-                    '<input class="form-control linkRedeSocial">'+
+                    '<input id="linkRedeSocial'+contRedesSociais.toString()+'" class="form-control linkRedeSocial">'+
                 '</div>'+    
             '</div>'+
             '<br>' +
-            '<button id="add" type="button" onClick="addRede()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>'
+            '<button id="add" type="button" onClick="addRede()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>',
+            preConfirm: () => {
+                console.log("contRedesSociais = ", contRedesSociais);
+                for (let index = 1; index <= contRedesSociais; index++) {
+                    var nome = document.getElementById("nomeRedeSocial"+index.toString());
+                    var link = document.getElementById("linkRedeSocial"+index.toString());
+                    var obj = new Object();
+                    obj.nome = nome.value;
+                    obj.link = link.value;
+                    RedesSociais.push(obj)
+                }
+                console.log("RedesSociais = ", RedesSociais);
+                
+                
+                //showInfo();
+            }
             
         },
         {
@@ -188,16 +226,19 @@ async function modalCreate(){
             '<button id="add" type="button" onClick="addInstrumento()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>'
         },
       ]).then((result) => {
-        if (result.value) {
-          const answers = JSON.stringify(result.value)
+        if (result.isConfirmed) {
           Swal.fire({
             title: 'All done!',
             html: `
               Your answers:
-              <pre><code>${answers}</code></pre>
+              <pre><code>Batata</code></pre>
             `,
             confirmButtonText: 'Lovely!'
           })
+        }
+        else{
+            resetInfos();
+
         }
       })
 
@@ -292,6 +333,58 @@ function makeRow()
     </td>
     `;
     return html;
+
+
+}
+
+function resetInfos(){
+
+    Id = null;
+    Nome = null;
+    Email = null;
+    Senha = null;
+    Login = null;
+    Descricao = null;
+    Telefone = null;
+    DataNascimento = null;
+
+    Status = null;
+    Tipo = null;
+
+    Endereco = null;
+
+    RedesSociais = [];
+    Estilos = [];
+    Instrumentos = [];
+
+    contRedesSociais = 1;
+    contEstilosMusicais = 1;
+
+}
+
+function showInfo()
+{
+    console.log("Id = ", Id);
+    console.log("Nome = ", Nome);
+    console.log("Email = ", Email);
+    console.log("Senha = ", Senha);
+    console.log("Login = ", Login);
+    console.log("Descricao = ", Descricao);
+    console.log("Telefone = ", Telefone);
+    console.log("DataNascimento = ", DataNascimento);
+
+    console.log("Status = ", Status);
+    console.log("Tipo = ", Tipo);
+
+    console.log("Endereco = ", Endereco);
+
+    console.log("RedesSociais = ", RedesSociais);
+
+    console.log("Estilos = ", Estilos)
+    console.log("Instrumentos = ", Instrumentos)
+
+    console.log("contRedesSociais = ", contRedesSociais);
+    console.log("contEstilosMusicais = ", contEstilosMusicais);
 
 
 }
