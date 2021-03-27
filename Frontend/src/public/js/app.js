@@ -70,9 +70,9 @@ function novaRede(cont){
     return '<hr>'+
         '<div style="padding-top: 0px; class="RedesSociais">'+
             '<label style="padding-top: 10px;">Nome Rede social '+cont.toString()+' </label>' +
-            '<input id="nomeRedeSocial'+contRedesSociais.toString()+'" class="form-control nomeRedeSocial">'+
+            '<input id="nomeRedeSocial'+cont.toString()+'" class="form-control">'+
             '<label style="padding-top: 10px;">Link Rede social '+contRedesSociais.toString()+' </label>' +
-            '<input id="linkRedeSocial'+contRedesSociais.toString()+'" class="form-control linkRedeSocial">'+
+            '<input id="linkRedeSocial'+cont.toString()+'" class="form-control">'+
         '</div>';
 }
 
@@ -80,7 +80,7 @@ function novoEstilo(cont){
     return '<hr>'+
     '<div style="padding-top: 0px; class="EstilosMusicais">'+
         '<label style="padding-top: 10px;">Nome Estilo Musical '+cont.toString()+'</label>' +
-        '<input class="form-control nomeEstiloMusical">'+
+        '<input id="nomeEstiloMusical'+cont.toString()+'" class="form-control">'+
     '</div>';
 }
 
@@ -88,7 +88,7 @@ function novoInstrumento(cont){
     return '<hr>'+
     '<div style="padding-top: 0px; class="InstrumentosMusicais">'+
         '<label style="padding-top: 10px;">Nome Instrumento Musical '+cont.toString()+'</label>' +
-        '<input class="form-control nomeInstrumentoMusical">'+
+        '<input id="nomeInstrumentoMusical'+cont.toString()+'" class="form-control">'+
     '</div>';
 }
 
@@ -175,9 +175,9 @@ async function modalCreate(){
             '<div id="socials">'+
                 '<div class="RedesSociais">'+
                     '<label style="padding-top: 10px;" for="cidade">Nome Rede social '+contRedesSociais.toString()+' </label>' +
-                    '<input id="nomeRedeSocial'+contRedesSociais.toString()+'" class="form-control nomeRedeSocial">'+
+                    '<input id="nomeRedeSocial'+contRedesSociais.toString()+'" class="form-control">'+
                     '<label style="padding-top: 10px;" for="cidade">Link Rede social '+contRedesSociais.toString()+' </label>' +
-                    '<input id="linkRedeSocial'+contRedesSociais.toString()+'" class="form-control linkRedeSocial">'+
+                    '<input id="linkRedeSocial'+contRedesSociais.toString()+'" class="form-control">'+
                 '</div>'+    
             '</div>'+
             '<br>' +
@@ -185,17 +185,14 @@ async function modalCreate(){
             preConfirm: () => {
                 console.log("contRedesSociais = ", contRedesSociais);
                 for (let index = 1; index <= contRedesSociais; index++) {
-                    var nome = document.getElementById("nomeRedeSocial"+index.toString());
-                    var link = document.getElementById("linkRedeSocial"+index.toString());
+                    var nomeRedeSocial = document.getElementById("nomeRedeSocial"+index.toString());
+                    var linkRedeSocial = document.getElementById("linkRedeSocial"+index.toString());
                     var obj = new Object();
-                    obj.nome = nome.value;
-                    obj.link = link.value;
-                    RedesSociais.push(obj)
+                    obj.nome = nomeRedeSocial.value;
+                    obj.link = linkRedeSocial.value;
+                    if(obj.nome && obj.link)RedesSociais.push(obj);
                 }
                 console.log("RedesSociais = ", RedesSociais);
-                
-                
-                //showInfo();
             }
             
         },
@@ -206,11 +203,19 @@ async function modalCreate(){
             '<div id="estilos">'+
                 '<div class="EstilosMusicais">'+
                     '<label style="padding-top: 10px;">Nome Estilo Musical '+contEstilosMusicais.toString()+'</label>' +
-                    '<input class="form-control nomeEstiloMusical">'+
+                    '<input id="nomeEstiloMusical'+contEstilosMusicais.toString()+'" class="form-control">'+
                 '</div>'+    
             '</div>'+
             '<br>' +
-            '<button id="add" type="button" onClick="addEstilo()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>'
+            '<button id="add" type="button" onClick="addEstilo()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>',
+            preConfirm: () => {
+                console.log("contEstilosMusicais = ", contEstilosMusicais);
+                for (let index = 1; index <= contEstilosMusicais; index++) {
+                    var nomeEstiloMusical = document.getElementById("nomeEstiloMusical"+index.toString());
+                    if(nomeEstiloMusical)Estilos.push(nomeEstiloMusical.value);
+                }
+                console.log("Estilos = ", Estilos);
+            }
         },
         {
             title:"Instrumentos",
@@ -219,22 +224,32 @@ async function modalCreate(){
             '<div id="instrumentos">'+
                 '<div class="InstrumentosMusicais">'+
                     '<label style="padding-top: 10px;">Nome Instrumento Musical '+contInstrumentos.toString()+'</label>' +
-                    '<input class="form-control nomeInstrumentoMusical">'+
+                    '<input id="nomeInstrumentoMusical'+contInstrumentos.toString()+'" class="form-control">'+
                 '</div>'+    
             '</div>'+
             '<br>' +
-            '<button id="add" type="button" onClick="addInstrumento()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>'
+            '<button id="add" type="button" onClick="addInstrumento()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>',
+            preConfirm: () => {
+                console.log("contInstrumentos = ", contInstrumentos);
+                for (let index = 1; index <= contInstrumentos; index++) {
+                    var nomeInstrumento = document.getElementById("nomeInstrumentoMusical"+index.toString());
+                    if(nomeInstrumento)Instrumentos.push(nomeInstrumento.value);
+                    
+                }
+                console.log("Instrumentos = ", Instrumentos);
+            }
         },
       ]).then((result) => {
+          console.log(result);
         if (result.isConfirmed) {
           Swal.fire({
-            title: 'All done!',
+            title: 'Pronto!',
             html: `
-              Your answers:
-              <pre><code>Batata</code></pre>
+              O usuário foi criado.
             `,
-            confirmButtonText: 'Lovely!'
+            confirmButtonText: 'Ótimo!'
           })
+          resetInfos();
         }
         else{
             resetInfos();
