@@ -1,9 +1,24 @@
 import UserMusico from "../entities/UserMusico";
 
+const base_url:string = "http://localhost:5000/api/musico/";
+
 class MusicoController {
-    defaultMethod() {
+    listar() {
       return new UserMusico("testeInd", "teste@gmail", "123", "jacs");
     }
+
+    adicionar(){
+
+    }
+
+    alterar(){
+
+    }
+
+    excluir(){
+
+    }
+
   }
   
   export = new MusicoController();

@@ -1,8 +1,12 @@
 export default class ErrorHandler extends Error {
-    constructor(
-      public statusCode: number,
-      public message: string
-    ) {
-      super();
+    
+  public statusCode: number;
+  public message: string;
+  public retorno: string;
+  constructor() {
+    super();
+    this.statusCode = 0;
+    this.message = "";
+    this.retorno = "";
     }
   }
