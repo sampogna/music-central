@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import MasterRouter from './routers/MasterRouter';
-import path from "path";
+import bodyParser from "body-parser";
 
 
 // load the environment variables from the .env file
@@ -18,13 +18,17 @@ class Server {
   public router = MasterRouter;
 }
 
+
 // initialize server app
 const server = new Server();
+server.app.use(bodyParser.urlencoded({extended: true}));
+server.app.use(bodyParser.json());
 
 server.app.use('/', server.router);
 server.app.set('view engine', 'ejs');
 server.app.set('views','src/views');
 server.app.use(express.static("src/public"));
+
 
 
 // make server listen on some port

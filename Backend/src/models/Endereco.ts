@@ -1,7 +1,7 @@
 
 
 export default class Endereco {
-    private Id?: number | null = null;
+    public Id?: number | null = null;
     public Usuario: number;
     public UF: string;
     public Estado: string;

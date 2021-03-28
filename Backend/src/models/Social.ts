@@ -4,7 +4,7 @@ export default class Social {
     public Nome: string;
     public Link: string;
   
-    constructor(nome: string, user: number, link: string) {
+    constructor(user: number, nome: string, link: string) {
       this.Nome = nome;
       this.Usuario = user;
       this.Link = link;

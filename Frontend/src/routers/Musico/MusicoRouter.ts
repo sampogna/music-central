@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response, Router } from 'express';
-import MusicoController from '../../controllers/MusicoController';
+import { NextFunction, Request, Response, Router } from "express";
+import MusicoController from "../../controllers/MusicoController";
 
 class MusicoRouter {
   private _router = Router();
@@ -17,13 +17,16 @@ class MusicoRouter {
    * Connect routes to their matching controller endpoints.
    */
   private _configure() {
-    this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
+    this._router.get("/", (req: Request, res: Response, next: NextFunction) => {
       res.render("pages/musico");
     });
-    this._router.post('/create', (req: Request, res: Response, next: NextFunction) => {
-      console.log("req.body", req.);
-      res.json(this._controller.excluir(req.body));
-    });
+
+    this._router.post(
+      "/create",
+      async (req: Request, res: Response, next: NextFunction) => {
+        await this._controller.adicionar(req, res);
+      }
+    );
   }
 }
 
