@@ -15,8 +15,9 @@ class MusicoController {
 
     }
 
-    excluir(){
-
+    excluir(req: Request){
+      console.log(req);
+      return new Object({result:"Ok"});
     }
 
   }

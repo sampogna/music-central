@@ -129,7 +129,7 @@ async function modalCreate(){
         '<input  id="email" class="form-control">' +
         '<label style="padding-top: 10px;" for="senha">Senha</label>' +
         '<input  id="senha" class="form-control">' +
-        '<label style="padding-top: 10px;" for="confSenha">Confirme a senha</label>' +
+        '<label style="padding-top: 10px;" for="confSenha">Confirmação de senha</label>' +
         '<input  id="confSenha" class="form-control">' +
         '<label style="padding-top: 10px;" for="login">Nome de usuário</label>' +
         '<input  id="login" class="form-control">'+
@@ -137,7 +137,7 @@ async function modalCreate(){
         '<input  id="desc" class="form-control">'+
         '<label style="padding-top: 10px;" for="telefone">Telefone</label>' +
         '<input  id="telefone" class="form-control">'+
-        '<label style="padding-top: 10px;" for="dataNasc">Data Nascimento</label>' +
+        '<label style="padding-top: 10px;" for="dataNasc">Data de Nascimento</label>' +
         '<input type="date" id="dataNasc" class="form-control">',
         confirmButtonText: 'Next &rarr;',
         preConfirm: () => {
@@ -149,8 +149,7 @@ async function modalCreate(){
             Descricao = document.getElementById('desc').value;
             Telefone = document.getElementById('telefone').value;
             DataNascimento = document.getElementById('dataNasc').value;
-            
-
+            //verificaDadosObr();
             }
         },
         {
@@ -239,60 +238,46 @@ async function modalCreate(){
                 console.log("Instrumentos = ", Instrumentos);
             }
         },
-      ]).then((result) => {
-          console.log(result);
-        if (result.isConfirmed) {
-          Swal.fire({
-            title: 'Pronto!',
-            html: `
-              O usuário foi criado.
-            `,
-            confirmButtonText: 'Ótimo!'
-          })
-          resetInfos();
-        }
-        else{
-            resetInfos();
+      ]).then(() => {
 
-        }
+        Swal.fire({
+            title: 'Criando usuário...',
+            icon:'info',
+            showConfirmButton: false,
+          }).then(
+                
+            $.ajax({
+                url: "/musico/create",
+                type: "POST",
+                data: verificaDados(),
+                dataType: "json",
+                success: function (result) {
+                    setTimeout(function(){
+                        Swal.fire({
+                            title: 'Usuário criado!',
+                            icon:'success',
+                            confirmButtonText: 'OK!'
+                        })
+                    }), 20000;
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    Swal.fire({
+                        title: 'Falha ao crair usuário!',
+                        icon:'error',
+                        confirmButtonText: 'OK!'
+                      })
+                }
+            })
+
+          )
+
       })
-
-
-
-
-
-    // await Swal.fire({
-    //     title: 'Inserir novo músico',
-    //     html:
-    //         '<label for="nome">Nome</label>' +
-    //         '<input id="nome" class="swal2-input">' +
-    //         '<label for="email">Email</label>' +
-    //         '<input id="email" class="swal2-input">' +
-    //         '<label for="senha">Senha</label>' +
-    //         '<input id="senha" class="swal2-input">' +
-    //         '<label for="confSenha">Confirme a senha</label>' +
-    //         '<input id="confSenha" class="swal2-input">' +
-    //         '<label for="login">Nome de usuário</label>' +
-    //         '<input id="login" class="swal2-input">',
-    //     focusConfirm: false,
-    //     preConfirm: () => {
-    //         return [
-    //         document.getElementById('swal-input1').value,
-    //         document.getElementById('swal-input2').value
-    //         ]
-    //     }
-    // })
-
-
-
 } 
 
 $('#add').click(async function(){
     await modalCreate();
     $('#list').append(makeRow());
 });
-
-
 
 
 function deleteRegister(tr){
@@ -313,21 +298,6 @@ function editRegister(tr){
       })
 
 }
-
-
-
-
-function editRegister(tr){
-    console.log(tr);
-    Swal.fire({
-        title: 'WIP!!',
-        text: 'Modal para editar músico de id ' + tr.find('td')[0].innerText,
-        icon: 'warning',
-        confirmButtonText: 'Cool'
-      })
-
-}
-
 
 
 function makeRow()
@@ -403,3 +373,81 @@ function showInfo()
 
 
 }
+
+
+function checkEmptyString(str){
+    if(str == null) return true;
+    const emptyStringRegex = /^\s+$/;
+    if(str.length == 0) return true;
+    var isEmptyString = emptyStringRegex.test(str);
+    return isEmptyString;
+}
+
+
+function verificaDadosObr(){
+    //console.log("Entrou");
+    var lstErros = [];
+    var html2 = "";
+    if(checkEmptyString(Nome)) lstErros.push("'Nome' é obrigatório e deve ser preenchido.");
+    if(checkEmptyString(Email)) lstErros.push("'Email' é obrigatório e deve ser preenchido.");
+    if(checkEmptyString(Senha)) lstErros.push("'Senha' é obrigatório e deve ser preenchido.");
+    if(checkEmptyString(ConfSenha)) lstErros.push("'Confirmação de senha' é obrigatório e deve ser preenchido.");
+    if(checkEmptyString(Login)) lstErros.push("'Nome de usuário' é obrigatório e deve ser preenchido.");
+    if(checkEmptyString(DataNascimento)) lstErros.push("'Data de Nascimento' é obrigatório e deve ser preenchido.");
+    if(Senha != ConfSenha) lstErros.push("'Senhas' e 'Confirmação de senha' são diferentes.");
+    //console.log("lstErros = ", lstErros);
+    if(lstErros.length>0)
+    {
+        lstErros.forEach(element => {
+            html2+=element;
+            html2+="<br>";
+        });
+
+        Swal.fire({
+            title: 'Erro!',
+            icon:'error',
+            html: html2,
+            confirmButtonText: 'Ok'
+          })
+          resetInfos();
+    }
+}
+
+function verificaDados(){
+    var data = new Object();
+    data.Id = Id;
+    data.Nome = Nome;
+    data.Email = Email;
+    data.Senha = Senha;
+    data.Login = Login;
+    data.DataNascimento = DataNascimento;
+    data.Descricao = checkEmptyString(Descricao) ? null : Descricao;
+    data.Telefone = checkEmptyString(Telefone) ? null : Telefone;
+    data.Status = 'ATIVO';
+    data.Tipo = 'MUSICO';
+    data.Endereco = typeof(Endereco) == "object"? Endereco : null;
+    data.RedesSociais = RedesSociais.length>0? RedesSociais : null;
+    data.Estilos = Estilos.length>0? Estilos : null;
+    data.Instrumentos = Instrumentos.length>0? Instrumentos : null;
+    console.log("data", data);
+    return data;
+}
+
+var Id = null;
+var Nome = null;
+var Email = null;
+var Senha = null;
+var ConfSenha = null;
+var Login = null;
+var Descricao = null;
+var Telefone = null;
+var DataNascimento = null;
+
+var Status = null;
+var Tipo = null;
+
+var Endereco = null;
+
+var RedesSociais = [];
+var Estilos = [];
+var Instrumentos = [];

@@ -20,6 +20,10 @@ class MusicoRouter {
     this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
       res.render("pages/musico");
     });
+    this._router.post('/create', (req: Request, res: Response, next: NextFunction) => {
+      console.log("req.body", req.);
+      res.json(this._controller.excluir(req.body));
+    });
   }
 }
 
