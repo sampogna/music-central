@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import express from 'express';
-import MasterRouter from './routers/MasterRouter';
+import MasterRouter from './routes/MasterRouter';
 import bodyParser from "body-parser";
 
 // load the environment variables from the .env file
