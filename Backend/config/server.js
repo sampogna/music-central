@@ -5,9 +5,22 @@ var cors = require('cors');
 
 
 var app = express();
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
+
+app.locals.tiposUsuarios = {
+    "Musico": "'MUSICO'",
+    "Banda": "'BANDA'",
+    "Industria": "'INDUSTRIA'"
+};
+app.locals.tiposIndustria = {
+    "Gravadora": "'GRAVADORA'",
+    "Produtor": "'PRODUTOR'",
+    "Holding": "'HOLDING'",
+    "Local": "'LOCAL'",
+    "Estudio": "'ESTUDIO'"
+}
 
 consign()
     .include('routes')
