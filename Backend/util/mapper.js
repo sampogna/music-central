@@ -1,23 +1,18 @@
 const ResultModel = require('./ResultModel');
 
 module.exports =  class UserMapper{
-    fields = ["Id","Nome","Email","Senha","Login","DataNascimento","Descricao","Telefone","Status","Tipo","Endereco","RedesSociais","Estilos","Criador","Integrantes","TipoIndustria","Logradouro","Instrumentos"].map(v => v.toLowerCase());
-
-    source = null;
-
+    fields = ["Id","Nome","Email","Senha","Login","DataNascimento","Descricao","Telefone","Tipo","Endereco","RedesSociais","Estilos","Criador","Integrantes","TipoIndustria","Logradouro","Instrumentos"].map(v => v.toLowerCase());
     result = null;
     app = null;
 
-    dest = null;
-
-    constructor(src, appObj){
-        this.source = src;
+    constructor(appObj){
         this.app = appObj;
     }
 
-    verifyFields(){
+    verifyFields(src){
         var res = new ResultModel();
-        var keys = Object.keys(this.source);
+        var keys = Object.keys(src).map(v => v.toLowerCase());    
+        console.log("keys",keys);
         if(keys.length == 0) {
             res.addError("Objeto 'source' vazio");
             //this.result = res;
@@ -25,7 +20,7 @@ module.exports =  class UserMapper{
         }
 
         this.fields.forEach(field => {
-            if(!field.toLowerCase() in keys)
+            if(keys.indexOf(field) < 0)
             {
                 res.addError(`Campo '${field}' não está presente.`);
             }
@@ -34,69 +29,88 @@ module.exports =  class UserMapper{
         return res;
     }
 
-    UserBasicFields(){
-        var src = this.source;
+    UserBasicFields(src){
         var dstTemp = new Object();
         dstTemp.Id = src.Id;
         dstTemp.Descricao = src.Descricao;
         dstTemp.Telefone = src.Telefone;
-        dstTemp.Status = src.Status;
-        dstTemp.Endereco = src.Endereco;
-        dstTemp.RedesSociais = src.RedesSociais;
-        this.dest = dstTemp;
-
+        dstTemp.Endereco = src.Endereco? (Object.keys(src.Endereco).length>0 ? JSON.stringify(src.Endereco) : null): null;
+        dstTemp.RedesSociais = src.RedesSociais? (src.RedesSociais.length>0 ? JSON.stringify(src.RedesSociais) : null): null;
+        return dstTemp;
+        
 
     }
 
 
-    UserToMusico(){
-        var src = this.source;
+    UserToMusico(src){
         var app = this.app;
         //User Padrao
-        if(!this.dest) this.UserBasicFields();
-        var dstTemp = this.dest;
+        var dstTemp = this.UserBasicFields(src);
         // Particularidades Musico
+        console.log("app.locals.tiposUsuarios.Musico", app.locals.tiposUsuarios.Musico);
         dstTemp.Tipo = app.locals.tiposUsuarios.Musico;
-        dstTemp.Estilos = src.Estilos;
-        dstTemp.Instrumentos = src.Instrumentos ? src.Instrumentos : null;
-        dstTemp.DataNascimento = src.DataNascimento;
-        this.dest = dstTemp;
+        dstTemp.Estilos = src.Estilos? (src.Estilos.length>0 ? JSON.stringify(src.Estilos) : null): null;
+        dstTemp.Instrumentos = src.Instrumentos? (src.Instrumentos.length>0 ? JSON.stringify(src.Instrumentos) : null): null;
+        dstTemp.DataNascimento = this.formatDate(src.DataNascimento);;
+        //this.dest = dstTemp;
         return dstTemp;
 
     }
     
-    UserToBanda(){
-        var src = this.source;
+    UserToBanda(src){
         var app = this.app;
         //User Padrao
-        if(!this.dest) this.UserBasicFields();
-        var dstTemp = this.dest;
+        var dstTemp = this.UserBasicFields(src);
         // Particularidades Banda
         dstTemp.Tipo = app.locals.tiposUsuarios.Banda;
-        dstTemp.Estilos = src.Estilos;
-        dstTemp.Criador = src.Criador ? src.Criador : null;
-        dstTemp.Integrantes = src.Integrantes;
-        this.dest = dstTemp;
+        dstTemp.Estilos = src.Estilos? (src.Estilos.length>0 ? JSON.stringify(src.Estilos) : null): null;
+        dstTemp.Criador = src.Criador;
+        dstTemp.Integrantes = src.Integrantes? (src.Integrantes.length>0 ? JSON.stringify(src.Integrantes) : null): null;
+        //this.dest = dstTemp;
         return dstTemp;
        
 
     }
 
 
-    UserToIndustria(){
-        var src = this.source;
+    UserToIndustria(src){
         var app = this.app;
         //User Padrao
-        if(!this.dest) this.UserBasicFields();
-        var dstTemp = this.dest;
+        var dstTemp = this.UserBasicFields(src);
         // Particularidades Industria
         dstTemp.Tipo = app.locals.tiposUsuarios.Industria;
-        dstTemp.Estilos = src.Estilos;
-        dstTemp.Instrumentos = src.Instrumentos ? src.Instrumentos : null;
-        dstTemp.DataNascimento = src.DataNascimento;
-        this.dest = dstTemp;
+        dstTemp.TipoIndustria = this.convertTipoIndustria(src.Estilos);
+        dstTemp.Logradouro = src.Logradouro;
+        //this.dest = dstTemp;
         return dstTemp;
     }
+
+
+    formatDate(str){
+        var lst = str.split("-");
+        var y,m,d;
+        y=lst[2];
+        m=lst[1];
+        d=lst[0];
+        return [y,m,d].join("-");
+
+    }
+
+    convertTipoIndustria(str){
+        var app = this.app;
+        var json = app.locals.tiposIndustrias;
+        var opc = json[str];
+        if(typeof(opc) == "undefined"){
+            var res = new ResultModel();
+            res.addError("Falha ao obter tipo de Industria");
+            this.result = res;
+            return null;
+        }
+        return opc;
+
+    }
+
+
 
 }
 

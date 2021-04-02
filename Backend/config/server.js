@@ -14,7 +14,7 @@ app.locals.tiposUsuarios = {
     "Banda": "'BANDA'",
     "Industria": "'INDUSTRIA'"
 };
-app.locals.tiposIndustria = {
+app.locals.tiposIndustrias = {
     "Gravadora": "'GRAVADORA'",
     "Produtor": "'PRODUTOR'",
     "Holding": "'HOLDING'",

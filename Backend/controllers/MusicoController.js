@@ -1,17 +1,15 @@
 var UserMapper = require('../util/mapper');
 
-module.exports.Teste = function (app, request, response) {
+module.exports.CreateUser = function (app, request, response) {
 
   var data = request.body;
-  var map = new UserMapper(data,app);
-  var isValid = map.verifyFields().Success;
-  var mapRes = map;
-  var user = map.UserToMusico();
-
-  // console.log('data',data);
-  // console.log('map',map);
-  // console.log('user',user);
-  response.status(200).json({"isValid":isValid, "data":data,"mapRes":mapRes,"user":user});
+  var map = new UserMapper(app);
+  var isValid = map.verifyFields(data);
+  if(!isValid.Success) response.status(200).json({errors: isValid.Errors});
+  var musico = map.UserToMusico(data);
+  var banda = map.UserToBanda(data);
+  var industria = map.UserToIndustria(data);
+  response.status(200).json({"musico":musico, "banda":banda, "industria":industria});
   
 
   // var connection = app.config.db();
