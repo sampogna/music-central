@@ -1,34 +1,116 @@
+function MusicoController() {
+}
+
 var UserMapper = require('../util/mapper');
 
-module.exports.CreateUser = function (app, request, response) {
+MusicoController.prototype.CreateUser = function (app, request, response) {
 
   var data = request.body;
-  var map = new UserMapper(app);
-  var isValid = map.verifyFields(data);
+  var map = new UserMapper(app, data);
+  var isValid = map.verifyFields();
   if(!isValid.Success) response.status(200).json({errors: isValid.Errors});
   var musico = map.UserToMusico(data);
-  var banda = map.UserToBanda(data);
-  var industria = map.UserToIndustria(data);
-  response.status(200).json({"musico":musico, "banda":banda, "industria":industria});
-  
 
-  // var connection = app.config.db();
-  // var clientMySql = new app.models.MySQL_DAO(connection);
-  // clientMySql.ListUsuarios(function (error, result) {
-  //   if (!error) {
-  //     if (result.length > 0) {
-  //       response.status(200).json(result);
-  //     } else {
-  //       response.status(500).json({ error: "Internal Server Error" });
-  //     }
-  //   } else {
-  //     var res = new Object();
-  //     res.error = error;
-  //     response.status(400).json(res);
-  //   }
-  // });
+  var connection = app.config.db();
+  var clientMySql = new app.models.MySQL_DAO(connection);
+  clientMySql.CreateUsuario(industria, function (error, result) {
+    if (!error) {
+      if (result.affectedRows > 0) {
+        response.status(200).json({result: "Músico criado com sucesso!"});
+      } else {
+        response.status(500).json({ error: "Internal Server Error" });
+      }
+    } else {
+      var res = new Object();
+      res.error = error;
+      response.status(400).json(res);
+    }
+  });
 
 }
+
+MusicoController.prototype.ListUsers = function (app, request, response) {
+
+  var connection = app.config.db();
+  var clientMySql = new app.models.MySQL_DAO(connection);
+  clientMySql.ListUsuarioPorTipo(app.locals.tiposUsuarios.Musico, function (error, result) {
+    if (!error) {
+      if (result.length > 0) {
+        response.status(200).json(result);
+      } else {
+        response.status(500).json({ error: "Não há usuários nessa categoria" });
+      }
+    } else {
+      var res = new Object();
+      res.error = error;
+      response.status(400).json(res);
+    }
+  });
+
+}
+
+MusicoController.prototype.UpdateUser = function (app, request, response) {
+
+  var data = request.body;
+  data.Tipo = app.locals.tiposUsuarios.Musico;
+  var map = new UserMapper(app, data);
+  var isValid = map.verifyFields();
+  if(!isValid.Success) response.status(200).json({errors: isValid.Errors});
+  var musico = map.UserToMusico(data);
+
+  //
+  var connection = app.config.db();
+  var clientMySql = new app.models.MySQL_DAO(connection);
+  //
+
+
+  clientMySql.GetUserById(musico.Id, function (error, result) {
+    if (!error) {
+      if (result.length == 1) {
+        var user = result[0];
+        user = map.convertBack(user);
+        user = map.convertAsInserting(user);
+        var check = map.verifyFieldsUpdate(user,musico);
+        if(check.Success){
+          var dataUpdated = map.checkUpdateDiff(user,musico);
+          if(Object.keys(dataUpdated).length >0)
+          {
+            clientMySql.UpdateUsuario(dataUpdated, musico.Id, function (error, result) {
+              if (!error) {
+                if (result.affectedRows > 0) {
+                  response.status(200).json({result: "Músico atualizado com sucesso!"});
+                } else {
+                  response.status(500).json({ error: "Internal Server Error" });
+                }
+              } else {
+                var res = new Object();
+                res.error = error;
+                response.status(400).json(res);
+              }
+            });
+          }
+          else
+          {
+            response.status(500).json({ error: "Nenhum dado atualizado" });
+          }
+
+          
+
+        }
+       
+      } else {
+        response.status(500).json({ error: "Internal Server Error" });
+      }
+    } else {
+      var res = new Object();
+      res.error = error;
+      response.status(400).json(res);
+    }
+  });
+
+}
+
+module.exports = new MusicoController();
 
 /*
 MODELO?

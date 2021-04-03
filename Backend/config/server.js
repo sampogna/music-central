@@ -10,16 +10,16 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.locals.tiposUsuarios = {
-    "Musico": "'MUSICO'",
-    "Banda": "'BANDA'",
-    "Industria": "'INDUSTRIA'"
+    "Musico": "MUSICO",
+    "Banda": "BANDA",
+    "Industria": "INDUSTRIA"
 };
 app.locals.tiposIndustrias = {
-    "Gravadora": "'GRAVADORA'",
-    "Produtor": "'PRODUTOR'",
-    "Holding": "'HOLDING'",
-    "Local": "'LOCAL'",
-    "Estudio": "'ESTUDIO'"
+    "Gravadora": "GRAVADORA",
+    "Produtor": "PRODUTOR",
+    "Holding": "HOLDING",
+    "Local": "LOCAL",
+    "Estudio": "ESTUDIO"
 }
 
 consign()

@@ -1,21 +1,23 @@
 const ResultModel = require('./ResultModel');
 
 module.exports =  class UserMapper{
-    fields = ["Id","Nome","Email","Senha","Login","DataNascimento","Descricao","Telefone","Tipo","Endereco","RedesSociais","Estilos","Criador","Integrantes","TipoIndustria","Logradouro","Instrumentos"].map(v => v.toLowerCase());
+    fields = ["Id","Nome","Email","Senha","Login","DataNascimento","Descricao","Telefone","Tipo","Endereco","RedesSociais","Estilos","Criador","Integrantes","TipoIndustria","Logradouro","Instrumentos"];
     result = null;
     app = null;
+    dstObj = null;
+    src = null;
 
-    constructor(appObj){
+    constructor(appObj, src){
+        this.src = src;
         this.app = appObj;
     }
 
-    verifyFields(src){
+    verifyFields(){
+        var src = this.src;
         var res = new ResultModel();
-        var keys = Object.keys(src).map(v => v.toLowerCase());    
-        console.log("keys",keys);
+        var keys = Object.keys(src);//.map(v => v.toLowerCase());    
         if(keys.length == 0) {
             res.addError("Objeto 'source' vazio");
-            //this.result = res;
             return res;
         }
 
@@ -25,13 +27,26 @@ module.exports =  class UserMapper{
                 res.addError(`Campo '${field}' não está presente.`);
             }
         });
-        //this.result = res;
+
         return res;
     }
 
-    UserBasicFields(src){
-        var dstTemp = new Object();
+
+    getNewEmptyObj(){
+        var newObj = new Object();
+        this.fields.map(v =>newObj[v] = null);
+        return newObj;
+
+    }
+
+    UserBasicFields(){
+        var src = this.src;
+        var dstTemp = this.getNewEmptyObj();
         dstTemp.Id = src.Id;
+        dstTemp.Nome = src.Nome;
+        dstTemp.Email = src.Email;
+        dstTemp.Senha = src.Senha;
+        dstTemp.Login = src.Login;
         dstTemp.Descricao = src.Descricao;
         dstTemp.Telefone = src.Telefone;
         dstTemp.Endereco = src.Endereco? (Object.keys(src.Endereco).length>0 ? JSON.stringify(src.Endereco) : null): null;
@@ -45,13 +60,13 @@ module.exports =  class UserMapper{
     UserToMusico(src){
         var app = this.app;
         //User Padrao
-        var dstTemp = this.UserBasicFields(src);
+        var dstTemp = this.UserBasicFields();
         // Particularidades Musico
         console.log("app.locals.tiposUsuarios.Musico", app.locals.tiposUsuarios.Musico);
         dstTemp.Tipo = app.locals.tiposUsuarios.Musico;
         dstTemp.Estilos = src.Estilos? (src.Estilos.length>0 ? JSON.stringify(src.Estilos) : null): null;
         dstTemp.Instrumentos = src.Instrumentos? (src.Instrumentos.length>0 ? JSON.stringify(src.Instrumentos) : null): null;
-        dstTemp.DataNascimento = this.formatDate(src.DataNascimento);;
+        dstTemp.DataNascimento = this.formatDate(src.DataNascimento);
         //this.dest = dstTemp;
         return dstTemp;
 
@@ -79,8 +94,8 @@ module.exports =  class UserMapper{
         var dstTemp = this.UserBasicFields(src);
         // Particularidades Industria
         dstTemp.Tipo = app.locals.tiposUsuarios.Industria;
-        dstTemp.TipoIndustria = this.convertTipoIndustria(src.Estilos);
-        dstTemp.Logradouro = src.Logradouro;
+        dstTemp.TipoIndustria = this.convertTipoIndustria(src.TipoIndustria);
+        dstTemp.Logradouro = src.Logradouro? (src.Logradouro.length>0 ? JSON.stringify(src.Logradouro) : null): null;
         //this.dest = dstTemp;
         return dstTemp;
     }
@@ -110,78 +125,104 @@ module.exports =  class UserMapper{
 
     }
 
+    checkUpdateDiff(old,updated){
+        var obj = new Object();
+        var keys = Object.keys(old);
+        keys.forEach(key => {
+            if(old[key] != updated[key]) obj[key] = updated[key];
+        });
+        return obj;
 
+
+    }
+
+    verifyFieldsUpdate(old, updated){
+        var res = new ResultModel();
+        var oldKeys = Object.keys(old);//.map(v => v.toLowerCase());    
+        var updatedKeys = Object.keys(updated);//.map(v => v.toLowerCase());    
+        if(updatedKeys.length == 0) {
+            res.addError("Objeto 'source' vazio");
+            return res;
+        }
+
+        oldKeys.forEach(key => {
+            if(updatedKeys.indexOf(key) < 0)
+            {
+                res.addError(`Campo '${field}' não está presente.(Update)`);
+            }
+        });
+
+        return res;
+    }
+
+    convertBack(src){
+        var obj = this.getNewEmptyObj();
+        var keys = Object.keys(obj);
+        keys.forEach(key => {
+            switch(key){
+                case "DataNascimento":
+                    obj.DataNascimento = src.DataNascimento !=null? this.MysqlDateToNormal(src.DataNascimento) : null;
+                    break;
+                case "Endereco":
+                    obj.Endereco = src.Endereco !=null? this.fromBlob(src.Endereco) : null;
+                    break;
+                case "RedesSociais":
+                    obj.RedesSociais = src.RedesSociais !=null? this.fromBlob(src.RedesSociais) : null;
+                    break;
+                case "Estilos":
+                    obj.Estilos = src.Estilos !=null? this.fromBlob(src.Estilos) : null;
+                    break;
+                case "Integrantes":
+                    obj.Integrantes = src.Integrantes !=null? this.fromBlob(src.Integrantes) : null;
+                    break;
+                case "TipoIndustria":
+                    obj.TipoIndustria = src.TipoIndustria !=null? this.fromBlob(src.TipoIndustria) : null;
+                    break;
+                case "Logradouro":
+                    obj.Logradouro = src.Logradouro !=null? this.fromBlob(src.Logradouro) : null;
+                    break;
+                case "Instrumentos":
+                    obj.Instrumentos = src.Instrumentos !=null? this.fromBlob(src.Instrumentos) : null;
+                    break;
+                default:
+                    obj[key] = src[key];
+            }
+            
+        });
+
+        return obj;
+    }
+
+    MysqlDateToNormal(date)
+    {
+        var teste = new Date(date);
+        var y = teste.getFullYear().toString();
+        var d = this.formatDateZero(teste.getDate());
+        var m = this.formatDateZero((teste.getMonth())+1);
+        return [d,m,y].join("-");
+    }
+
+    formatDateZero(num)
+    {
+        return num<10? ("0"+num.toString()) : num.toString();
+    }
+
+    fromBlob(blob)
+    {
+        var buf = new Buffer.from(blob, "binary").toString("utf-8");
+        var json = JSON.parse(buf);
+        return json;
+    }
+
+    convertAsInserting(src){
+        src.Endereco = src.Endereco? (Object.keys(src.Endereco).length>0 ? JSON.stringify(src.Endereco) : null): null;
+        src.RedesSociais = src.RedesSociais? (src.RedesSociais.length>0 ? JSON.stringify(src.RedesSociais) : null): null;
+        src.Estilos = src.Estilos? (src.Estilos.length>0 ? JSON.stringify(src.Estilos) : null): null;
+        src.Instrumentos = src.Instrumentos? (src.Instrumentos.length>0 ? JSON.stringify(src.Instrumentos) : null): null;
+        src.DataNascimento = this.formatDate(src.DataNascimento);
+        src.Integrantes = src.Integrantes? (src.Integrantes.length>0 ? JSON.stringify(src.Integrantes) : null): null;
+        src.Logradouro = src.Logradouro? (src.Logradouro.length>0 ? JSON.stringify(src.Logradouro) : null): null;
+        return src;
+    }
 
 }
-
-
-
-// }
-// AutoMapper.create<UserView, UserMusico>("UserToMusico")
-//     //User Padrao
-//     .map(src => src.Id, dst => dst.Id)
-//     .map(src => src.Nome, dst => dst.Nome)
-//     .map(src => src.Email, dst => dst.Email)
-//     .map(src => src.Senha, dst => dst.Senha)
-//     .map(src => src.Login, dst => dst.Login)
-//     .map(src => src.Descricao, dst => dst.Descricao)
-//     .map(src => src.Telefone, dst => dst.Telefone)
-//     .map(src => src.Status, dst => dst.Status, {
-
-//     .map(src => src.Tipo, dst => dst.Tipo, {
-//     operation: (p:TipoUsuario) => TipoUsuario[p]
-//     })
-//     .map(src => src.Endereco, dst => dst.Endereco)
-//     .map(src => src.RedesSociais, dst => dst.RedesSociais)
-//     //
-//     // Particularidades Musico
-//     .map(src => src.Estilos, dst => dst.Estilos)
-//     .map(src => src.Instrumentos, dst => dst.Instrumentos)
-//     .map(src => src.DataNascimento, dst => dst.DataNascimento)
-
-// AutoMapper.create<UserView, UserBanda>("UserToBanda")
-//     //User Padrao
-//     .map(src => src.Id, dst => dst.Id)
-//     .map(src => src.Nome, dst => dst.Nome)
-//     .map(src => src.Email, dst => dst.Email)
-//     .map(src => src.Senha, dst => dst.Senha)
-//     .map(src => src.Login, dst => dst.Login)
-//     .map(src => src.Descricao, dst => dst.Descricao)
-//     .map(src => src.Telefone, dst => dst.Telefone)
-//     .map(src => src.Status, dst => dst.Status, {
-//     operation: (p:TipoStatus) => TipoStatus[p]
-//     })
-//     .map(src => src.Tipo, dst => dst.Tipo, {
-//     operation: (p:TipoUsuario) => TipoUsuario[p]
-//     })
-//     .map(src => src.Endereco, dst => dst.Endereco)
-//     .map(src => src.RedesSociais, dst => dst.RedesSociais)
-//     //
-//     // Particularidades Banda
-//     .map(src => src.Estilos, dst => dst.Estilos)
-//     .map(src => src.Criador, dst => dst.Criador)
-//     .map(src => src.Integrantes, dst => dst.Integrantes)
-
-// AutoMapper.create<UserView, UserIndustria>("UserToIndustria")
-//     //User Padrao
-//     .map(src => src.Id, dst => dst.Id)
-//     .map(src => src.Nome, dst => dst.Nome)
-//     .map(src => src.Email, dst => dst.Email)
-//     .map(src => src.Senha, dst => dst.Senha)
-//     .map(src => src.Login, dst => dst.Login)
-//     .map(src => src.Descricao, dst => dst.Descricao)
-//     .map(src => src.Telefone, dst => dst.Telefone)
-//     .map(src => src.Status, dst => dst.Status, {
-//     operation: (p:TipoStatus) => TipoStatus[p]
-//     })
-//     .map(src => src.Tipo, dst => dst.Tipo, {
-//     operation: (p:TipoUsuario) => TipoUsuario[p]
-//     })
-//     .map(src => src.Endereco, dst => dst.Endereco)
-//     .map(src => src.RedesSociais, dst => dst.RedesSociais)
-//     //
-//     // Particularidades Banda
-//     .map(src => src.TipoIndustria, dst => dst.TipoIndustria, {
-//     operation: (p:TipoIndustria) => TipoIndustria[p]
-//     })
-//     .map(src => src.Logradouro, dst => dst.Logradouro)
