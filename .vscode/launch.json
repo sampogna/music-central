@@ -9,8 +9,7 @@
             "type": "node",
             "request": "launch",
             "cwd": "${workspaceFolder}\\Backend",
-            "runtimeExecutable": "npm",
-            "runtimeArgs": ["run", "dev"]
+            "runtimeExecutable": "nodemon"
           }
 
     ]
