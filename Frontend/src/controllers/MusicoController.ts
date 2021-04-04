@@ -8,7 +8,19 @@ import TiposUsuario from "../models/TiposUsuarios";
 const base_url: string = "http://localhost:3100/api/musico/";
 
 class MusicoController {
-  listar(req: Request, res: Response) {
+  async listar(req: Request, res: Response) {
+
+    try {
+      const response = await axios.get(base_url + "list");
+      res.render("pages/musico", {data:response.data});
+    } catch (exception) {
+      res.render("pages/musico", {data:null});
+      process.stderr.write(
+        `ERROR received from ${base_url + "create"}: ${exception}\n`
+      );
+    }
+
+
     return new UserMusico("testeInd", "teste@gmail", "123", "jacs");
   }
 
@@ -17,24 +29,6 @@ class MusicoController {
       var dataBody = req.body;
       dataBody.Tipo = TiposUsuario.Musico;
       dataBody.DataNascimento = this.formatDate(dataBody.DataNascimento);
-      console.log(req.body);
-      // var lstErros = this.verificaDadosObr(
-      //   dataBody.Nome,
-      //   dataBody.Email,
-      //   dataBody.Senha,
-      //   dataBody.ConfSenha,
-      //   dataBody.Login,
-      //   dataBody.DataNascimento
-      // );
-      // if(lstErros.length>0){
-      //   var ret = new ErrorHandler();
-      //   ret.mensagens = lstErros;
-      //   ret.codigo = 400;
-      //   ret.retorno = "Campos obrigatórios não preenchidos."
-      //   res.status(ret.codigo).json(ret);
-      //   return;
-      // }
-
       const response = await axios.post(base_url + "create", req.body);
       console.log("response axios", response.data);
       res.status(200).json(response.data);
@@ -54,6 +48,9 @@ class MusicoController {
     //return new Object({result:"Ok"});
   }
 
+  
+
+  //////////////////////////////////////////////////////
   checkEmptyString(str: string) {
     if (str == null || str.length == 0) return true;
     const emptyStringRegex = /^\s+$/;

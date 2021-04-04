@@ -298,7 +298,7 @@ verificaDados();
     })
 }
 
-$('#add').click(async function () {
+$('#add, #add2').click(async function () {
     resetInfos();
     await modalCreate();
     $('#list').append(makeRow());
@@ -427,6 +427,48 @@ function verificaDados() {
     showInfo();
     return sendObj;
 }
+
+
+$('.modal-redes-sociais').click(function () {
+    var redes = JSON.parse(this.value);
+    var html2 = 
+    '<div class="row">'+
+        '<div class="col">'+
+            'Nome'+
+        '</div>'+
+        '<div class="col">'+
+            'Link'+
+        '</div>'+
+    '</div>'+
+    '<hr>';
+
+    redes.forEach(function (rede, index) {
+        html2 += 
+        '<div style="padding-top: 0px;" class="row">'+
+            '<div style="padding-top: 0px;" class="col">'+
+                `${rede.nome}`+
+            '</div>'+
+            '<div class="col">'+
+            `<a target="_blank" href="${rede.link}">Link</a>`+
+            '</div>'+
+        '</div>';
+        if(index < redes.length-1) html2+= '<hr>';
+    });
+
+
+    console.log(redes);
+    swal.fire({
+        title: "Redes Sociais",
+        html: html2
+    
+    })
+});
+
+
+
+
+
+
 
 // var Id = null;
 // var Nome = null;

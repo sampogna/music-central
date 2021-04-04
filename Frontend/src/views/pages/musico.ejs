@@ -17,40 +17,76 @@
                         <button id="add" type="button" class="btn btn-success"><i class="fas fa-plus text-light">&nbsp;Adicionar novo usuário</i></button>
                     </div>
                     <hr>
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <td class="text-light text-center">#</td>
-                            <td class="text-light text-center">Nome</td>
-                            <td class="text-light text-center">Email</td>
-                            <td class="text-light text-center">Senha</td>
-                            <td class="text-light text-center">Login</td>
-                            <td class="text-light text-center">Estilos</td>
-                            <td class="text-light text-center">Instrumentos</td>
-                            <td class="text-light text-center">Opções</td>
-                        </thead>
-                        <tbody id="list">
-                            <tr>
-                                <td class="text-light text-center">1</td>
-                                <td class="text-light text-center">a</td>
-                                <td class="text-light text-center">a</td>
-                                <td class="text-light text-center">a</td>
-                                <td class="text-light text-center">a</td>
-                                <td class="text-light text-center">a</td>
-                                <td class="text-light text-center">a</td>
-                                <!-- <i onclick="console.log($(this).closest('td').closest('tr').find('td')[0].innerText);$(this).closest('td').closest('tr').remove()" class="text-warning fas fa-pencil-alt"></i> -->
-                                <td class="text-center"> 
-                                    <i onclick="editRegister($(this).closest('td').closest('tr'))" class="text-warning fas fa-pencil-alt"></i>
-                                    &nbsp;&nbsp;&nbsp;
-                                    <i onclick="deleteRegister($(this).closest('td').closest('tr'))" class="text-danger fas fa-trash-alt"></i>
-                                </td>
-                            </tr>
-                            
+                    <% if(data){%>
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <td class="text-light text-center">#</td>
+                                <td class="text-light text-center">Nome</td>
+                                <td class="text-light text-center">Email</td>
+                                <td class="text-light text-center">Senha</td>
+                                <td class="text-light text-center">Login</td>
+                                <td class="text-light text-center">Data de Nascimento</td>
+                                <td class="text-light text-center">Descrição</td>
+                                <td class="text-light text-center">Telefone</td>
+                                <td class="text-light text-center">Endereço</td>
+                                <td class="text-light text-center">Redes Sociais</td>
+                                <td class="text-light text-center">Estilos</td>
+                                <td class="text-light text-center">Instrumentos</td>
+                                <td class="text-light text-center">Opções</td>
+                            </thead>
+                            <tbody id="list">
+                                <% for( let index = 0; index < data.length; index++ ) { 
+                                    console.log(data[index].Endereco);
+                                    
+                                    %>
+                                    <tr>
+                                        <td class="text-light text-center"><%= data[index].Id ? data[index].Id : "-" %> </td>
+                                        <td class="text-light text-center"><%= data[index].Nome ? data[index].Nome : "-" %></td>
+                                        <td class="text-light text-center"><%= data[index].Email ? data[index].Email : "-" %></td>
+                                        <td class="text-light text-center"><%= data[index].Senha ? data[index].Senha : "-" %></td>
+                                        <td class="text-light text-center"><%= data[index].Login ? data[index].Login : "-" %></td>
+                                        <td class="text-light text-center"><%= data[index].DataNascimento ? data[index].DataNascimento : "-" %></td>
+                                        <td class="text-light text-center"><%= data[index].Descricao ? data[index].Descricao : "-" %></td>
+                                        <td class="text-light text-center"><%= data[index].Telefone ? data[index].Telefone : "-" %></td>
+                                        <td class="text-light text-center"><%= data[index].Endereço ? data[index].Endereço : "-" %></td>
+                                        <td class="text-light text-center"><% if(data[index].RedesSociais){ %>
+                                            <button type='button' value="<%= JSON.stringify(data[index].RedesSociais)%>" class='btn btn-primary modal-redes-sociais'> Launch </button>
+                                        <%}
+                                        else{%>
+                                            -
+                                        <%}%></td>
+                                            
+                                        <td class="text-light text-center"><%= data[index].Estilos ? data[index].Estilos : "-" %></td>
+                                        <td class="text-light text-center"><%= data[index].Instrumentos ? data[index].Instrumentos : "-" %></td>
+                                        <td class="text-center"> 
+                                            <i onclick="editRegister($(this).closest('td').closest('tr'))" class="text-warning fas fa-pencil-alt"></i>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <i onclick="deleteRegister($(this).closest('td').closest('tr'))" class="text-danger fas fa-trash-alt"></i>
+                                        </td>
+                                    </tr>
+                                <% } %>
+                                
+                                <div class="row">
+                                    <div class="col2">
+                                        aaa
+                                    </div>
+                                     
+                                    <div class="col2">
+                                        vvv   
+                                    </div>
+                                </div>
 
-                        </tbody>
-                    </table>
-                    <!--  Inserir conteudo da pagina aqui -->
-                    <p> Inserir conteúdo aqui.  </p>
-
+                            </tbody>
+                        </table>
+                    <%} 
+                    else{ %>
+                        <div class="alert alert-primary" role="alert">
+                            <h4 class="alert-heading">Ainda não há usuários cadastrados nessa categoria <i class="far fa-frown-open"></i>.</h4>
+                            <p>Adicione um clicando no botão abaixo ou no acima.</p>
+                            <hr>
+                            <button id="add2" type="button" class="btn btn-success"><i class="fas fa-plus text-light">&nbsp;Adicionar novo usuário</i></button>
+                        </div>
+                    <% } %>
                 </div>
             </div>
         </div>

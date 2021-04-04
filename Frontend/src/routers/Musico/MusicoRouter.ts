@@ -17,8 +17,9 @@ class MusicoRouter {
    * Connect routes to their matching controller endpoints.
    */
   private _configure() {
-    this._router.get("/", (req: Request, res: Response, next: NextFunction) => {
-      res.render("pages/musico");
+    this._router.get("/", async (req: Request, res: Response, next: NextFunction) => {
+      await this._controller.listar(req,res);
+      
     });
 
     this._router.post(

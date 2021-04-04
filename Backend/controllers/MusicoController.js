@@ -38,7 +38,6 @@ MusicoController.prototype.List = function (app, request, response) {
     if (!error) {
       if (result.length > 0) {
         var mapper = new UserMapper(app, null);
-        
         response.status(200).json(result.map(v=> v = mapper.convertBack(v)));
       } else {
         response.status(500).json({ error: "Não há usuários nessa categoria" });
@@ -121,6 +120,27 @@ MusicoController.prototype.Delete = function (app, request, response) {
     if (!error) {
       if (result.affectedRows > 0) {
         response.status(200).json({result: "Músico excluído com sucesso!"});
+      } else {
+        response.status(500).json({ error: "Usuário não encontrado." });
+      }
+    } else {
+      var res = new Object();
+      res.error = error;
+      response.status(400).json(res);
+    }
+  });
+
+}
+
+MusicoController.prototype.Get = function (app, request, response) {
+  var userId = request.params.userId;
+  var connection = app.config.db();
+  var clientMySql = new app.models.MySQL_DAO(connection);
+  clientMySql.GetUserById(userId, function (error, result) {
+    if (!error) {
+      if (result.length > 0) {
+        var mapper = new UserMapper(app, null);
+        response.status(200).json(mapper.convertBack(result[0]));
       } else {
         response.status(500).json({ error: "Usuário não encontrado." });
       }

@@ -3,5 +3,7 @@
         "**/.git": true,
         "**/node_modules": true,
         "**/_old": true,
-    }
+    },
+    "debug.console.closeOnEnd": true,
+    "terminal.explorerKind": "external"
 }

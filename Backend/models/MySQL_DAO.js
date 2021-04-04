@@ -2,7 +2,7 @@ function DataBaseDAO(connection) {
   this._conn = connection;
 }
 DataBaseDAO.prototype.ListUsuarios = function (callback) {
-  this._conn.query('SELECT * FROM usuarios',
+  this._conn.query('SELECT * FROM usuarios where Ativo = 0',
     callback)
 
 };
@@ -50,7 +50,7 @@ DataBaseDAO.prototype.DeleteUsuario = function (id, callback) {
 
 DataBaseDAO.prototype.ListUsuarioPorTipo = function (tipo, callback) {
   this._conn.query('SELECT * FROM usuarios\
-                    WHERE Tipo = ?',tipo,
+                    WHERE Tipo = ? and Ativo = 1',tipo,
     callback)
 
 };
