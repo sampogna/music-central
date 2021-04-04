@@ -40,6 +40,14 @@ DataBaseDAO.prototype.UpdateUsuario = function (data, id, callback) {
 
 };
 
+DataBaseDAO.prototype.DeleteUsuario = function (id, callback) {
+  this._conn.query('UPDATE usuarios\
+                  SET Ativo = 0 \
+                  WHERE id = ? AND Ativo = 1',id,
+    callback)
+
+};
+
 DataBaseDAO.prototype.ListUsuarioPorTipo = function (tipo, callback) {
   this._conn.query('SELECT * FROM usuarios\
                     WHERE Tipo = ?',tipo,

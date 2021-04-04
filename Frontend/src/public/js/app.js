@@ -1,40 +1,33 @@
-var Id = null;
-var Nome = null;
-var Email = null;
-var Senha = null;
-var ConfSenha = null;
-var Login = null;
-var Descricao = null;
-var Telefone = null;
-var DataNascimento = null;
-var Status = null;
-var Tipo = null;
-var Endereco = null;
-var RedesSociais = [];
-var Estilos = [];
-var Instrumentos = [];
+var sendObj = {
+    "ConfSenha" : null,
+    "Id" : null,
+    "Nome" : null,
+    "Email" : null,
+    "Senha" : null,
+    "Login" : null,
+    "Descricao" : null,
+    "Telefone" : null,
+    "DataNascimento" : null,
+    "Status" : null,
+    "Tipo" : null,
+    "Endereco" : null,
+    "RedesSociais" : [],
+    "Estilos" : [],
+    "Instrumentos" : [],
+    "Criador" : null,
+    "Integrantes" : null,
+    "TipoIndustria" : null,
+    "Logradouro" : null
+}
 var contRedesSociais = 1;
 var contEstilosMusicais = 1;
 var contInstrumentos = 1;
-
 var criar = false;
 
-// public Nome: string;
-// public Email: string;
-// public Senha: string;
-// public Login: string;
-// public Descricao?: string | null = null;
-// public Telefone?: string | null = null;
-// public DataNascimento?: Date | null = null; //DateTime?;
-
-// public Status?: string | null = null; 
-// public Tipo?: string | null = null; 
-
-// public Endereco?: Endereco | null = null;
-// public RedesSociais?: Array<Social> | null = null; 
 const Estados =
     '<label style="padding-top: 10px;" for="estados">UF</label>' +
     '<select id="estados" class="form-control" name="estados-brasil">' +
+    '<option disabled selected value="">Selecione uma opção</option>' +
     '<option value="AC">Acre</option>' +
     '<option value="AL">Alagoas</option>' +
     '<option value="AP">Amapá</option>' +
@@ -109,7 +102,7 @@ function addInstrumento() {
 async function modalCreate() {
     Swal.mixin({
         showCancelButton: true,
-        progressSteps: ['1', '2', '3', '4', '5']
+        progressSteps: ['1', '2', '3', '4', '5','6']
     }).queue([
         {
             title: "Informações básicas",
@@ -123,7 +116,20 @@ async function modalCreate() {
                 '<label style="padding-top: 10px;" for="confSenha">Confirmação de senha</label>' +
                 '<input  id="confSenha" class="form-control">' +
                 '<label style="padding-top: 10px;" for="login">Nome de usuário</label>' +
-                '<input  id="login" class="form-control">' +
+                '<input  id="login" class="form-control">',
+            confirmButtonText: 'Next &rarr;',
+            preConfirm: () => {
+                sendObj.Nome = document.getElementById('nome').value;
+                sendObj.Email = document.getElementById('email').value;
+                sendObj.Senha = document.getElementById('senha').value;
+                sendObj.ConfSenha = document.getElementById('confSenha').value;
+                sendObj.Login = document.getElementById('login').value;
+                
+            }
+        },
+        {
+            title: "Informações básicas",
+            html:
                 '<label style="padding-top: 10px;" for="desc">Sobre você</label>' +
                 '<input  id="desc" class="form-control">' +
                 '<label style="padding-top: 10px;" for="telefone">Telefone</label>' +
@@ -132,14 +138,9 @@ async function modalCreate() {
                 '<input type="date" id="dataNasc" class="form-control">',
             confirmButtonText: 'Next &rarr;',
             preConfirm: () => {
-                Nome = document.getElementById('nome').value;
-                Email = document.getElementById('email').value;
-                Senha = document.getElementById('senha').value;
-                ConfSenha = document.getElementById('confSenha').value;
-                Login = document.getElementById('login').value;
-                Descricao = document.getElementById('desc').value;
-                Telefone = document.getElementById('telefone').value;
-                DataNascimento = document.getElementById('dataNasc').value;
+                sendObj.Descricao = document.getElementById('desc').value;
+                sendObj.Telefone = document.getElementById('telefone').value;
+                sendObj.DataNascimento = document.getElementById('dataNasc').value;
                 verificaDadosObr();
             }
         },
@@ -151,11 +152,19 @@ async function modalCreate() {
                 '<label style="padding-top: 10px;" for="cidade">Cidade</label>' +
                 '<input  id="cidade" class="form-control">',
             preConfirm: () => {
-                Endereco = new Object();
-                Endereco.Cidade = document.getElementById('cidade').value;
                 var e = document.getElementById("estados");
-                Endereco.UF = e.value;
-                Endereco.Estado = e.options[e.selectedIndex].text;
+
+                var value = e.value;
+                if(value == ""){
+                    sendObj.Endereco = null;
+                }
+                else{
+                    sendObj.Endereco = new Object();
+                    sendObj.Endereco.Cidade = document.getElementById('cidade').value;
+                    sendObj.Endereco.UF = e.value;
+                    sendObj.Endereco.Estado = e.options[e.selectedIndex].text;
+                }
+                
             }
         },
         {
@@ -180,7 +189,7 @@ async function modalCreate() {
                     var obj = new Object();
                     obj.nome = nomeRedeSocial.value;
                     obj.link = linkRedeSocial.value;
-                    if (obj.nome && obj.link) RedesSociais.push(obj);
+                    if (obj.nome && obj.link) sendObj.RedesSociais.push(obj);
                 }
 
             }
@@ -201,7 +210,7 @@ async function modalCreate() {
             preConfirm: () => {
                 for (let index = 1; index <= contEstilosMusicais; index++) {
                     var nomeEstiloMusical = document.getElementById("nomeEstiloMusical" + index.toString());
-                    if (nomeEstiloMusical) Estilos.push(nomeEstiloMusical.value);
+                    if (nomeEstiloMusical) sendObj.Estilos.push(nomeEstiloMusical.value);
                 }
 
             }
@@ -222,7 +231,7 @@ async function modalCreate() {
 
                 for (let index = 1; index <= contInstrumentos; index++) {
                     var nomeInstrumento = document.getElementById("nomeInstrumentoMusical" + index.toString());
-                    if (nomeInstrumento) Instrumentos.push(nomeInstrumento.value);
+                    if (nomeInstrumento) sendObj.Instrumentos.push(nomeInstrumento.value);
                 }
                 criar = true;
 
@@ -233,16 +242,16 @@ async function modalCreate() {
 
 
         if (criar) {
+verificaDados();
             Swal.fire({
                 title: 'Criando usuário...',
                 icon: 'info',
                 showConfirmButton: false
             }).then(
-
                 $.ajax({
                     url: "/musico/create",
                     type: "POST",
-                    data: verificaDados(),
+                    data: sendObj,
                     dataType: "json",
                     success: function (resultAjax) {
                         Swal.fire({
@@ -339,23 +348,27 @@ function makeRow() {
 
 function resetInfos() {
 
-    Id = null;
-    Nome = null;
-    Email = null;
-    Senha = null;
-    Login = null;
-    Descricao = null;
-    Telefone = null;
-    DataNascimento = null;
-
-    Status = null;
-    Tipo = null;
-
-    Endereco = null;
-
-    RedesSociais = [];
-    Estilos = [];
-    Instrumentos = [];
+    sendObj = {
+        "ConfSenha" : null,
+        "Id" : null,
+        "Nome" : null,
+        "Email" : null,
+        "Senha" : null,
+        "Login" : null,
+        "Descricao" : null,
+        "Telefone" : null,
+        "DataNascimento" : null,
+        "Status" : null,
+        "Tipo" : null,
+        "Endereco" : null,
+        "RedesSociais" : [],
+        "Estilos" : [],
+        "Instrumentos" : [],
+        "Criador" : null,
+        "Integrantes" : null,
+        "TipoIndustria" : null,
+        "Logradouro" : null
+    }
 
     contRedesSociais = 1;
     contEstilosMusicais = 1;
@@ -365,29 +378,7 @@ function resetInfos() {
 }
 
 function showInfo() {
-    console.log("Id = ", Id);
-    console.log("Nome = ", Nome);
-    console.log("Email = ", Email);
-    console.log("Senha = ", Senha);
-    console.log("Login = ", Login);
-    console.log("Descricao = ", Descricao);
-    console.log("Telefone = ", Telefone);
-    console.log("DataNascimento = ", DataNascimento);
-
-    console.log("Status = ", Status);
-    console.log("Tipo = ", Tipo);
-
-    console.log("Endereco = ", Endereco);
-
-    console.log("RedesSociais = ", RedesSociais);
-
-    console.log("Estilos = ", Estilos)
-    console.log("Instrumentos = ", Instrumentos)
-
-    console.log("contRedesSociais = ", contRedesSociais);
-    console.log("contEstilosMusicais = ", contEstilosMusicais);
-
-
+    console.log("sendObj = ", sendObj);
 }
 
 
@@ -403,13 +394,13 @@ function checkEmptyString(str) {
 function verificaDadosObr() {
     var lstErros = [];
     var html2 = "";
-    if (checkEmptyString(Nome)) lstErros.push("'Nome' é obrigatório e deve ser preenchido.");
-    if (checkEmptyString(Email)) lstErros.push("'Email' é obrigatório e deve ser preenchido.");
-    if (checkEmptyString(Senha)) lstErros.push("'Senha' é obrigatório e deve ser preenchido.");
-    if (checkEmptyString(ConfSenha)) lstErros.push("'Confirmação de senha' é obrigatório e deve ser preenchido.");
-    if (checkEmptyString(Login)) lstErros.push("'Nome de usuário' é obrigatório e deve ser preenchido.");
-    if (checkEmptyString(DataNascimento)) lstErros.push("'Data de Nascimento' é obrigatório e deve ser preenchido.");
-    if (Senha != ConfSenha) lstErros.push("'Senhas' e 'Confirmação de senha' são diferentes.");
+    if (checkEmptyString(sendObj.Nome)) lstErros.push("'Nome' é obrigatório e deve ser preenchido.");
+    if (checkEmptyString(sendObj.Email)) lstErros.push("'Email' é obrigatório e deve ser preenchido.");
+    if (checkEmptyString(sendObj.Senha)) lstErros.push("'Senha' é obrigatório e deve ser preenchido.");
+    if (checkEmptyString(sendObj.ConfSenha)) lstErros.push("'Confirmação de senha' é obrigatório e deve ser preenchido.");
+    if (checkEmptyString(sendObj.Login)) lstErros.push("'Nome de usuário' é obrigatório e deve ser preenchido.");
+    if (checkEmptyString(sendObj.DataNascimento)) lstErros.push("'Data de Nascimento' é obrigatório e deve ser preenchido.");
+    if (sendObj.Senha != sendObj.ConfSenha) lstErros.push("'Senhas' e 'Confirmação de senha' são diferentes.");
     if (lstErros.length > 0) {
         lstErros.forEach(element => {
             html2 += element;
@@ -427,41 +418,31 @@ function verificaDadosObr() {
 }
 
 function verificaDados() {
-    var data = new Object();
-    data.Id = Id;
-    data.Nome = Nome;
-    data.Email = Email;
-    data.Senha = Senha;
-    data.ConfSenha = ConfSenha;
-    data.Login = Login;
-    data.DataNascimento = DataNascimento;
-    data.Descricao = checkEmptyString(Descricao) ? null : Descricao;
-    data.Telefone = checkEmptyString(Telefone) ? null : Telefone;
-    data.Status = 'ATIVO';
-    data.Tipo = 'MUSICO';
-    data.Endereco = typeof (Endereco) == "object" ? Endereco : null;
-    data.RedesSociais = RedesSociais.length > 0 ? RedesSociais : null;
-    data.Estilos = Estilos.length > 0 ? Estilos : null;
-    data.Instrumentos = Instrumentos.length > 0 ? Instrumentos : null;
-    console.log("data", JSON.stringify(data));
-    return data;
+    sendObj.Descricao = checkEmptyString(sendObj.Descricao) ? null : sendObj.Descricao;
+    sendObj.Telefone = checkEmptyString(sendObj.Telefone) ? null : sendObj.Telefone;
+    sendObj.Endereco = typeof (sendObj.Endereco) == "object" ? sendObj.Endereco : null;
+    sendObj.RedesSociais = sendObj.RedesSociais.length > 0 ? sendObj.RedesSociais : null;
+    sendObj.Estilos = sendObj.Estilos.length > 0 ? sendObj.Estilos : null;
+    sendObj.Instrumentos = sendObj.Instrumentos.length > 0 ? sendObj.Instrumentos : null;
+    showInfo();
+    return sendObj;
 }
 
-var Id = null;
-var Nome = null;
-var Email = null;
-var Senha = null;
-var ConfSenha = null;
-var Login = null;
-var Descricao = null;
-var Telefone = null;
-var DataNascimento = null;
+// var Id = null;
+// var Nome = null;
+// var Email = null;
+// var Senha = null;
+// var ConfSenha = null;
+// var Login = null;
+// var Descricao = null;
+// var Telefone = null;
+// var DataNascimento = null;
 
-var Status = null;
-var Tipo = null;
+// var Status = null;
+// var Tipo = null;
 
-var Endereco = null;
+// var Endereco = null;
 
-var RedesSociais = [];
-var Estilos = [];
-var Instrumentos = [];
+// var RedesSociais = [];
+// var Estilos = [];
+// var Instrumentos = [];

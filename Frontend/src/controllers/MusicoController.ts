@@ -3,8 +3,9 @@ import { NextFunction, Request, Response } from "express";
 import axios from "axios";
 import ErrorHandler from "../models/ErrorHandler";
 import { text } from "body-parser";
+import TiposUsuario from "../models/TiposUsuarios";
 
-const base_url: string = "http://localhost:5000/api/musico/";
+const base_url: string = "http://localhost:3100/api/musico/";
 
 class MusicoController {
   listar(req: Request, res: Response) {
@@ -14,27 +15,31 @@ class MusicoController {
   async adicionar(req: Request, res: Response) {
     try {
       var dataBody = req.body;
-      var lstErros = this.verificaDadosObr(
-        dataBody.Nome,
-        dataBody.Email,
-        dataBody.Senha,
-        dataBody.ConfSenha,
-        dataBody.Login,
-        dataBody.DataNascimento
-      );
-      if(lstErros.length>0){
-        var ret = new ErrorHandler();
-        ret.mensagens = lstErros;
-        ret.codigo = 400;
-        ret.retorno = "Campos obrigatórios não preenchidos."
-        res.status(ret.codigo).json(ret);
-        return;
-      }
+      dataBody.Tipo = TiposUsuario.Musico;
+      dataBody.DataNascimento = this.formatDate(dataBody.DataNascimento);
+      console.log(req.body);
+      // var lstErros = this.verificaDadosObr(
+      //   dataBody.Nome,
+      //   dataBody.Email,
+      //   dataBody.Senha,
+      //   dataBody.ConfSenha,
+      //   dataBody.Login,
+      //   dataBody.DataNascimento
+      // );
+      // if(lstErros.length>0){
+      //   var ret = new ErrorHandler();
+      //   ret.mensagens = lstErros;
+      //   ret.codigo = 400;
+      //   ret.retorno = "Campos obrigatórios não preenchidos."
+      //   res.status(ret.codigo).json(ret);
+      //   return;
+      // }
 
       const response = await axios.post(base_url + "create", req.body);
       console.log("response axios", response.data);
       res.status(200).json(response.data);
     } catch (exception) {
+      res.status(500).json({retorno: "Algo inesperado aconteceu", mensagens: ["Internal Server Error"]});
       process.stderr.write(
         `ERROR received from ${base_url + "create"}: ${exception}\n`
       );
@@ -85,5 +90,15 @@ class MusicoController {
       lstErros.push("'Senhas' e 'Confirmação de senha' são diferentes.");
     return lstErros;
   }
+
+  formatDate(str:string){
+    var lst = str.split("-");
+    var y,m,d;
+    y=lst[0];
+    m=lst[1];
+    d=lst[2];
+    return [d,m,y].join("-");
+
+}
 }
 export = new MusicoController();

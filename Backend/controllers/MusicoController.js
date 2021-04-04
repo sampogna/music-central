@@ -3,17 +3,17 @@ function MusicoController() {
 
 var UserMapper = require('../util/mapper');
 
-MusicoController.prototype.CreateUser = function (app, request, response) {
+MusicoController.prototype.Create = function (app, request, response) {
 
   var data = request.body;
   var map = new UserMapper(app, data);
   var isValid = map.verifyFields();
-  if(!isValid.Success) response.status(200).json({errors: isValid.Errors});
+  if(!isValid.Success) return response.status(200).json({errors: isValid.Errors});
   var musico = map.UserToMusico(data);
 
   var connection = app.config.db();
   var clientMySql = new app.models.MySQL_DAO(connection);
-  clientMySql.CreateUsuario(industria, function (error, result) {
+  clientMySql.CreateUsuario(musico, function (error, result) {
     if (!error) {
       if (result.affectedRows > 0) {
         response.status(200).json({result: "Músico criado com sucesso!"});
@@ -21,6 +21,7 @@ MusicoController.prototype.CreateUser = function (app, request, response) {
         response.status(500).json({ error: "Internal Server Error" });
       }
     } else {
+      console.log("error Musico Create", error);
       var res = new Object();
       res.error = error;
       response.status(400).json(res);
@@ -29,14 +30,16 @@ MusicoController.prototype.CreateUser = function (app, request, response) {
 
 }
 
-MusicoController.prototype.ListUsers = function (app, request, response) {
+MusicoController.prototype.List = function (app, request, response) {
 
   var connection = app.config.db();
   var clientMySql = new app.models.MySQL_DAO(connection);
   clientMySql.ListUsuarioPorTipo(app.locals.tiposUsuarios.Musico, function (error, result) {
     if (!error) {
       if (result.length > 0) {
-        response.status(200).json(result);
+        var mapper = new UserMapper(app, null);
+        
+        response.status(200).json(result.map(v=> v = mapper.convertBack(v)));
       } else {
         response.status(500).json({ error: "Não há usuários nessa categoria" });
       }
@@ -49,7 +52,7 @@ MusicoController.prototype.ListUsers = function (app, request, response) {
 
 }
 
-MusicoController.prototype.UpdateUser = function (app, request, response) {
+MusicoController.prototype.Update = function (app, request, response) {
 
   var data = request.body;
   data.Tipo = app.locals.tiposUsuarios.Musico;
@@ -109,6 +112,27 @@ MusicoController.prototype.UpdateUser = function (app, request, response) {
   });
 
 }
+
+MusicoController.prototype.Delete = function (app, request, response) {
+  var userId = request.params.userId;
+  var connection = app.config.db();
+  var clientMySql = new app.models.MySQL_DAO(connection);
+  clientMySql.DeleteUsuario(userId, function (error, result) {
+    if (!error) {
+      if (result.affectedRows > 0) {
+        response.status(200).json({result: "Músico excluído com sucesso!"});
+      } else {
+        response.status(500).json({ error: "Usuário não encontrado." });
+      }
+    } else {
+      var res = new Object();
+      res.error = error;
+      response.status(400).json(res);
+    }
+  });
+
+}
+
 
 module.exports = new MusicoController();
 
