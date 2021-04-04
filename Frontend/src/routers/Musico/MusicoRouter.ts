@@ -28,6 +28,28 @@ class MusicoRouter {
         await this._controller.adicionar(req, res);
       }
     );
+
+    this._router.post(
+      "/update",
+      async (req: Request, res: Response, next: NextFunction) => {
+        await this._controller.adicionar(req, res);
+      }
+    );
+
+    this._router.post(
+      "/:userId",
+      async (req: Request, res: Response, next: NextFunction) => {
+        await this._controller.adicionar(req, res);
+      }
+    );
+    
+    this._router.delete(
+      "/delete/:userId",
+      async (req: Request, res: Response, next: NextFunction) => {
+        await this._controller.delete(req, res);
+      }
+    );
+
   }
 }
 

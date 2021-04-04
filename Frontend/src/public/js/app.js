@@ -189,7 +189,7 @@ async function modalCreate() {
                     var obj = new Object();
                     obj.nome = nomeRedeSocial.value;
                     obj.link = linkRedeSocial.value;
-                    if (obj.nome && obj.link) sendObj.RedesSociais.push(obj);
+                    if (!checkEmptyString(obj.nome) && !checkEmptyString(obj.link)) sendObj.RedesSociais.push(obj);
                 }
 
             }
@@ -210,7 +210,8 @@ async function modalCreate() {
             preConfirm: () => {
                 for (let index = 1; index <= contEstilosMusicais; index++) {
                     var nomeEstiloMusical = document.getElementById("nomeEstiloMusical" + index.toString());
-                    if (nomeEstiloMusical) sendObj.Estilos.push(nomeEstiloMusical.value);
+                    
+                    if (!checkEmptyString(nomeEstiloMusical.value)) sendObj.Estilos.push(nomeEstiloMusical.value);
                 }
 
             }
@@ -231,7 +232,7 @@ async function modalCreate() {
 
                 for (let index = 1; index <= contInstrumentos; index++) {
                     var nomeInstrumento = document.getElementById("nomeInstrumentoMusical" + index.toString());
-                    if (nomeInstrumento) sendObj.Instrumentos.push(nomeInstrumento.value);
+                    if (!checkEmptyString(nomeInstrumento.value)) sendObj.Instrumentos.push(nomeInstrumento.value);
                 }
                 criar = true;
 
@@ -242,7 +243,7 @@ async function modalCreate() {
 
 
         if (criar) {
-verificaDados();
+            verificaDados();
             Swal.fire({
                 title: 'Criando usuário...',
                 icon: 'info',
@@ -259,8 +260,13 @@ verificaDados();
                             icon: 'success',
                             text: "Usuário criado com sucesso!",
                             confirmButtonText: 'Ok'
+                        }).then(() =>{
+                            resetInfos();
+                            window.location.reload();
+
                         })
-                        resetInfos();
+                        
+                        
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         var json = xhr.responseJSON;
@@ -307,8 +313,103 @@ $('#add, #add2').click(async function () {
 
 function deleteRegister(tr) {
     let id = tr.find('td')[0].innerText;
-    console.log(id);
-    tr.remove();
+    Swal.fire({
+        titleText: 'Tem certeza que deseja excluir o usuário de id '+id+'?',
+        html: '<b>Essa ação é irreversível!<b>',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: `Sim`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "/musico/delete/"+id,
+                type: "DELETE",
+                success: function (resultAjax) {
+                    Swal.fire({
+                        title: 'Sucesso!',
+                        icon: 'success',
+                        text: "Usuário excluído com sucesso!",
+                        confirmButtonText: 'Ok'
+                    }).then(() =>{
+                        resetInfos();
+                        window.location.reload();
+    
+                    })
+                    
+                    
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.responseJSON);
+                    console.log(xhr.thrownError);
+                    console.log(xhr.ajaxOptions);
+                    
+                    var json = xhr.responseJSON;
+                    var lstErros = json.mensagens;
+                    if (lstErros.length > 0) {
+                        var html2 = "<h4>" + json.retorno + "</h4>";
+                        lstErros.forEach(element => {
+                            html2 += element;
+                            html2 += "<br>";
+                        });
+    
+                        Swal.fire({
+                            title: 'Erro!',
+                            icon: 'error',
+                            html: html2,
+                            confirmButtonText: 'Ok'
+                        })
+                        resetInfos();
+                    }
+                }
+            })
+        } else if (result.isDenied) {
+          Swal.fire('Usuário NÃO foi excluído', '', 'info')
+        }
+      })
+    // 
+        // $.ajax({
+        //     url: "/musico/create",
+        //     type: "POST",
+        //     data: sendObj,
+        //     dataType: "json",
+        //     success: function (resultAjax) {
+        //         Swal.fire({
+        //             title: 'Sucesso!',
+        //             icon: 'success',
+        //             text: "Usuário criado com sucesso!",
+        //             confirmButtonText: 'Ok'
+        //         }).then(() =>{
+        //             resetInfos();
+        //             window.location.reload();
+
+        //         })
+                
+                
+        //     },
+        //     error: function (xhr, ajaxOptions, thrownError) {
+        //         var json = xhr.responseJSON;
+        //         var lstErros = json.mensagens;
+        //         if (lstErros.length > 0) {
+        //             var html2 = "<h4>" + json.retorno + "</h4>";
+        //             lstErros.forEach(element => {
+        //                 html2 += element;
+        //                 html2 += "<br>";
+        //             });
+
+        //             Swal.fire({
+        //                 title: 'Erro!',
+        //                 icon: 'error',
+        //                 html: html2,
+        //                 confirmButtonText: 'Ok'
+        //             })
+        //             resetInfos();
+        //         }
+        //     }
+        // })
+
+
+    //tr.remove();
 
 }
 
@@ -464,6 +565,56 @@ $('.modal-redes-sociais').click(function () {
     })
 });
 
+
+
+$('.modal-estilos').click(function () {
+    var estilos = JSON.parse(this.value);
+    var html2 = 
+    '<div class="row">'+
+    '</div>'+
+    '<hr>';
+
+    estilos.forEach(function (estilo, index) {
+        html2 += 
+        '<div style="padding-top: 0px;" class="row">'+
+            '<div style="padding-top: 0px;" class="col">'+
+                `${estilo}`+
+            '</div>'+
+        '</div>';
+        if(index < estilos.length-1) html2+= '<hr>';
+    });
+
+    swal.fire({
+        title: "Estilos",
+        html: html2
+    
+    })
+});
+
+$('.modal-instrumentos').click(function () {
+    var instrumentos = JSON.parse(this.value);
+    var html2 = 
+    '<div class="row">'+
+    '</div>'+
+    '<hr>';
+
+    instrumentos.forEach(function (instrumento, index) {
+        html2 += 
+        '<div style="padding-top: 0px;" class="row">'+
+            '<div style="padding-top: 0px;" class="col">'+
+                `${instrumento}`+
+            '</div>'+
+        '</div>';
+        if(index < instrumentos.length-1) html2+= '<hr>';
+    });
+    
+    swal.fire({
+        title: "Instrumentos",
+        html: html2
+    
+    })
+    
+});
 
 
 
