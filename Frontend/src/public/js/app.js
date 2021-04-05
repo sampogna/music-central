@@ -1,6 +1,15 @@
-// $( function() {
-//     $( document ).tooltip();
-//   } );
+$(document).ready( function () {
+    if($('#tabela')){
+        $('#tabela').DataTable({
+            "scrollX": true,
+            "paging": false
+
+
+        });
+    }
+    
+    
+} );
 var sendObj = {
     "ConfSenha": null,
     "Id": null,
@@ -109,7 +118,7 @@ async function modalCreate() {
     }).queue([
         {
             title: "Informações básicas",
-            width: "64rem",
+            width: "50rem",
             html:
                 '<div class="row">'+
                     '<div class="col">'+
@@ -138,19 +147,19 @@ async function modalCreate() {
                         '</div>'+
                     '</div>'+
                     '<div class="col">'+
-                    '<div class="alert alert-primary" role="alert" id="alert-senha">'+
-                    '<h4 class="alert-heading">Força da senha</h4>'+
-                    '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui 8 a 20 caracteres. </span>'+
-                    '<br>'+
-                    '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres maiúsculos. </span>'+
-                    '<br>'+
-                    '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres minúsculos.</span>'+
-                    '<br>'+
-                    '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui números.</span>'+
-                    '<br>'+
-                    '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres especiais.</span>'+
-                    '<br>'+
-                    '</div>'+
+                        '<div class="alert alert-primary" role="alert">'+
+                            '<h4 class="alert-heading">Força da senha</h4>'+
+                            '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui 8 a 20 caracteres. </span>'+
+                            '<br>'+
+                            '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres maiúsculos. </span>'+
+                            '<br>'+
+                            '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres minúsculos.</span>'+
+                            '<br>'+
+                            '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui números.</span>'+
+                            '<br>'+
+                            '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres especiais.</span>'+
+                            '<br>'+
+                        '</div>'+
                     '</div>'+
                 '</div>',
                 
@@ -594,26 +603,26 @@ function editRegister(tr) {
 }
 
 
-function makeRow() {
-    var html = `
-    <tr>
-    <td class="text-light text-center">${1}</td>
-    <td class="text-light text-center">${"a"}</td>
-    <td class="text-light text-center">${"a"}</td>
-    <td class="text-light text-center">${"a"}</td>
-    <td class="text-light text-center">${"a"}</td>
-    <td class="text-light text-center">${"a"}</td>
-    <td class="text-light text-center">${"a"}</td>
-    <td class="text-center"> 
-        <i onclick="editRegister($(this).closest('td').closest('tr'))" class="text-warning fas fa-pencil-alt"></i>
-        &nbsp;&nbsp;&nbsp;
-        <i onclick="deleteRegister($(this).closest('td').closest('tr'))" class="text-danger fas fa-trash-alt"></i>
-    </td>
-    `;
-    return html;
+// function makeRow() {
+//     var html = `
+//     <tr>
+//     <td class="text-light text-center">${1}</td>
+//     <td class="text-light text-center">${"a"}</td>
+//     <td class="text-light text-center">${"a"}</td>
+//     <td class="text-light text-center">${"a"}</td>
+//     <td class="text-light text-center">${"a"}</td>
+//     <td class="text-light text-center">${"a"}</td>
+//     <td class="text-light text-center">${"a"}</td>
+//     <td class="text-center"> 
+//         <i onclick="editRegister($(this).closest('td').closest('tr'))" class="text-warning fas fa-pencil-alt"></i>
+//         &nbsp;&nbsp;&nbsp;
+//         <i onclick="deleteRegister($(this).closest('td').closest('tr'))" class="text-danger fas fa-trash-alt"></i>
+//     </td>
+//     `;
+//     return html;
 
 
-}
+// }
 
 function resetInfos() {
 
