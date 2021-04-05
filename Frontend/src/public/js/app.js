@@ -1,23 +1,26 @@
+// $( function() {
+//     $( document ).tooltip();
+//   } );
 var sendObj = {
-    "ConfSenha" : null,
-    "Id" : null,
-    "Nome" : null,
-    "Email" : null,
-    "Senha" : null,
-    "Login" : null,
-    "Descricao" : null,
-    "Telefone" : null,
-    "DataNascimento" : null,
-    "Status" : null,
-    "Tipo" : null,
-    "Endereco" : null,
-    "RedesSociais" : [],
-    "Estilos" : [],
-    "Instrumentos" : [],
-    "Criador" : null,
-    "Integrantes" : null,
-    "TipoIndustria" : null,
-    "Logradouro" : null
+    "ConfSenha": null,
+    "Id": null,
+    "Nome": null,
+    "Email": null,
+    "Senha": null,
+    "Login": null,
+    "Descricao": null,
+    "Telefone": null,
+    "DataNascimento": null,
+    "Status": null,
+    "Tipo": null,
+    "Endereco": null,
+    "RedesSociais": [],
+    "Estilos": [],
+    "Instrumentos": [],
+    "Criador": null,
+    "Integrantes": null,
+    "TipoIndustria": null,
+    "Logradouro": null
 }
 var contRedesSociais = 1;
 var contEstilosMusicais = 1;
@@ -102,29 +105,194 @@ function addInstrumento() {
 async function modalCreate() {
     Swal.mixin({
         showCancelButton: true,
-        progressSteps: ['1', '2', '3', '4', '5','6']
+        progressSteps: ['1', '2', '3', '4', '5', '6']
     }).queue([
         {
             title: "Informações básicas",
+            width: "64rem",
             html:
-                '<label style="padding-top: 10px;" for="nome">Nome</label>' +
-                '<input  id="nome" class="form-control">' +
-                '<label style="padding-top: 10px;" for="email">Email</label>' +
-                '<input  id="email" class="form-control">' +
-                '<label style="padding-top: 10px;" for="senha">Senha</label>' +
-                '<input  id="senha" class="form-control">' +
-                '<label style="padding-top: 10px;" for="confSenha">Confirmação de senha</label>' +
-                '<input  id="confSenha" class="form-control">' +
-                '<label style="padding-top: 10px;" for="login">Nome de usuário</label>' +
-                '<input  id="login" class="form-control">',
+                '<div class="row">'+
+                    '<div class="col">'+
+                        '<label style="padding-top: 10px;" for="nome">Nome</label>' +
+                        '<input  id="nome" class="form-control">' +
+                        '<div id="invFB-Nome" style="display: none" class="invalid-feedback">' +
+                        'Nome muito curto ou muito longo.' +
+                        '</div>' +
+                        '<label style="padding-top: 10px;" for="email">Email</label>' +
+                        '<input id="email" class="form-control">' +
+                        '<div  id="invFB-Email" style="display: none" class="invalid-feedback">' +
+                        'Formato de email inválido.' +
+                        '</div>' +
+                        '<label style="padding-top: 10px;" for="senha">Senha</label>' +
+                        '<input id="senha" class="form-control">' +
+                        '<div  id="invFB-Senha" style="display: none" class="invalid-feedback">' +
+                        'Senha insegura ou inválida.' +
+                        '</div>' +
+                        '<label style="padding-top: 10px;" for="confSenha">Confirmação de senha</label>' +
+                        '<input id="confSenha" class="form-control" data-toggle="tooltip" data-placement="right" title="Tooltip on right">' +
+                        '<div id="invFB-ConfSenha" style="display: none" class="invalid-feedback"> Senha e Confirmação de Senha não coincidem. </div>' +
+                        '<label style="padding-top: 10px;" for="login">Nome de usuário</label>' +
+                        '<input id="login" class="form-control">' +
+                        '<div id="invFB-Login" style="display: none" class="invalid-feedback">' +
+                        'Login muito curto ou muito longo.' +
+                        '</div>'+
+                    '</div>'+
+                    '<div class="col">'+
+                    '<div class="alert alert-primary" role="alert" id="alert-senha">'+
+                    '<h4 class="alert-heading">Força da senha</h4>'+
+                    '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui 8 a 20 caracteres. </span>'+
+                    '<br>'+
+                    '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres maiúsculos. </span>'+
+                    '<br>'+
+                    '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres minúsculos.</span>'+
+                    '<br>'+
+                    '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui números.</span>'+
+                    '<br>'+
+                    '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres especiais.</span>'+
+                    '<br>'+
+                    '</div>'+
+                    '</div>'+
+                '</div>',
+                
             confirmButtonText: 'Next &rarr;',
+            didOpen: () => {
+                $(".swal2-confirm").attr('disabled', 'false');
+                
+                $('#nome').on('change keyup paste',function () {
+                    var lenNome = document.getElementById('nome').value.length;
+                    console.log(lenNome);
+                    if(lenNome>10 && lenNome<100){
+                        $('#invFB-Nome').hide();
+                        $(".swal2-confirm").attr('disabled', false);
+                    }
+                    else{
+                        $('#invFB-Nome').show();
+                        $(".swal2-confirm").attr('disabled', 'disabled');
+                    }
+                });
+
+                $('#email').on('change keyup paste',function () {
+                    var tempEmail = document.getElementById('email').value;
+                    console.log("email", validateEmail(tempEmail)   );
+                    if(validateEmail(tempEmail)){
+                        $('#invFB-Email').hide();
+                        $(".swal2-confirm").attr('disabled', false);
+                    }
+                    else{
+                        $('#invFB-Email').show();
+                        $(".swal2-confirm").attr('disabled', 'disabled');
+                    }
+                    
+                });
+
+                $('#senha').on('change keyup paste',function () {
+                    var tempSenha = this.value;
+                    
+                    var hasUpperCase = /[A-Z]/.test(tempSenha);
+                    var hasLowerCase = /[a-z]/.test(tempSenha);
+                    var hasNumbers = /\d/.test(tempSenha);
+                    var hasNonalphas = /\W/.test(tempSenha);
+                    var len = tempSenha.length;
+
+                    var lenOk = len>=8 && len <=20;
+                    
+                    var iconOk = '<i class="fas fa-check text-success "></i>';
+
+
+                    var iconNotOk = '<i class="fas fa-times text-danger "></i>';
+
+                    var html =  '<h4 class="alert-heading">Força da senha</h4>';
+                    if(lenOk)
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui 8 a 20 caracteres. </span>';
+                    }
+                    else
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui 8 a 20 caracteres. </span>';
+                    }
+                    html+='<br>';
+                    if(hasUpperCase)
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui caracteres maiúsculos.. </span>';
+                    }
+                    else
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres maiúsculos.. </span>';
+                    }
+                    html+='<br>';
+                    if(hasLowerCase)
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui caracteres minúsculos. </span>';
+                    }
+                    else
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres minúsculos. </span>';
+                    }
+                    html+='<br>';
+                    if(hasNumbers)
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui números. </span>';
+                    }
+                    else
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui números. </span>';
+                    }
+                    html+='<br>';
+                    if(hasNonalphas)
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui caracteres especiais. </span>';
+                    }
+                    else
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres especiais. </span>';
+                    }
+                    html+='<br>';
+                    $('#alert-senha').html(html);
+            
+                });
+
+                $('#confSenha').on('change keyup paste',function () {
+                    var tempSenha = document.getElementById('senha').value;
+                    var tempConfSenha = document.getElementById('confSenha').value;
+                    if(tempSenha == tempConfSenha){
+                        $('#invFB-ConfSenha').hide();
+                        $(".swal2-confirm").attr('disabled', false);
+                    }
+                    else{
+                        $('#invFB-ConfSenha').show();
+                        $(".swal2-confirm").attr('disabled', 'disabled');
+                    }
+                });
+
+                $('#login').on('change keyup paste',function () {
+                    var tempSenha = document.getElementById('senha').value;
+                    var tempConfSenha = document.getElementById('confSenha').value;
+                    if(tempSenha == tempConfSenha){
+                        $('#invFB-ConfSenha').hide();
+                        $(".swal2-confirm").attr('disabled', false);
+                    }
+                    else{
+                        $('#invFB-ConfSenha').show();
+                        $(".swal2-confirm").attr('disabled', 'disabled');
+                    }
+                });
+            },
             preConfirm: () => {
                 sendObj.Nome = document.getElementById('nome').value;
-                sendObj.Email = document.getElementById('email').value;
+                sendObj.Email = document.getElementById('email').value.toLowerCase();
                 sendObj.Senha = document.getElementById('senha').value;
                 sendObj.ConfSenha = document.getElementById('confSenha').value;
                 sendObj.Login = document.getElementById('login').value;
-                
+
+                // $('#confSenha').keydown(function() {
+
+                // });
+
+                // if(sendObj.Senha != sendObj.ConfSenha){
+                //     document.getElementById('confSenha').classList.add('was-validated');
+                //     $(".swal2-confirm").attr('disabled', 'disabled');
+                // }  
+
             }
         },
         {
@@ -155,16 +323,16 @@ async function modalCreate() {
                 var e = document.getElementById("estados");
 
                 var value = e.value;
-                if(value == ""){
+                if (value == "") {
                     sendObj.Endereco = null;
                 }
-                else{
+                else {
                     sendObj.Endereco = new Object();
                     sendObj.Endereco.Cidade = document.getElementById('cidade').value;
                     sendObj.Endereco.UF = e.value;
                     sendObj.Endereco.Estado = e.options[e.selectedIndex].text;
                 }
-                
+
             }
         },
         {
@@ -210,7 +378,7 @@ async function modalCreate() {
             preConfirm: () => {
                 for (let index = 1; index <= contEstilosMusicais; index++) {
                     var nomeEstiloMusical = document.getElementById("nomeEstiloMusical" + index.toString());
-                    
+
                     if (!checkEmptyString(nomeEstiloMusical.value)) sendObj.Estilos.push(nomeEstiloMusical.value);
                 }
 
@@ -260,13 +428,13 @@ async function modalCreate() {
                             icon: 'success',
                             text: "Usuário criado com sucesso!",
                             confirmButtonText: 'Ok'
-                        }).then(() =>{
+                        }).then(() => {
                             resetInfos();
                             window.location.reload();
 
                         })
-                        
-                        
+
+
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         var json = xhr.responseJSON;
@@ -314,16 +482,16 @@ $('#add, #add2').click(async function () {
 function deleteRegister(tr) {
     let id = tr.find('td')[0].innerText;
     Swal.fire({
-        titleText: 'Tem certeza que deseja excluir o usuário de id '+id+'?',
+        titleText: 'Tem certeza que deseja excluir o usuário de id ' + id + '?',
         html: '<b>Essa ação é irreversível!<b>',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: `Sim`,
-      }).then((result) => {
+    }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
             $.ajax({
-                url: "/musico/delete/"+id,
+                url: "/musico/delete/" + id,
                 type: "DELETE",
                 success: function (resultAjax) {
                     Swal.fire({
@@ -331,19 +499,19 @@ function deleteRegister(tr) {
                         icon: 'success',
                         text: "Usuário excluído com sucesso!",
                         confirmButtonText: 'Ok'
-                    }).then(() =>{
+                    }).then(() => {
                         resetInfos();
                         window.location.reload();
-    
+
                     })
-                    
-                    
+
+
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     console.log(xhr.responseJSON);
                     console.log(xhr.thrownError);
                     console.log(xhr.ajaxOptions);
-                    
+
                     var json = xhr.responseJSON;
                     var lstErros = json.mensagens;
                     if (lstErros.length > 0) {
@@ -352,7 +520,7 @@ function deleteRegister(tr) {
                             html2 += element;
                             html2 += "<br>";
                         });
-    
+
                         Swal.fire({
                             title: 'Erro!',
                             icon: 'error',
@@ -364,49 +532,49 @@ function deleteRegister(tr) {
                 }
             })
         } else if (result.isDenied) {
-          Swal.fire('Usuário NÃO foi excluído', '', 'info')
+            Swal.fire('Usuário NÃO foi excluído', '', 'info')
         }
-      })
+    })
     // 
-        // $.ajax({
-        //     url: "/musico/create",
-        //     type: "POST",
-        //     data: sendObj,
-        //     dataType: "json",
-        //     success: function (resultAjax) {
-        //         Swal.fire({
-        //             title: 'Sucesso!',
-        //             icon: 'success',
-        //             text: "Usuário criado com sucesso!",
-        //             confirmButtonText: 'Ok'
-        //         }).then(() =>{
-        //             resetInfos();
-        //             window.location.reload();
+    // $.ajax({
+    //     url: "/musico/create",
+    //     type: "POST",
+    //     data: sendObj,
+    //     dataType: "json",
+    //     success: function (resultAjax) {
+    //         Swal.fire({
+    //             title: 'Sucesso!',
+    //             icon: 'success',
+    //             text: "Usuário criado com sucesso!",
+    //             confirmButtonText: 'Ok'
+    //         }).then(() =>{
+    //             resetInfos();
+    //             window.location.reload();
 
-        //         })
-                
-                
-        //     },
-        //     error: function (xhr, ajaxOptions, thrownError) {
-        //         var json = xhr.responseJSON;
-        //         var lstErros = json.mensagens;
-        //         if (lstErros.length > 0) {
-        //             var html2 = "<h4>" + json.retorno + "</h4>";
-        //             lstErros.forEach(element => {
-        //                 html2 += element;
-        //                 html2 += "<br>";
-        //             });
+    //         })
 
-        //             Swal.fire({
-        //                 title: 'Erro!',
-        //                 icon: 'error',
-        //                 html: html2,
-        //                 confirmButtonText: 'Ok'
-        //             })
-        //             resetInfos();
-        //         }
-        //     }
-        // })
+
+    //     },
+    //     error: function (xhr, ajaxOptions, thrownError) {
+    //         var json = xhr.responseJSON;
+    //         var lstErros = json.mensagens;
+    //         if (lstErros.length > 0) {
+    //             var html2 = "<h4>" + json.retorno + "</h4>";
+    //             lstErros.forEach(element => {
+    //                 html2 += element;
+    //                 html2 += "<br>";
+    //             });
+
+    //             Swal.fire({
+    //                 title: 'Erro!',
+    //                 icon: 'error',
+    //                 html: html2,
+    //                 confirmButtonText: 'Ok'
+    //             })
+    //             resetInfos();
+    //         }
+    //     }
+    // })
 
 
     //tr.remove();
@@ -450,25 +618,25 @@ function makeRow() {
 function resetInfos() {
 
     sendObj = {
-        "ConfSenha" : null,
-        "Id" : null,
-        "Nome" : null,
-        "Email" : null,
-        "Senha" : null,
-        "Login" : null,
-        "Descricao" : null,
-        "Telefone" : null,
-        "DataNascimento" : null,
-        "Status" : null,
-        "Tipo" : null,
-        "Endereco" : null,
-        "RedesSociais" : [],
-        "Estilos" : [],
-        "Instrumentos" : [],
-        "Criador" : null,
-        "Integrantes" : null,
-        "TipoIndustria" : null,
-        "Logradouro" : null
+        "ConfSenha": null,
+        "Id": null,
+        "Nome": null,
+        "Email": null,
+        "Senha": null,
+        "Login": null,
+        "Descricao": null,
+        "Telefone": null,
+        "DataNascimento": null,
+        "Status": null,
+        "Tipo": null,
+        "Endereco": null,
+        "RedesSociais": [],
+        "Estilos": [],
+        "Instrumentos": [],
+        "Criador": null,
+        "Integrantes": null,
+        "TipoIndustria": null,
+        "Logradouro": null
     }
 
     contRedesSociais = 1;
@@ -532,28 +700,28 @@ function verificaDados() {
 
 $('.modal-redes-sociais').click(function () {
     var redes = JSON.parse(this.value);
-    var html2 = 
-    '<div class="row">'+
-        '<div class="col">'+
-            'Nome'+
-        '</div>'+
-        '<div class="col">'+
-            'Link'+
-        '</div>'+
-    '</div>'+
-    '<hr>';
+    var html2 =
+        '<div class="row">' +
+        '<div class="col">' +
+        'Nome' +
+        '</div>' +
+        '<div class="col">' +
+        'Link' +
+        '</div>' +
+        '</div>' +
+        '<hr>';
 
     redes.forEach(function (rede, index) {
-        html2 += 
-        '<div style="padding-top: 0px;" class="row">'+
-            '<div style="padding-top: 0px;" class="col">'+
-                `${rede.nome}`+
-            '</div>'+
-            '<div class="col">'+
-            `<a target="_blank" href="${rede.link}">Link</a>`+
-            '</div>'+
-        '</div>';
-        if(index < redes.length-1) html2+= '<hr>';
+        html2 +=
+            '<div style="padding-top: 0px;" class="row">' +
+            '<div style="padding-top: 0px;" class="col">' +
+            `${rede.nome}` +
+            '</div>' +
+            '<div class="col">' +
+            `<a target="_blank" href="${rede.link}">Link</a>` +
+            '</div>' +
+            '</div>';
+        if (index < redes.length - 1) html2 += '<hr>';
     });
 
 
@@ -561,7 +729,7 @@ $('.modal-redes-sociais').click(function () {
     swal.fire({
         title: "Redes Sociais",
         html: html2
-    
+
     })
 });
 
@@ -569,59 +737,95 @@ $('.modal-redes-sociais').click(function () {
 
 $('.modal-estilos').click(function () {
     var estilos = JSON.parse(this.value);
-    var html2 = 
-    '<div class="row">'+
-    '</div>'+
-    '<hr>';
+    var html2 =
+        '<div class="row">' +
+        '</div>' +
+        '<hr>';
 
     estilos.forEach(function (estilo, index) {
-        html2 += 
-        '<div style="padding-top: 0px;" class="row">'+
-            '<div style="padding-top: 0px;" class="col">'+
-                `${estilo}`+
-            '</div>'+
-        '</div>';
-        if(index < estilos.length-1) html2+= '<hr>';
+        html2 +=
+            '<div style="padding-top: 0px;" class="row">' +
+            '<div style="padding-top: 0px;" class="col">' +
+            `${estilo}` +
+            '</div>' +
+            '</div>';
+        if (index < estilos.length - 1) html2 += '<hr>';
     });
 
     swal.fire({
         title: "Estilos",
         html: html2
-    
+
     })
 });
 
 $('.modal-instrumentos').click(function () {
     var instrumentos = JSON.parse(this.value);
-    var html2 = 
-    '<div class="row">'+
-    '</div>'+
-    '<hr>';
+    var html2 =
+        '<div class="row">' +
+        '</div>' +
+        '<hr>';
 
     instrumentos.forEach(function (instrumento, index) {
-        html2 += 
-        '<div style="padding-top: 0px;" class="row">'+
-            '<div style="padding-top: 0px;" class="col">'+
-                `${instrumento}`+
-            '</div>'+
-        '</div>';
-        if(index < instrumentos.length-1) html2+= '<hr>';
+        html2 +=
+            '<div style="padding-top: 0px;" class="row">' +
+            '<div style="padding-top: 0px;" class="col">' +
+            `${instrumento}` +
+            '</div>' +
+            '</div>';
+        if (index < instrumentos.length - 1) html2 += '<hr>';
     });
-    
+
     swal.fire({
         title: "Instrumentos",
         html: html2
-    
+
     })
-    
+
 });
 
 
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+    
+
+}
+
+function passwordStrenghHTML(tempSenha)
+{
+    var hasUpperCase = /[A-Z]/.test(tempSenha);
+    var hasLowerCase = /[a-z]/.test(tempSenha);
+    var hasNumbers = /\d/.test(tempSenha);
+    var hasNonalphas = /\W/.test(tempSenha);
+    var len = tempSenha.length;
+
+    var lenOk = len>=8 && len <=20;
+    
+    var iconOk = '<i class="fas fa-check text-success "></i>';
 
 
+    var iconNotOk = '<i class="fas fa-times text-danger "></i>';
+
+    var html =  '<h4 class="alert-heading">Força da senha</h4>'+
+    '<span style="float: left;" class="text-dark">'+lenOk? iconOk : iconNotOk+' Possui 8 a 20 caracteres. </span>'+
+    '<br>'+
+    '<span style="float: left;" class="text-dark">'+hasUpperCase? iconOk : iconNotOk+' Possui caracteres maiúsculos. </span>'+
+    '<br>'+
+    '<span style="float: left;" class="text-dark">'+hasLowerCase? iconOk : iconNotOk+' Possui caracteres minúsculos.</span>'+
+    '<br>'+
+    '<span style="float: left;" class="text-dark">'+hasNumbers? iconOk : iconNotOk+' Possui números.</span>'+
+    '<br>'+
+    '<span style="float: left;" class="text-dark">'+hasNonalphas? iconOk : iconNotOk+' Possui caracteres especiais.</span>'+
+    '<br>'+
+    '<hr>';
+    console.log(html);
+    $('#alert-senha').html(html);
 
 
-// var Id = null;
+}
+
+
 // var Nome = null;
 // var Email = null;
 // var Senha = null;
