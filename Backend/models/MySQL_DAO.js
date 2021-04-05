@@ -57,7 +57,7 @@ DataBaseDAO.prototype.ListUsuarioPorTipo = function (tipo, callback) {
 
 DataBaseDAO.prototype.GetUserById = function (id, callback) {
   this._conn.query('SELECT * FROM usuarios\
-                    WHERE Id = ?',id,
+                    WHERE Id = ? and Ativo = 1',id,
     callback)
 
 };

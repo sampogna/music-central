@@ -31,10 +31,37 @@ var sendObj = {
     "TipoIndustria": null,
     "Logradouro": null
 }
+
+var updateObj = {
+    "ConfSenha": null,
+    "Id": null,
+    "Nome": null,
+    "Email": null,
+    "Senha": null,
+    "Login": null,
+    "Descricao": null,
+    "Telefone": null,
+    "DataNascimento": null,
+    "Status": null,
+    "Tipo": null,
+    "Endereco": null,
+    "RedesSociais": [],
+    "Estilos": [],
+    "Instrumentos": [],
+    "Criador": null,
+    "Integrantes": null,
+    "TipoIndustria": null,
+    "Logradouro": null
+}
 var contRedesSociais = 1;
 var contEstilosMusicais = 1;
 var contInstrumentos = 1;
 var criar = false;
+
+var contRedesSociaisUpdate = 0;
+var contEstilosMusicaisUpdate = 0;
+var contInstrumentosUpdate = 0;
+var atualizar = false;
 
 const Estados =
     '<label style="padding-top: 10px;" for="estados">UF</label>' +
@@ -74,9 +101,28 @@ function novaRede(cont) {
         '<div style="padding-top: 0px; class="RedesSociais">' +
         '<label style="padding-top: 10px;">Nome Rede social ' + cont.toString() + ' </label>' +
         '<input id="nomeRedeSocial' + cont.toString() + '" class="form-control">' +
-        '<label style="padding-top: 10px;">Link Rede social ' + contRedesSociais.toString() + ' </label>' +
+        '<label style="padding-top: 10px;">Link Rede social ' + cont.toString() + ' </label>' +
         '<input id="linkRedeSocial' + cont.toString() + '" class="form-control">' +
         '</div>';
+}
+
+function novaRedeComValor(cont, valObj) {
+    return `<hr> 
+            <div style="padding-top: 0px; class="RedesSociais"> 
+            <label style="padding-top: 10px;">Nome Rede social ${cont.toString()}  </label> 
+            <input id="nomeRedeSocial${cont.toString()}" class="form-control" value="${valObj.nome ? valObj.nome : ""}"> 
+            <label style="padding-top: 10px;">Link Rede social ${cont.toString()}  </label> 
+            <input id="linkRedeSocial${cont.toString()}" class="form-control"  value="${valObj.link ? valObj.link : ""}">
+            </div>`;
+}
+
+function novaRedeComValorFirst(cont, valObj) {
+    return `<div style="padding-top: 0px; class="RedesSociais"> 
+            <label style="padding-top: 10px;">Nome Rede social ${cont.toString()}  </label> 
+            <input id="nomeRedeSocial${cont.toString()}" class="form-control" value="${valObj.nome ? valObj.nome : ""}"> 
+            <label style="padding-top: 10px;">Link Rede social ${cont.toString()}  </label> 
+            <input id="linkRedeSocial${cont.toString()}" class="form-control"  value="${valObj.link ? valObj.link : ""}">
+            </div>`;
 }
 
 function novoEstilo(cont) {
@@ -87,17 +133,101 @@ function novoEstilo(cont) {
         '</div>';
 }
 
+function novoEstiloComValor(cont, val) {
+    return `<hr> 
+    <div style="padding-top: 0px; class="EstilosMusicais"> 
+    <label style="padding-top: 10px;">Nome Estilo Musical ${cont.toString()}</label> 
+    <input id="nomeEstiloMusical${cont.toString()}" class="form-control" value="${val ? val : ""}"> 
+    </div>`;
+}
+
+function novoEstiloComValorFirst(cont, val) {
+    return `<div style="padding-top: 0px; class="EstilosMusicais"> 
+    <label style="padding-top: 10px;">Nome Estilo Musical ${cont.toString()}</label> 
+    <input id="nomeEstiloMusical${cont.toString()}" class="form-control" value="${val ? val : ""}"> 
+    </div>`;
+}
+
 function novoInstrumento(cont) {
-    return '<hr>' +
-        '<div style="padding-top: 0px; class="InstrumentosMusicais">' +
-        '<label style="padding-top: 10px;">Nome Instrumento Musical ' + cont.toString() + '</label>' +
-        '<input id="nomeInstrumentoMusical' + cont.toString() + '" class="form-control">' +
-        '</div>';
+    return `<hr> 
+    <div style="padding-top: 0px; class="InstrumentosMusicais"> 
+    <label style="padding-top: 10px;">Nome Instrumento Musical ${cont.toString()}</label> 
+    <input id="nomeInstrumentoMusical${cont.toString()}" class="form-control"> 
+    </div>`;
+}
+
+function novoInstrumentoComValor(cont, val) {
+    return `<hr> 
+    <div style="padding-top: 0px; class="InstrumentosMusicais"> 
+    <label style="padding-top: 10px;">Nome Instrumento Musical ${cont.toString()}</label> 
+    <input id="nomeInstrumentoMusical${cont.toString()}" class="form-control" value="${val ? val : ""}"> 
+    </div>`
+}
+
+function novoInstrumentoComValorFirst(cont, val) {
+    return `<div style="padding-top: 0px; class="InstrumentosMusicais"> 
+    <label style="padding-top: 10px;">Nome Instrumento Musical ${cont.toString()}</label> 
+    <input id="nomeInstrumentoMusical${cont.toString()}" class="form-control" value="${val ? val : ""}"> 
+    </div>`
 }
 
 function addRede() {
     contRedesSociais++;
+    
     $('#socials').append(novaRede(contRedesSociais));
+}
+function addRedeComValor(valObj) {
+    contRedesSociaisUpdate++;
+    
+    $('#socials').append(novaRedeComValor(contRedesSociaisUpdate, valObj));
+}
+
+function addRedeComValorFirst(valObj) {
+    contRedesSociaisUpdate++;
+    
+    $('#socials').append(novaRedeComValorFirst(contRedesSociaisUpdate, valObj));
+}
+
+function addRedeSemValorFirst() {
+    contRedesSociaisUpdate++;
+    var valObj = {
+        link: "",
+        nome:""
+    }
+    
+    $('#socials').append(novaRedeComValorFirst(contRedesSociaisUpdate, valObj));
+}
+
+function addRedeSemValor() {
+    contRedesSociaisUpdate++;
+    var valObj = {
+        link: "",
+        nome:""
+    }
+    
+    $('#socials').append(novaRedeComValor(contRedesSociaisUpdate, valObj));
+}
+
+function addEstiloComValor(val) {
+    contEstilosMusicaisUpdate++;
+    $('#estilos').append(novoEstiloComValor(contEstilosMusicaisUpdate, val));
+}
+
+function addEstiloComValorFirst(val) {
+    contEstilosMusicaisUpdate++;
+    $('#estilos').append(novoEstiloComValorFirst(contEstilosMusicaisUpdate, val));
+}
+
+function addEstiloSemValor() {
+    contEstilosMusicaisUpdate++;
+    var val = "";
+    $('#estilos').append(novoEstiloComValor(contEstilosMusicaisUpdate, val));
+}
+
+function addEstiloSemValorFirst() {
+    contEstilosMusicaisUpdate++;
+    var val = "";
+    $('#estilos').append(novoEstiloComValorFirst(contEstilosMusicaisUpdate, val));
 }
 
 function addEstilo() {
@@ -109,6 +239,33 @@ function addInstrumento() {
     contInstrumentos++;
     $('#instrumentos').append(novoInstrumento(contInstrumentos));
 }
+
+function addInstrumentoComValor(val) {
+    contInstrumentosUpdate++;
+    $('#instrumentos').append(novoInstrumentoComValor(contInstrumentosUpdate, val));
+}
+
+function addInstrumentoComValorFirst(val) {
+    contInstrumentosUpdate++;
+    
+    $('#instrumentos').append(novoInstrumentoComValorFirst(contInstrumentosUpdate, val));
+}
+
+function addInstrumentoSemValor() {
+    contInstrumentosUpdate++;
+    var val = "";
+    $('#instrumentos').append(novoInstrumentoComValor(contInstrumentosUpdate, val));
+}
+
+function addInstrumentoSemValorFirst() {
+    contInstrumentosUpdate++;
+    var val = "";
+    $('#instrumentos').append(novoInstrumentoComValorFirst(contInstrumentosUpdate, val));
+}
+
+
+
+
 
 
 async function modalCreate() {
@@ -484,8 +641,9 @@ async function modalCreate() {
 $('#add, #add2').click(async function () {
     resetInfos();
     await modalCreate();
-    $('#list').append(makeRow());
 });
+
+
 
 
 function deleteRegister(tr) {
@@ -544,64 +702,474 @@ function deleteRegister(tr) {
             Swal.fire('Usuário NÃO foi excluído', '', 'info')
         }
     })
-    // 
-    // $.ajax({
-    //     url: "/musico/create",
-    //     type: "POST",
-    //     data: sendObj,
-    //     dataType: "json",
-    //     success: function (resultAjax) {
-    //         Swal.fire({
-    //             title: 'Sucesso!',
-    //             icon: 'success',
-    //             text: "Usuário criado com sucesso!",
-    //             confirmButtonText: 'Ok'
-    //         }).then(() =>{
-    //             resetInfos();
-    //             window.location.reload();
-
-    //         })
-
-
-    //     },
-    //     error: function (xhr, ajaxOptions, thrownError) {
-    //         var json = xhr.responseJSON;
-    //         var lstErros = json.mensagens;
-    //         if (lstErros.length > 0) {
-    //             var html2 = "<h4>" + json.retorno + "</h4>";
-    //             lstErros.forEach(element => {
-    //                 html2 += element;
-    //                 html2 += "<br>";
-    //             });
-
-    //             Swal.fire({
-    //                 title: 'Erro!',
-    //                 icon: 'error',
-    //                 html: html2,
-    //                 confirmButtonText: 'Ok'
-    //             })
-    //             resetInfos();
-    //         }
-    //     }
-    // })
-
-
-    //tr.remove();
-
 }
 
 
-function editRegister(tr) {
-    console.log(tr);
+async function editRegister(tr) {
+    resetInfosUpdate();
+    var id = tr.find('td')[0].innerText;
+    
     Swal.fire({
-        title: 'WIP!!',
-        text: 'Modal para editar músico de id ' + tr.find('td')[0].innerText,
-        icon: 'warning',
-        confirmButtonText: 'Cool'
-    })
+        title: 'Atualizar o usuário '+id+"?",
+        showCancelButton: true,
+        confirmButtonText: 'Sim',
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          return fetch(`/musico/${id}`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(response.statusText)
+              }
+              return response.json()
+            })
+            .catch(error => {
+              Swal.showValidationMessage(
+                `Request failed: ${error}`
+              )
+            })
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+            var mapeado = await updateMapper(result.value);
+            
+          Swal.fire({
+            html: JSON.stringify(result.value)
+          }).then(async () =>{
+
+            await modalUpdate();
+
+          });
+        }
+    });
 
 }
 
+async function updateMapper(data){
+
+    
+    await Object.keys(updateObj).map(v => updateObj[v] = data[v]);
+}
+
+async function modalUpdate() {
+    var data = updateObj;
+    Swal.mixin({
+        title: `Atualizar usuário ${data.Id}`,
+        showCancelButton: true,
+        progressSteps: ['1', '2', '3', '4', '5', '6'],
+        didOpen:()=>{
+            //$(".swal2-confirm").attr('disabled', 'true');
+        }
+    }).queue([
+        {
+            title: "Informações básicas",
+            width: "50rem",
+            html:
+            `<div class="row">
+                <div class="col">
+                    <label style="padding-top: 10px;" for="nome">Nome</label>
+                    <input  id="nome" class="form-control" value="${data.Nome}">
+                    <div id="invFB-Nome" style="display: none" class="invalid-feedback">
+                    Nome muito curto ou muito longo.
+                    </div>
+                    <label style="padding-top: 10px;" for="email">Email</label>
+                    <input id="email" class="form-control" value="${data.Email}">
+                    <div  id="invFB-Email" style="display: none" class="invalid-feedback">
+                    Formato de email inválido.
+                    </div>
+                    <label style="padding-top: 10px;" for="senha">Senha</label>
+                    <input id="senha" class="form-control" value="${data.Senha}">
+                    <div  id="invFB-Senha" style="display: none" class="invalid-feedback">
+                    Senha insegura ou inválida.
+                    </div>
+                    <label style="padding-top: 10px;" for="confSenha">Confirmação de senha</label>
+                    <input id="confSenha" class="form-control" value="${data.Senha}">
+                    <div id="invFB-ConfSenha" style="display: none" class="invalid-feedback"> Senha e Confirmação de Senha não coincidem. </div>
+                    <label style="padding-top: 10px;" for="login">Nome de usuário</label>
+                    <input id="login" class="form-control" value="${data.Login}">
+                    <div id="invFB-Login" style="display: none" class="invalid-feedback">
+                    Login muito curto ou muito longo.
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="alert alert-primary" role="alert">
+                        <h4 class="alert-heading">Força da senha</h4>
+                        <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui 8 a 20 caracteres. </span>
+                        <br>
+                        <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres maiúsculos. </span>
+                        <br>
+                        <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres minúsculos.</span>
+                        <br>
+                        <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui números.</span>
+                        <br>
+                        <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres especiais.</span>
+                        <br>
+                    </div>
+                </div>
+            </div>`,
+                
+            confirmButtonText: 'Next &rarr;',
+            didOpen: () => {
+                //$(".swal2-confirm").attr('disabled', 'disabled');
+                
+                $('#nome').on('change keyup paste',function () {
+                    var lenNome = document.getElementById('nome').value.length;
+                    console.log(lenNome);
+                    if(lenNome>10 && lenNome<100){
+                        $('#invFB-Nome').hide();
+                        //$(".swal2-confirm").attr('disabled', false);
+                    }
+                    else{
+                        $('#invFB-Nome').show();
+                        //$(".swal2-confirm").attr('disabled', 'disabled');
+                    }
+                });
+
+                $('#email').on('change keyup paste',function () {
+                    var tempEmail = document.getElementById('email').value;
+                    console.log("email", validateEmail(tempEmail)   );
+                    if(validateEmail(tempEmail)){
+                        $('#invFB-Email').hide();
+                        //$(".swal2-confirm").attr('disabled', false);
+                    }
+                    else{
+                        $('#invFB-Email').show();
+                        //$(".swal2-confirm").attr('disabled', 'disabled');
+                    }
+                    
+                });
+
+                $('#senha').on('change keyup paste',function () {
+                    var tempSenha = this.value;
+                    
+                    var hasUpperCase = /[A-Z]/.test(tempSenha);
+                    var hasLowerCase = /[a-z]/.test(tempSenha);
+                    var hasNumbers = /\d/.test(tempSenha);
+                    var hasNonalphas = /\W/.test(tempSenha);
+                    var len = tempSenha.length;
+
+                    var lenOk = len>=8 && len <=20;
+                    
+                    var iconOk = '<i class="fas fa-check text-success "></i>';
+
+
+                    var iconNotOk = '<i class="fas fa-times text-danger "></i>';
+
+                    var html =  '<h4 class="alert-heading">Força da senha</h4>';
+                    if(lenOk)
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui 8 a 20 caracteres. </span>';
+                    }
+                    else
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui 8 a 20 caracteres. </span>';
+                    }
+                    html+='<br>';
+                    if(hasUpperCase)
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui caracteres maiúsculos.. </span>';
+                    }
+                    else
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres maiúsculos.. </span>';
+                    }
+                    html+='<br>';
+                    if(hasLowerCase)
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui caracteres minúsculos. </span>';
+                    }
+                    else
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres minúsculos. </span>';
+                    }
+                    html+='<br>';
+                    if(hasNumbers)
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui números. </span>';
+                    }
+                    else
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui números. </span>';
+                    }
+                    html+='<br>';
+                    if(hasNonalphas)
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui caracteres especiais. </span>';
+                    }
+                    else
+                    {
+                        html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres especiais. </span>';
+                    }
+                    html+='<br>';
+                    $('#alert-senha').html(html);
+            
+                });
+
+                $('#confSenha').on('change keyup paste',function () {
+                    var tempSenha = document.getElementById('senha').value;
+                    var tempConfSenha = document.getElementById('confSenha').value;
+                    if(tempSenha == tempConfSenha){
+                        $('#invFB-ConfSenha').hide();
+                        //$(".swal2-confirm").attr('disabled', false);
+                    }
+                    else{
+                        $('#invFB-ConfSenha').show();
+                        //$(".swal2-confirm").attr('disabled', 'disabled');
+                    }
+                });
+
+                $('#login').on('change keyup paste',function () {
+                    var tempSenha = document.getElementById('senha').value;
+                    var tempConfSenha = document.getElementById('confSenha').value;
+                    if(tempSenha == tempConfSenha){
+                        $('#invFB-ConfSenha').hide();
+                        //$(".swal2-confirm").attr('disabled', false);
+                    }
+                    else{
+                        $('#invFB-ConfSenha').show();
+                        //$(".swal2-confirm").attr('disabled', 'disabled');
+                    }
+                });
+            },
+            preConfirm: () => {
+                sendObj.Nome = document.getElementById('nome').value;
+                sendObj.Email = document.getElementById('email').value.toLowerCase();
+                sendObj.Senha = document.getElementById('senha').value;
+                sendObj.ConfSenha = document.getElementById('confSenha').value;
+                sendObj.Login = document.getElementById('login').value;
+
+                // $('#confSenha').keydown(function() {
+
+                // });
+
+                // if(sendObj.Senha != sendObj.ConfSenha){
+                //     document.getElementById('confSenha').classList.add('was-validated');
+                //     //$(".swal2-confirm").attr('disabled', 'disabled');
+                // }  
+
+            }
+        },
+        {
+            title: "Informações básicas",
+            html:
+            `<label style="padding-top: 10px;" for="desc">Sobre você</label> 
+            <input  id="desc" class="form-control" value="${data.Descricao ? data.Descricao : ""}"> 
+            <label style="padding-top: 10px;" for="telefone">Telefone</label> 
+            <input  id="telefone" class="form-control" value="${data.Telefone ? data.Telefone : ""}"> 
+            <label style="padding-top: 10px;" for="dataNasc">Data de Nascimento</label> 
+            <input type="date" id="dataNasc" class="form-control"value="${data.DataNascimento.split("-").reverse().join("-")}">`,
+            confirmButtonText: 'Next &rarr;',
+            preConfirm: () => {
+                sendObj.Descricao = document.getElementById('desc').value;
+                sendObj.Telefone = document.getElementById('telefone').value;
+                sendObj.DataNascimento = document.getElementById('dataNasc').value;
+                verificaDadosObr();
+            }
+        },
+        {
+            title: "Endereço",
+            confirmButtonText: 'Next &rarr;',
+            didOpen:()=>{
+                if(data.Endereco){
+                    if(data.Endereco.UF) $('#estados').val(data.Endereco.UF);
+                    if(data.Endereco.Cidade) $('#cidade').val(data.Endereco.Cidade);
+                }
+                
+            },
+            html:
+                Estados +
+                `<label style="padding-top: 10px;" for="cidade">Cidade</label>
+                <input  id="cidade" class="form-control">`,
+            preConfirm: () => {
+                var e = document.getElementById("estados");
+
+                var value = e.value;
+                if (value == "") {
+                    sendObj.Endereco = null;
+                }
+                else {
+                    sendObj.Endereco = new Object();
+                    sendObj.Endereco.Cidade = document.getElementById('cidade').value;
+                    sendObj.Endereco.UF = e.value;
+                    sendObj.Endereco.Estado = e.options[e.selectedIndex].text;
+                }
+
+            }
+        },
+        {
+            title: "Redes Sociais",
+            confirmButtonText: 'Next &rarr;',
+            didOpen:()=>{
+                if(data.RedesSociais && data.RedesSociais.length > 0){
+                    data.RedesSociais.forEach((element,index) => {
+                        console.log(index);
+                        if(index == 0) addRedeComValorFirst(element);
+                        else{
+                            addRedeComValor(element);
+                        }
+                        
+                    });
+                }
+                else{
+                    addRedeSemValorFirst();
+                }
+
+
+            },
+            html:
+                '<div id="socials">' +
+                '</div>' +
+                '<br>' +
+                '<button id="add" type="button" onClick="addRedeSemValor()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>',
+            preConfirm: () => {
+
+                for (let index = 1; index <= contRedesSociais; index++) {
+                    var nomeRedeSocial = document.getElementById("nomeRedeSocial" + index.toString());
+                    var linkRedeSocial = document.getElementById("linkRedeSocial" + index.toString());
+                    var obj = new Object();
+                    obj.nome = nomeRedeSocial.value;
+                    obj.link = linkRedeSocial.value;
+                    if (!checkEmptyString(obj.nome) && !checkEmptyString(obj.link)) sendObj.RedesSociais.push(obj);
+                }
+
+            }
+
+        },
+        {
+            title: "Estilos Musicais",
+            confirmButtonText: 'Next &rarr;',
+            didOpen:()=>{
+                if(data.Estilos && data.Estilos.length > 0){
+                    data.Estilos.forEach((element,index) => {
+                        
+                        if(index == 0) addEstiloComValorFirst(element);
+                        else{
+                            addEstiloComValor(element);
+                        }
+                        
+                        
+                    });
+                }
+                else{
+                    addEstiloSemValorFirst();
+                }
+
+
+            },
+            html:
+                '<div id="estilos">' +
+                '</div>' +
+                '<br>' +
+                '<button id="add" type="button" onClick="addEstiloSemValor()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>',
+            preConfirm: () => {
+                for (let index = 1; index <= contEstilosMusicais; index++) {
+                    var nomeEstiloMusical = document.getElementById("nomeEstiloMusical" + index.toString());
+
+                    if (!checkEmptyString(nomeEstiloMusical.value)) sendObj.Estilos.push(nomeEstiloMusical.value);
+                }
+
+            }
+        },
+        {
+            title: "Instrumentos",
+            confirmButtonText: 'Next &rarr;',
+            didOpen:()=>{
+                if(data.Instrumentos && data.Instrumentos.length > 0){
+                    data.Instrumentos.forEach((element,index) => {
+                        console.log(index);
+                        if(index == 0) addInstrumentoComValorFirst(element);
+                        else{
+                            addInstrumentoComValor(element);
+                        }
+                        
+                    });
+                }
+                else{
+                    addInstrumentoSemValorFirst();
+                }
+
+
+            },
+            html:
+                '<div id="instrumentos">' +
+                '</div>' +
+                '<br>' +
+                '<button id="add" type="button" onClick="addInstrumentoSemValor()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>',
+            preConfirm: () => {
+
+                for (let index = 1; index <= contInstrumentos; index++) {
+                    var nomeInstrumento = document.getElementById("nomeInstrumentoMusical" + index.toString());
+                    if (!checkEmptyString(nomeInstrumento.value)) sendObj.Instrumentos.push(nomeInstrumento.value);
+                }
+                criar = true;
+
+            }
+
+        },
+    ]).then(() => {
+
+
+        if (criar) {
+            verificaDados();
+            Swal.fire({
+                title: 'Criando usuário...',
+                icon: 'info',
+                showConfirmButton: false
+            }).then(
+                $.ajax({
+                    url: "/musico/create",
+                    type: "POST",
+                    data: sendObj,
+                    dataType: "json",
+                    success: function (resultAjax) {
+                        Swal.fire({
+                            title: 'Sucesso!',
+                            icon: 'success',
+                            text: "Usuário criado com sucesso!",
+                            confirmButtonText: 'Ok'
+                        }).then(() => {
+                            resetInfos();
+                            window.location.reload();
+
+                        })
+
+
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        var json = xhr.responseJSON;
+                        var lstErros = json.mensagens;
+                        if (lstErros.length > 0) {
+                            var html2 = "<h4>" + json.retorno + "</h4>";
+                            lstErros.forEach(element => {
+                                html2 += element;
+                                html2 += "<br>";
+                            });
+
+                            Swal.fire({
+                                title: 'Erro!',
+                                icon: 'error',
+                                html: html2,
+                                confirmButtonText: 'Ok'
+                            })
+                            resetInfos();
+                        }
+                    }
+                })
+
+            )
+
+        }
+        else {
+            console.log("Processo de atualização abortado, limpando campos...");
+            resetInfosUpdate();
+        }
+
+
+
+
+
+    })
+}
 
 // function makeRow() {
 //     var html = `
@@ -623,6 +1191,38 @@ function editRegister(tr) {
 
 
 // }
+
+function resetInfosUpdate() {
+
+    updateObj = {
+        "ConfSenha": null,
+        "Id": null,
+        "Nome": null,
+        "Email": null,
+        "Senha": null,
+        "Login": null,
+        "Descricao": null,
+        "Telefone": null,
+        "DataNascimento": null,
+        "Status": null,
+        "Tipo": null,
+        "Endereco": null,
+        "RedesSociais": [],
+        "Estilos": [],
+        "Instrumentos": [],
+        "Criador": null,
+        "Integrantes": null,
+        "TipoIndustria": null,
+        "Logradouro": null
+    }
+
+    contRedesSociaisUpdate = 0;
+    contEstilosMusicaisUpdate = 0;
+    contInstrumentosUpdate = 0;
+
+    atualizar = false;
+
+}
 
 function resetInfos() {
 
@@ -650,6 +1250,7 @@ function resetInfos() {
 
     contRedesSociais = 1;
     contEstilosMusicais = 1;
+    contInstrumentos = 1;
 
     criar = false;
 
@@ -833,22 +1434,3 @@ function passwordStrenghHTML(tempSenha)
 
 
 }
-
-
-// var Nome = null;
-// var Email = null;
-// var Senha = null;
-// var ConfSenha = null;
-// var Login = null;
-// var Descricao = null;
-// var Telefone = null;
-// var DataNascimento = null;
-
-// var Status = null;
-// var Tipo = null;
-
-// var Endereco = null;
-
-// var RedesSociais = [];
-// var Estilos = [];
-// var Instrumentos = [];

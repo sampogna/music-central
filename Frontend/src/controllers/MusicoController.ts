@@ -16,12 +16,9 @@ class MusicoController {
     } catch (exception) {
       res.render("pages/musico", {data:null});
       process.stderr.write(
-        `ERROR received from ${base_url + "create"}: ${exception}\n`
+        `ERROR received from ${base_url + "list"}: ${exception}\n`
       );
     }
-
-
-    return new UserMusico("testeInd", "teste@gmail", "123", "jacs");
   }
 
   async adicionar(req: Request, res: Response) {
@@ -53,7 +50,21 @@ class MusicoController {
     } catch (exception) {
       res.status(500).json({retorno: "Algo inesperado aconteceu", mensagens: ["Internal Server Error"]});
       process.stderr.write(
-        `ERROR received from ${base_url + "create"}: ${exception}\n`
+        `ERROR received from ${base_url + "delete"}: ${exception}\n`
+      );
+    }
+  }
+
+  async get(req: Request, res: Response) {
+    try {
+      var userId = req.params.userId;
+      const response = await axios.get(base_url +userId);
+      console.log("response axios", response.data);
+      res.status(200).json(response.data);
+    } catch (exception) {
+      res.status(500).json({retorno: "Algo inesperado aconteceu", mensagens: ["Internal Server Error"]});
+      process.stderr.write(
+        `ERROR received from ${base_url + "get"}: ${exception}\n`
       );
     }
   }

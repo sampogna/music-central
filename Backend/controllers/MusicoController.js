@@ -116,10 +116,11 @@ MusicoController.prototype.Delete = function (app, request, response) {
   var userId = request.params.userId;
   var connection = app.config.db();
   var clientMySql = new app.models.MySQL_DAO(connection);
-  clientMySql.DeleteUsuario(userId, function (error, result) {
+  clientMySql.GetUserById(userId, function (error, result) {
     if (!error) {
-      if (result.affectedRows > 0) {
-        response.status(200).json({result: "Músico excluído com sucesso!"});
+      if (result.length == 1) {
+        var mapper = new UserMapper(app, null);
+        response.status(200).json(mapper.convertBack(result[0]));
       } else {
         response.status(500).json({ error: "Usuário não encontrado." });
       }

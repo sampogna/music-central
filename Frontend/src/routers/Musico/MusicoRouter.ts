@@ -36,10 +36,10 @@ class MusicoRouter {
       }
     );
 
-    this._router.post(
+    this._router.get(
       "/:userId",
       async (req: Request, res: Response, next: NextFunction) => {
-        await this._controller.adicionar(req, res);
+        await this._controller.get(req, res);
       }
     );
     
