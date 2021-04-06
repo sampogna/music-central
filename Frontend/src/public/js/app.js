@@ -310,48 +310,48 @@ async function modalCreate() {
                 VerficadoresDeCampo(1)
             },
             html:
-                '<div class="row">'+
-                    '<div class="col">'+
-                        '<label style="padding-top: 10px;" for="nome">Nome*</label>' +
-                        '<input  id="nome" class="form-control">' +
-                        '<div id="invFB-Nome" style="display: none" class="invalid-feedback">' +
-                        'Nome muito curto ou muito longo.' +
-                        '</div>' +
-                        '<label style="padding-top: 10px;" for="email">Email*</label>' +
-                        '<input id="email" class="form-control">' +
-                        '<div  id="invFB-Email" style="display: none" class="invalid-feedback">' +
-                        'Formato de email inválido.' +
-                        '</div>' +
-                        '<label style="padding-top: 10px;" for="senha">Senha*</label>' +
-                        '<input id="senha" class="form-control">' +
-                        '<div  id="invFB-Senha" style="display: none" class="invalid-feedback">' +
-                        'Senha insegura ou inválida.' +
-                        '</div>' +
-                        '<label style="padding-top: 10px;" for="confSenha">Confirmação de senha*</label>' +
-                        '<input id="confSenha" class="form-control" data-toggle="tooltip" data-placement="right" title="Tooltip on right">' +
-                        '<div id="invFB-ConfSenha" style="display: none" class="invalid-feedback"> Senha e Confirmação de Senha não coincidem. </div>' +
-                        '<label style="padding-top: 10px;" for="login">Nome de usuário*</label>' +
-                        '<input id="login" class="form-control">' +
-                        '<div id="invFB-Login" style="display: none" class="invalid-feedback">' +
-                        'Login muito curto ou muito longo.' +
-                        '</div>'+
-                    '</div>'+
-                    '<div class="col">'+
-                        '<div class="alert alert-primary" role="alert" id="alert-senha">'+
-                            '<h4 class="alert-heading">Força da senha</h4>'+
-                            '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui 8 a 20 caracteres. </span>'+
-                            '<br>'+
-                            '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres maiúsculos. </span>'+
-                            '<br>'+
-                            '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres minúsculos.</span>'+
-                            '<br>'+
-                            '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui números.</span>'+
-                            '<br>'+
-                            '<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres especiais.</span>'+
-                            '<br>'+
-                        '</div>'+
-                    '</div>'+
-                '</div>',
+            `<div class="row">
+            <div class="col">
+                <label style="padding-top: 10px;" for="nome">Nome*</label> 
+                <input  id="nome" class="form-control"> 
+                <div id="invFB-Nome" style="display: none" class="invalid-feedback"> 
+                Nome muito curto ou muito longo. 
+                </div> 
+                <label style="padding-top: 10px;" for="email">Email*</label> 
+                <input id="email" class="form-control"> 
+                <div  id="invFB-Email" style="display: none" class="invalid-feedback"> 
+                Formato de email inválido. 
+                </div> 
+                <label style="padding-top: 10px;" for="senha">Senha* &nbsp;<i onclick="showHide($(this))" title="Mostrar senha" class="fas fa-eye"></i></label> 
+                <input type="password" id="senha" class="form-control"> 
+                <div id="invFB-Senha" style="display: none" class="invalid-feedback"> 
+                Senha insegura ou inválida. 
+                </div> 
+                <label style="padding-top: 10px;" for="confSenha">Confirmação de senha* &nbsp;<i onclick="showHide($(this))" title="Mostrar senha" class="fas fa-eye"></i></label> 
+                <input type="password" id="confSenha" class="form-control"> 
+                <div id="invFB-ConfSenha" style="display: none" class="invalid-feedback"> Senha e Confirmação de Senha não coincidem. </div> 
+                <label style="padding-top: 10px;" for="login">Nome de usuário*</label> 
+                <input id="login" class="form-control"> 
+                <div id="invFB-Login" style="display: none" class="invalid-feedback"> 
+                Login muito curto ou muito longo. 
+                </div>
+            </div>
+            <div class="col">
+                <div class="alert alert-primary" role="alert" id="alert-senha">
+                    <h4 class="alert-heading">Força da senha</h4>
+                    <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui 8 a 20 caracteres. </span>
+                    <br>
+                    <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres maiúsculos. </span>
+                    <br>
+                    <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres minúsculos.</span>
+                    <br>
+                    <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui números.</span>
+                    <br>
+                    <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres especiais.</span>
+                    <br>
+                </div>
+            </div>
+        </div>`,
             preConfirm: () => {
                 sendObj.Nome = document.getElementById('nome').value;
                 sendObj.Email = document.getElementById('email').value.toLowerCase();
@@ -1752,4 +1752,33 @@ function InstrumentosMusicais(){
     
     var observer = new MutationObserver(callback);
     observer.observe(targetNode, config);
+}
+
+function showHide(){
+    if($('#confSenha').prop('type') == "text") $('#confSenha').prop('type', 'password');
+    else $('#confSenha').prop('type', 'text');
+
+    if($('#senha').prop('type') == "text") $('#senha').prop('type', 'password');
+    else $('#senha').prop('type', 'text');
+   
+    $("i[title='Mostrar senha']").each(function() {
+        
+        if($( this ).attr("class") == "fas fa-eye"){
+            $( this ).removeClass("fas fa-eye");
+            $( this ).addClass("fas fa-eye-slash");
+        }
+        else{
+            $( this ).removeClass("fas fa-eye-slash");
+            $( this ).addClass("fas fa-eye");
+        }
+      });
+    
+
+    // $("i[title='Mostrar senha']").each(element => {
+    //     if(element.css("class") == "fas fa-eye") element.css("class","fas fa-eye-slash");
+    //     else element.css("class","fas fa-eye");
+    // });
+
+   
+    
 }
