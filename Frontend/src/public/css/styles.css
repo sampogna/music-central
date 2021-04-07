@@ -53,3 +53,7 @@ span.fas.fa-music {
 i{
     cursor: pointer;
 }
+
+[id*="invFB"] {  /* WE USE * HERE */
+    font-weight: bold;
+}

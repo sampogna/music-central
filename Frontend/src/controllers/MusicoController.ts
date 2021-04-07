@@ -37,8 +37,18 @@ class MusicoController {
     }
   }
 
-  alterar(req: Request, res: Response) {
-    res.json(req.body);
+  async alterar(req: Request, res: Response) {
+    try {
+      var userId = req.params.userId;
+      const response = await axios.post(base_url + "update/"+userId, req.body);
+      console.log("response axios", response.data);
+      res.status(200).json(response.data);
+    } catch (exception) {
+      res.status(500).json({retorno: "Algo inesperado aconteceu", mensagens: ["Internal Server Error"]});
+      process.stderr.write(
+        `ERROR received from ${base_url + "delete"}: ${exception}\n`
+      );
+    }
   }
 
   async delete(req: Request, res: Response) {
