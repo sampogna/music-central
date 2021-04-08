@@ -26,7 +26,7 @@ body{
     bottom: 0;
 }
 .container{
-    width: 80%;
+    width: 100%;
     margin: 0 auto; /* Center the DIV horizontally */
 }
 nav a{
@@ -56,4 +56,8 @@ i{
 
 [id*="invFB"] {  /* WE USE * HERE */
     font-weight: bold;
+}
+input[type="search"]{
+
+    margin-bottom: 10px;
 }

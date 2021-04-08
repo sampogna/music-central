@@ -48,7 +48,14 @@
                                                 <td class="text-light text-left"><%= data[index].DataNascimento ? data[index].DataNascimento : "-" %></td>
                                                 <td class="text-light text-left"><%= data[index].Descricao ? data[index].Descricao : "-" %></td>
                                                 <td class="text-light text-left"><%= data[index].Telefone ? data[index].Telefone : "-" %></td>
-                                                <td class="text-light text-left"><%= data[index].Endereço ? data[index].Endereço : "-" %></td>
+                                                <td class="text-light text-center"><% if(data[index].Endereco != null){ %>
+                                                    <button type='button' value="<%= JSON.stringify(data[index].Endereco)%>" class='btn btn-primary modal-endereco'> <i class="fas fa-eye"></i> </button>
+                                                <%}
+                                                else{%>
+                                                    -
+                                                <%}%></td>
+
+
                                                 <td class="text-light text-left"><% if(data[index].RedesSociais){ %>
                                                     <button type='button' value="<%= JSON.stringify(data[index].RedesSociais)%>" class='btn btn-primary modal-redes-sociais'> <i class="fas fa-eye"></i> </button>
                                                 <%}

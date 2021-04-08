@@ -66,8 +66,8 @@ module.exports =  class UserMapper{
         dstTemp.Tipo = app.locals.tiposUsuarios.Musico;
         dstTemp.Estilos = src.Estilos? (src.Estilos.length>0 ? JSON.stringify(src.Estilos) : null): null;
         dstTemp.Instrumentos = src.Instrumentos? (src.Instrumentos.length>0 ? JSON.stringify(src.Instrumentos) : null): null;
-        dstTemp.DataNascimento = this.formatDate(src.DataNascimento);
         //this.dest = dstTemp;
+        dstTemp.DataNascimento = this.formatDate(src.DataNascimento);
         return dstTemp;
 
     }
@@ -101,7 +101,7 @@ module.exports =  class UserMapper{
     }
 
 
-    formatDate(str){
+    formatDate(str){ 
         var lst = str.split("-");
         var y,m,d;
 
@@ -153,7 +153,7 @@ module.exports =  class UserMapper{
         oldKeys.forEach(key => {
             if(updatedKeys.indexOf(key) < 0)
             {
-                res.addError(`Campo '${field}' não está presente.(Update)`);
+                res.addError(`Campo '${key}' não está presente.(Update)`);
             }
         });
 
@@ -228,6 +228,132 @@ module.exports =  class UserMapper{
         src.Integrantes = src.Integrantes? (src.Integrantes.length>0 ? JSON.stringify(src.Integrantes) : null): null;
         src.Logradouro = src.Logradouro? (src.Logradouro.length>0 ? JSON.stringify(src.Logradouro) : null): null;
         return src;
+    }
+
+    teste(bd, nova){
+        var dstTemp = new Object();
+
+        if(bd.Nome!= null) if(bd.Nome != nova.Nome) dstTemp.Nome = nova.Nome;
+        if(bd.Email!= null) if(bd.Email != nova.Email) dstTemp.Email = nova.Email;
+        if(bd.Login!= null) if(bd.Login != nova.Login) dstTemp.Login = nova.Login;
+        if(bd.Descricao!= null) if(bd.Descricao != nova.Descricao) dstTemp.Descricao = nova.Descricao;
+        if(bd.Telefone!= null) if(bd.Telefone != nova.Telefone) dstTemp.Telefone = nova.Telefone;
+
+        //bd.Endereco!= null ? (this.fromBlob(bd.Endereco) != nova.Endereco ? dstTemp.Endereco = nova.Endereco;) : dstTemp.Endereco = nova.Endereco;
+
+        if(bd.Endereco!=null){
+            var newEnderceo = new Object();
+            var fromBlobVar = this.fromBlob(bd.Endereco);
+            var keys = Object.keys(fromBlobVar);
+            keys.forEach(key => {
+                if(fromBlobVar[key] != nova.Endereco[key])
+                {
+                    newEnderceo[key] = nova.Endereco[key];
+                }
+            });
+
+            if(Object.keys(newEnderceo).length>0) dstTemp.Endereco = newEnderceo;
+        }
+        else{
+            dstTemp.Endereco = nova.Endereco;
+        }
+
+    
+
+        if(nova.RedesSociais!=null){
+            if(nova.RedesSociais.length >0){
+                var newLst = [];
+                nova.RedesSociais.forEach(element => {
+                    if(element.length>0){
+                        newLst.push(element);
+                    }
+                });
+                
+                if(newLst.length>0) dstTemp.RedesSociais = newLst;
+                
+            }
+            
+        }
+
+        if(nova.Instrumentos!=null){
+            if(nova.Instrumentos.length >0){
+                var newLst = [];
+                nova.Instrumentos.forEach(element => {
+                    if(element.length>0){
+                        newLst.push(element);
+                    }
+                });
+                
+                if(newLst.length>0) dstTemp.Instrumentos = newLst;
+                
+            }
+            
+        }
+
+        if(nova.Estilos!=null){
+            if(nova.Estilos.length >0){
+                var newLst = [];
+                nova.Estilos.forEach(element => {
+                    if(element.length>0){
+                        newLst.push(element);
+                    }
+                });
+                
+                if(newLst.length>0) dstTemp.Estilos = newLst;
+                
+            }
+            
+        }
+
+        if(bd.DataNascimento!=null){
+            var fromBdData = this.formatDate(this.MysqlDateToNormal(bd.DataNascimento));
+            var newData = this.formatDate(nova.DataNascimento);
+            if(fromBdData != newData ){
+                dstTemp.DataNascimento = newData;
+            }
+        }
+        else{
+            dstTemp.DataNascimento = this.formatDate(nova.DataNascimento);
+        }
+
+        // if(bd.RedesSociais!= null) if(this.fromBlob(bd.RedesSociais) != nova.RedesSociais) dstTemp.RedesSociais = nova.RedesSociais;
+        // if(bd.Instrumentos!= null) if(this.fromBlob(bd.Instrumentos) != nova.Instrumentos) dstTemp.Instrumentos = nova.Instrumentos;
+        // if(bd.Estilos!= null) if(this.fromBlob(bd.Estilos) != nova.Estilos) dstTemp.Estilos = nova.Estilos;
+        // if(bd.DataNascimento!= null) if(this.formatDate(this.MysqlDateToNormal(bd.DataNascimento)) != this.formatDate(nova.DataNascimento)) dstTemp.DataNascimento = this.formatDate(nova.DataNascimento);
+    
+        var keys = Object.keys(dstTemp);
+        if(keys.includes("Endereco"))
+        {
+            var teste = dstTemp.Endereco;
+            var teste2 = JSON.stringify(teste);
+            dstTemp.Endereco = teste2;
+        }
+
+        if(keys.includes("RedesSociais"))
+        {
+            var teste = dstTemp.RedesSociais;
+            var teste2 = JSON.stringify(teste);
+            dstTemp.RedesSociais = teste2;
+        }
+
+        if(keys.includes("Instrumentos"))
+        {
+            var teste = dstTemp.Instrumentos;
+            var teste2 = JSON.stringify(teste);
+            dstTemp.Instrumentos = teste2;
+        }
+
+        if(keys.includes("Estilos"))
+        {
+            var teste = dstTemp.Estilos;
+            var teste2 = JSON.stringify(teste);
+            dstTemp.Estilos = teste2;
+        }
+
+        return dstTemp;
+
+
+
     }
 
 }

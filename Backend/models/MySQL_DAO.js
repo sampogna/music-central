@@ -23,6 +23,7 @@ DataBaseDAO.prototype.CreateUsuario = function (data, callback) {
 };
 
 DataBaseDAO.prototype.UpdateUsuario = function (data, id, callback) {
+  delete data.Id;
   var strSet = "";
   var keys = Object.keys(data);
   keys.forEach(key => {

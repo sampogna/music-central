@@ -52,75 +52,72 @@ MusicoController.prototype.List = function (app, request, response) {
 }
 
 MusicoController.prototype.Update = function (app, request, response) {
+  try{
+      var data = request.body;
+      data.Tipo = app.locals.tiposUsuarios.Musico;
+      console.log(data);
+      var map = new UserMapper(app, data);
+      var isValid = map.verifyFields();
+      if(!isValid.Success) return response.status(200).json({errors: isValid.Errors});
 
-  var data = request.body;
-  data.Tipo = app.locals.tiposUsuarios.Musico;
-  var map = new UserMapper(app, data);
-  var isValid = map.verifyFields();
-  if(!isValid.Success) response.status(200).json({errors: isValid.Errors});
-  var musico = map.UserToMusico(data);
+      //
+      var connection = app.config.db();
+      var clientMySql = new app.models.MySQL_DAO(connection);
+      //
 
-  //
-  var connection = app.config.db();
-  var clientMySql = new app.models.MySQL_DAO(connection);
-  //
-
-
-  clientMySql.GetUserById(musico.Id, function (error, result) {
-    if (!error) {
-      if (result.length == 1) {
-        var user = result[0];
-        user = map.convertBack(user);
-        user = map.convertAsInserting(user);
-        var check = map.verifyFieldsUpdate(user,musico);
-        if(check.Success){
-          var dataUpdated = map.checkUpdateDiff(user,musico);
-          if(Object.keys(dataUpdated).length >0)
-          {
-            clientMySql.UpdateUsuario(dataUpdated, musico.Id, function (error, result) {
-              if (!error) {
-                if (result.affectedRows > 0) {
-                  response.status(200).json({result: "Músico atualizado com sucesso!"});
+      clientMySql.GetUserById(data.Id, function (error, result) {
+        if (!error) {
+          if (result.length == 1) {
+            var user = result[0];
+            var updateObj = map.teste(user, data);
+            if(Object.keys(updateObj).length>0)
+            {
+              clientMySql.UpdateUsuario(updateObj, user.Id, function (error, result) {
+                if (!error) {
+                  if (result.affectedRows > 0) {
+                    response.status(200).json({result: "Músico atualizado com sucesso!"});
+                  } else {
+                    response.status(500).json({ error: "Internal Server Error" });
+                  }
                 } else {
-                  response.status(500).json({ error: "Internal Server Error" });
+                  var res = new Object();
+                  res.error = error;
+                  console.log(error);
+                  response.status(400).json(res);
                 }
-              } else {
-                var res = new Object();
-                res.error = error;
-                response.status(400).json(res);
-              }
-            });
-          }
-          else
-          {
-            response.status(200).json({ error: "Nenhum dado atualizado" });
-          }
+              });
 
-          
-
+            }
+            else {
+              response.status(201).json({ result: "Não há nada a ser atualizado. Dados completamente iguais." });
+            }
+            
+          } else {
+            response.status(500).json({ error: "Internal Server Error" });
+          }
+        } else {
+          var res = new Object();
+          res.error = error;
+          response.status(400).json(res);
         }
-       
-      } else {
-        response.status(500).json({ error: "Internal Server Error" });
-      }
-    } else {
-      var res = new Object();
-      res.error = error;
-      response.status(400).json(res);
-    }
-  });
+      });
 
-}
+    }
+    catch(e){
+      console.log(e);
+    }
+      
+
+  }
 
 MusicoController.prototype.Delete = function (app, request, response) {
   var userId = request.params.userId;
   var connection = app.config.db();
   var clientMySql = new app.models.MySQL_DAO(connection);
-  clientMySql.GetUserById(userId, function (error, result) {
+  clientMySql.DeleteUsuario(userId, function (error, result) {
     if (!error) {
-      if (result.length == 1) {
-        var mapper = new UserMapper(app, null);
-        response.status(200).json(mapper.convertBack(result[0]));
+      if (result.affectedRows == 1) {
+        response.status(200).json({result:"Usuário excluído com sucesso!"});
       } else {
         response.status(500).json({ error: "Usuário não encontrado." });
       }

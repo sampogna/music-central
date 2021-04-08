@@ -10,6 +10,9 @@ $(document).ready( function () {
     
     
 } );
+
+/* CRIAR VARS*/ 
+
 var sendObj = {
     "ConfSenha": null,
     "Id": null,
@@ -32,37 +35,10 @@ var sendObj = {
     "Logradouro": null
 }
 
-var updateObj = {
-    "ConfSenha": null,
-    "Id": null,
-    "Nome": null,
-    "Email": null,
-    "Senha": null,
-    "Login": null,
-    "Descricao": null,
-    "Telefone": null,
-    "DataNascimento": null,
-    "Status": null,
-    "Tipo": null,
-    Endereco: null,
-    "RedesSociais": [],
-    "Estilos": [],
-    "Instrumentos": [],
-    "Criador": null,
-    "Integrantes": null,
-    "TipoIndustria": null,
-    "Logradouro": null
-}
 var contRedesSociais = 1;
 var contEstilosMusicais = 1;
 var contInstrumentos = 1;
 var criar = false;
-
-var contRedesSociaisUpdate = 0;
-var contEstilosMusicaisUpdate = 0;
-var contInstrumentosUpdate = 0;
-var atualizar = false;
-
 const Estados =
     '<label style="padding-top: 10px;" for="estados">UF</label>' +
     '<select id="estados" class="form-control" name="estados-brasil">' +
@@ -96,6 +72,75 @@ const Estados =
     '<option value="TO">Tocantins</option>' +
     '</select>'
 
+/* FIM CRIAR VARS*/ 
+
+
+/* UPDATE VARS*/ 
+
+var updateObj = {
+    "ConfSenha": null,
+    "Id": null,
+    "Nome": null,
+    "Email": null,
+    "Senha": null,
+    "Login": null,
+    "Descricao": null,
+    "Telefone": null,
+    "DataNascimento": null,
+    "Status": null,
+    "Tipo": null,
+    "Endereco": null,
+    "RedesSociais": [],
+    "Estilos": [],
+    "Instrumentos": [],
+    "Criador": null,
+    "Integrantes": null,
+    "TipoIndustria": null,
+    "Logradouro": null
+}
+
+
+var contRedesSociaisUpdate = 0;
+var contEstilosMusicaisUpdate = 0;
+var contInstrumentosUpdate = 0;
+var atualizar = false;
+
+const EstadosUpdate =
+    `<label style="padding-top: 10px;" for="estados">UF</label> 
+    <select id="estadosUpdate" class="form-control" name="estados-brasil"> 
+    <option selected value="">Selecione uma opção</option> 
+    <option value="AC">Acre</option> 
+    <option value="AL">Alagoas</option> 
+    <option value="AP">Amapá</option> 
+    <option value="AM">Amazonas</option> 
+    <option value="BA">Bahia</option> 
+    <option value="CE">Ceará</option> 
+    <option value="DF">Distrito Federal</option> 
+    <option value="ES">Espírito Santo</option> 
+    <option value="GO">Goiás</option> 
+    <option value="MA">Maranhão</option> 
+    <option value="MT">Mato Grosso</option> 
+    <option value="MS">Mato Grosso do Sul</option> 
+    <option value="MG">Minas Gerais</option> 
+    <option value="PA">Pará</option> 
+    <option value="PB">Paraíba</option> 
+    <option value="PR">Paraná</option> 
+    <option value="PE">Pernambuco</option> 
+    <option value="PI">Piauí</option> 
+    <option value="RJ">Rio de Janeiro</option> 
+    <option value="RN">Rio Grande do Norte</option> 
+    <option value="RS">Rio Grande do Sul</option> 
+    <option value="RO">Rondônia</option> 
+    <option value="RR">Roraima</option> 
+    <option value="SC">Santa Catarina</option> 
+    <option value="SP">São Paulo</option> 
+    <option value="SE">Sergipe</option> 
+    <option value="TO">Tocantins</option> 
+    </select>`;
+/* FIM UPDATE VARS*/ 
+
+
+/* REDES */
 function novaRede(cont) {
     return `<hr> 
             <div style="padding-top: 0px; class="RedesSociais"> 
@@ -134,6 +179,96 @@ function novaRedeComValorFirst(cont, valObj) {
             </div>`;
 }
 
+
+function addRede() {
+    contRedesSociais++;
+    
+    $('#socials').append(novaRede(contRedesSociais));
+}
+function addRedeComValor(valObj) {
+    contRedesSociaisUpdate++;
+    
+    $('#socialsUpdate').append(novaRedeComValor(contRedesSociaisUpdate, valObj));
+}
+
+function addRedeComValorFirst(valObj) {
+    contRedesSociaisUpdate++;
+    
+    $('#socialsUpdate').append(novaRedeComValorFirst(contRedesSociaisUpdate, valObj));
+}
+
+function addRedeSemValorFirst() {
+    contRedesSociaisUpdate++;
+    var valObj = {
+        link: "",
+        nome:""
+    }
+    
+    $('#socialsUpdate').append(novaRedeComValorFirst(contRedesSociaisUpdate, valObj));
+}
+
+function addRedeSemValor() {
+    contRedesSociaisUpdate++;
+    var valObj = {
+        link: "",
+        nome:""
+    }
+    
+    $('#socialsUpdate').append(novaRedeComValor(contRedesSociaisUpdate, valObj));
+}
+
+function checkNItemsRedeSocial(id){
+    var cont = id[id.length-1];
+    var linkValue = document.getElementById('linkRedeSocial'+cont).value;
+    var linkLen = linkValue.length;
+    var fbEl = $('#invFB-RedeSocial'+cont);
+    var nomeValue = document.getElementById('nomeRedeSocial'+cont).value;
+    var nomeLen = nomeValue.length;
+
+    if(linkLen >0 && nomeLen >0) {
+        fbEl.hide();
+        $(".swal2-confirm").attr('disabled', false);
+    }
+    if(linkLen >0 && nomeLen ==0){
+        fbEl.show();
+        $(".swal2-confirm").attr('disabled', 'disabled');
+
+    }
+    if(linkLen == 0 && nomeLen >0){
+        fbEl.show();
+        $(".swal2-confirm").attr('disabled', 'disabled');
+
+    }
+    if(linkLen == 0 && nomeLen == 0){
+        fbEl.hide();
+        $(".swal2-confirm").attr('disabled', false);
+    }
+}
+
+$('.modal-redes-sociais').click(function () {
+    var redes = JSON.parse(this.value);
+    var html2 = `<hr>
+    `
+    redes.forEach(function (rede, index) {
+        html2 +=
+            '<div style="padding-top: 0px;" class="row">' +
+                '<div style="padding-top: 0px;" class="col">' +
+                    `<a target="_blank" href="${rede.link}">${rede.nome}</a>` +
+                '</div>' +
+            '</div>';
+        if (index < redes.length - 1) html2 += '<hr>';
+    });
+
+    console.log(redes);
+    swal.fire({
+        title: "Redes Sociais",
+        html: html2
+
+    })
+}); 
+/* FIM REDES */
+
+/* ESTILOS */
 function novoEstilo(cont) {
     return `<hr> 
             <div style="padding-top: 0px;" class="EstilosMusicais"> 
@@ -146,7 +281,6 @@ function novoEstilo(cont) {
 }
 
 function novoEstiloComValor(cont, val) {
-    debugger;
     return `<hr> 
     <div style="padding-top: 0px;" class="EstilosMusicais"> 
         <label style="padding-top: 10px;" for="nomeEstiloMusical${cont.toString()}">Nome Estilo Musical ${cont.toString()}</label> 
@@ -167,6 +301,80 @@ function novoEstiloComValorFirst(cont, val) {
     </div>`;
 }
 
+function addEstiloComValor(val) {
+    contEstilosMusicaisUpdate++;
+    $('#estilosUpdate').append(novoEstiloComValor(contEstilosMusicaisUpdate, val));
+}
+
+function addEstiloComValorFirst(val) {
+    contEstilosMusicaisUpdate++;    
+    $('#estilosUpdate').append(novoEstiloComValorFirst(contEstilosMusicaisUpdate, val));
+}
+
+function addEstiloSemValor() {
+    contEstilosMusicaisUpdate++;
+    var val = "";
+    $('#estilosUpdate').append(novoEstiloComValor(contEstilosMusicaisUpdate, val));
+}
+
+function addEstiloSemValorFirst() {
+    contEstilosMusicaisUpdate++;
+    var val = "";
+    $('#estilosUpdate').append(novoEstiloComValorFirst(contEstilosMusicaisUpdate, val));
+}
+
+function addEstilo() {
+    contEstilosMusicais++;
+    $('#estilos').append(novoEstilo(contEstilosMusicais));
+}
+
+function checkNItemsEstiloMusical(id){
+    var cont = id[id.length-1];
+    var fbEl = $('#invFB-EstiloMusical'+cont);
+    var nomeValue = document.getElementById(id).value;
+    var nomeLen = nomeValue.length;
+
+    if(nomeLen >0 && !checkEmptyString(nomeValue)) {
+        fbEl.hide();
+        $(".swal2-confirm").attr('disabled', false);
+    }
+
+    if(nomeLen == 0) {
+        fbEl.hide();
+        $(".swal2-confirm").attr('disabled', false);
+    }
+
+    if(nomeLen >0 && checkEmptyString(nomeValue)){
+        fbEl.show();
+        $(".swal2-confirm").attr('disabled', 'disabled');
+
+    }
+}
+
+$('.modal-estilos').click(function () {
+    var estilos = JSON.parse(this.value);
+    var html2 = '<hr>';
+
+    estilos.forEach(function (estilo, index) {
+        html2 +=
+            '<div style="padding-top: 0px;" class="row">' +
+                '<div style="padding-top: 0px;" class="col">' +
+                    `${estilo}` +
+                '</div>' +
+            '</div>';
+        if (index < estilos.length - 1) html2 += '<hr>';
+    });
+
+    swal.fire({
+        title: "Estilos",
+        html: html2
+
+    })
+});
+
+/* FIM ESTILOS */
+
+/* INSTRUMENTOS */
 function novoInstrumento(cont) {
     return `<hr> 
     <div style="padding-top: 0px; class="InstrumentosMusicais"> 
@@ -199,71 +407,6 @@ function novoInstrumentoComValorFirst(cont, val) {
     </div>`
 }
 
-function addRede() {
-    contRedesSociais++;
-    
-    $('#socials').append(novaRede(contRedesSociais));
-}
-function addRedeComValor(valObj) {
-    contRedesSociaisUpdate++;
-    
-    $('#socials').append(novaRedeComValor(contRedesSociaisUpdate, valObj));
-}
-
-function addRedeComValorFirst(valObj) {
-    contRedesSociaisUpdate++;
-    
-    $('#socials').append(novaRedeComValorFirst(contRedesSociaisUpdate, valObj));
-}
-
-function addRedeSemValorFirst() {
-    contRedesSociaisUpdate++;
-    var valObj = {
-        link: "",
-        nome:""
-    }
-    
-    $('#socials').append(novaRedeComValorFirst(contRedesSociaisUpdate, valObj));
-}
-
-function addRedeSemValor() {
-    contRedesSociaisUpdate++;
-    var valObj = {
-        link: "",
-        nome:""
-    }
-    
-    $('#socials').append(novaRedeComValor(contRedesSociaisUpdate, valObj));
-}
-
-function addEstiloComValor(val) {
-    contEstilosMusicaisUpdate++;
-    $('#estilos').append(novoEstiloComValor(contEstilosMusicaisUpdate, val));
-}
-
-function addEstiloComValorFirst(val) {
-    contEstilosMusicaisUpdate++;    
-    $('#estilos').append(novoEstiloComValorFirst(contEstilosMusicaisUpdate, val));
-}
-
-function addEstiloSemValor() {
-    debugger;
-    contEstilosMusicaisUpdate++;
-    var val = "";
-    $('#estilos').append(novoEstiloComValor(contEstilosMusicaisUpdate, val));
-}
-
-function addEstiloSemValorFirst() {
-    contEstilosMusicaisUpdate++;
-    var val = "";
-    $('#estilos').append(novoEstiloComValorFirst(contEstilosMusicaisUpdate, val));
-}
-
-function addEstilo() {
-    contEstilosMusicais++;
-    $('#estilos').append(novoEstilo(contEstilosMusicais));
-}
-
 function addInstrumento() {
     contInstrumentos++;
     $('#instrumentos').append(novoInstrumento(contInstrumentos));
@@ -271,32 +414,74 @@ function addInstrumento() {
 
 function addInstrumentoComValor(val) {
     contInstrumentosUpdate++;
-    $('#instrumentos').append(novoInstrumentoComValor(contInstrumentosUpdate, val));
+    $('#instrumentosUpdate').append(novoInstrumentoComValor(contInstrumentosUpdate, val));
 }
 
 function addInstrumentoComValorFirst(val) {
     contInstrumentosUpdate++;
     
-    $('#instrumentos').append(novoInstrumentoComValorFirst(contInstrumentosUpdate, val));
+    $('#instrumentosUpdate').append(novoInstrumentoComValorFirst(contInstrumentosUpdate, val));
 }
 
 function addInstrumentoSemValor() {
     contInstrumentosUpdate++;
     var val = "";
-    $('#instrumentos').append(novoInstrumentoComValor(contInstrumentosUpdate, val));
+    $('#instrumentosUpdate').append(novoInstrumentoComValor(contInstrumentosUpdate, val));
 }
 
 function addInstrumentoSemValorFirst() {
     contInstrumentosUpdate++;
     var val = "";
-    $('#instrumentos').append(novoInstrumentoComValorFirst(contInstrumentosUpdate, val));
+    $('#instrumentosUpdate').append(novoInstrumentoComValorFirst(contInstrumentosUpdate, val));
 }
 
+function checkNItemsInstrumentoMusical(id){
+    var cont = id[id.length-1];
+    var fbEl = $('#invFB-InstrumentoMusical'+cont);
+    var nomeValue = document.getElementById(id).value;
+    var nomeLen = nomeValue.length;
 
+    if(nomeLen >0 && !checkEmptyString(nomeValue)) {
+        fbEl.hide();
+        $(".swal2-confirm").attr('disabled', false);
+    }
 
+    if(nomeLen == 0) {
+        fbEl.hide();
+        $(".swal2-confirm").attr('disabled', false);
+    }
 
+    if(nomeLen >0 && checkEmptyString(nomeValue)){
+        fbEl.show();
+        $(".swal2-confirm").attr('disabled', 'disabled');
 
+    }
+}
 
+$('.modal-instrumentos').click(function () {
+    var instrumentos = JSON.parse(this.value);
+    var html2 = '<hr>';
+
+    instrumentos.forEach(function (instrumento, index) {
+        html2 +=
+            '<div style="padding-top: 0px;" class="row">' +
+                '<div style="padding-top: 0px;" class="col">' +
+                    `${instrumento}` +
+                '</div>' +
+            '</div>';
+        if (index < instrumentos.length - 1) html2 += '<hr>';
+    });
+
+    swal.fire({
+        title: "Instrumentos",
+        html: html2
+
+    })
+
+});
+/* FIM INSTRUMENTOS */
+
+/* MODAIS */
 async function modalCreate() {
     Swal.mixin({
         showCancelButton: true,
@@ -564,7 +749,307 @@ async function modalCreate() {
 
 
 
+async function modalUpdate() {
+    var data = updateObj;
+    //console.log("data", data);
+    Swal.mixin({
+        showCancelButton: true,
+        progressSteps: ['1', '2', '3', '4', '5'],
+        reverseButtons: true
+    }).queue([
+        {
+            title: "Informações básicas",
+            width: "50rem",
+            footer:'<span class="text-muted" >*Campos obrigatórios</span>',
+            confirmButtonText: 'Next &rarr;',
+            didOpen: ()=>{
+                $('#nomeUpdate').val(data.Nome);
+                $('#emailUpdate').val(data.Email);
+                $('#loginUpdate').val(data.Login);
+                $('#descUpdate').val(data.Descricao);
+                $('#telefoneUpdate').val(data.Telefone);
+                $('#dataNascUpdate').val(data.DataNascimento == null? "" : (data.DataNascimento.split("-").reverse().join("-")));
+                VerficadoresDeCampoUpdate(1);
+            },
+            html:
+            `<div class="row">
+            <div class="col">
 
+                <label style="padding-top: 10px;" for="nomeUpdate">Nome</label> 
+                <input  id="nomeUpdate" class="form-control"> 
+                <div id="invFB-NomeUpdate" style="display: none" class="invalid-feedback"> 
+                </div> 
+
+                <label style="padding-top: 10px;" for="emailUpdate">Email</label> 
+                <input id="emailUpdate" class="form-control"> 
+                <div  id="invFB-EmailUpdate" style="display: none" class="invalid-feedback"> 
+                    Formato de email inválido. 
+                </div>
+
+                <label style="padding-top: 10px;" for="loginUpdate">Nome de usuário*</label> 
+                <input id="loginUpdate" class="form-control"> 
+                <div id="invFB-LoginUpdate" style="display: none" class="invalid-feedback"> 
+                </div>
+            </div>
+            <div class="col">
+                <label style="padding-top: 10px;" for="descUpdate">Sobre você</label>
+                <input  id="descUpdate" class="form-control">
+
+                <label style="padding-top: 10px;" for="telefoneUpdate">Telefone</label>
+                <input  id="telefoneUpdate" class="form-control">
+
+                <label style="padding-top: 10px;" for="dataNascUpdate">Data de Nascimento*</label>
+                <input type="date" id="dataNascUpdate" class="form-control">
+                <div id="invFB-DataNascUpdate" style="display: none" class="invalid-feedback"> 
+                </div>
+
+            </div>
+        </div>`,
+            preConfirm: () => {
+                updateObj.Nome = document.getElementById('nomeUpdate').value;
+                updateObj.Email = document.getElementById('emailUpdate').value.toLowerCase();
+                updateObj.Login = document.getElementById('loginUpdate').value;
+                updateObj.Descricao = document.getElementById('descUpdate').value;
+                updateObj.Telefone = document.getElementById('telefoneUpdate').value;
+                updateObj.DataNascimento = document.getElementById('dataNascUpdate').value;
+                
+            }
+        },
+        {
+            title: "Endereço",
+            confirmButtonText: 'Next &rarr;',
+            footer: '<span class="text-muted" id="invFB-EnderecoUpdate"></span>',
+            didOpen:()=>{ 
+                var teste = data.Endereco;
+                if(teste == null || teste == {}) {
+                    $('#cidadeUpdate').val("");
+                    $('#estadosUpdate').val("");
+                }
+                else{
+                    if(teste.Cidade) $('#cidadeUpdate').val(teste.Cidade);
+                    if(teste.UF) $('#estadosUpdate').val(teste.UF);
+                    //{"Cidade":"dsdas","UF":"AC","Estado":"Acre"}
+                }
+
+                VerficadoresDeCampoUpdate(3)
+
+                
+            },
+            html:
+            EstadosUpdate +
+                `<label style="padding-top: 10px;" for="cidadeUpdate">Cidade</label>
+                <input  id="cidadeUpdate" class="form-control">`,
+            preConfirm: () => {
+                var e = document.getElementById("estadosUpdate");
+
+                var value = e.value;
+                if (value == "") {
+                    updateObj.Endereco = null;
+                }
+                else {
+                    updateObj.Endereco = new Object();
+                    updateObj.Endereco.Cidade = document.getElementById('cidadeUpdate').value;
+                    updateObj.Endereco.UF = e.value;
+                    updateObj.Endereco.Estado = e.options[e.selectedIndex].text;
+                }
+
+            }
+        },
+        {
+            title: "Redes Sociais",
+            confirmButtonText: 'Next &rarr;',
+            didOpen:()=>{
+
+                var redes =  data.RedesSociais;
+                console.log("redes", redes)
+                if(redes == null || redes.length == 0) addRedeSemValorFirst();
+                else{
+                    redes.forEach((element, index) =>{
+
+                        if(index == 0) addRedeComValorFirst(element);
+                        else addRedeComValor(element);
+
+                    })
+                }
+
+                VerficadoresDeCampoUpdate(4)
+            },
+            html:
+            `<div id="socialsUpdate"> 
+                
+            </div> 
+            <br> 
+            <button id="add" type="button" onClick="addRedeSemValor()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>`,
+            preConfirm: () => {
+
+                for (let index = 1; index <= contRedesSociais; index++) {
+                    var nomeRedeSocial = document.getElementById("nomeRedeSocial" + index.toString());
+                    var linkRedeSocial = document.getElementById("linkRedeSocial" + index.toString());
+                    var obj = new Object();
+                    obj.nome = nomeRedeSocial.value;
+                    obj.link = linkRedeSocial.value;
+                    if (!checkEmptyString(obj.nome) && !checkEmptyString(obj.link)) updateObj.RedesSociais.push(obj);
+                }
+
+            }
+        },
+        {
+            title: "Estilos Musicais",
+            confirmButtonText: 'Next &rarr;',
+            didOpen:()=>{ 
+                var estilos =  data.Estilos;
+                if(estilos == null || estilos.length == 0) addEstiloSemValorFirst();
+                else{
+
+                    estilos.forEach((element, index) =>{
+
+                        if(index == 0) addEstiloComValorFirst(element);
+                        else addEstiloComValor(element);
+
+                    })
+                }
+                VerficadoresDeCampoUpdate(5)
+            },
+            html:
+            `<div id="estilosUpdate"> 
+                
+            </div> 
+            <br> 
+            <button id="add" type="button" onClick="addEstiloSemValor()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>`,
+            preConfirm: () => {
+                for (let index = 1; index <= contEstilosMusicais; index++) {
+                    var nomeEstiloMusical = document.getElementById("nomeEstiloMusical" + index.toString());
+
+                    if (!checkEmptyString(nomeEstiloMusical.value)) updateObj.Estilos.push(nomeEstiloMusical.value);
+                }
+
+            }
+        },
+        {
+            title: "Instrumentos",
+            confirmButtonText: 'Enviar',
+            didOpen:()=>{ 
+                var instrumentos =  data.Instrumentos;
+                if(instrumentos == null || instrumentos.length == 0) addInstrumentoSemValorFirst();
+                else{
+
+                    instrumentos.forEach((element, index) =>{
+
+                        if(index == 0) addInstrumentoComValorFirst(element);
+                        else addInstrumentoComValor(element);
+
+                    })
+                }
+                VerficadoresDeCampoUpdate(6)
+            },
+            html:
+            `<div id="instrumentosUpdate"> 
+            </div> 
+            <br> 
+            <button id="add" type="button" onClick="addInstrumentoSemValor()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>`,
+            preConfirm: () => {
+
+                for (let index = 1; index <= contInstrumentos; index++) {
+                    var nomeInstrumento = document.getElementById("nomeInstrumentoMusical" + index.toString());
+                    if (!checkEmptyString(nomeInstrumento.value)) updateObj.Instrumentos.push(nomeInstrumento.value);
+                }
+                atualizar = true;
+
+            }
+
+        },
+    ]).then(() => {
+        if (atualizar) {
+            verificaDadosUpdate();
+            console.log("after info", JSON.stringify(updateObj));
+            Swal.fire({
+                title: 'Atualizando usuário...',
+                icon: 'info',
+                showConfirmButton: false
+            }).then(
+                $.ajax({
+                    url: "/musico/update",
+                    type: "POST",
+                    data: updateObj,
+                    dataType: "json",
+                    success: function (resultAjax,code,xhr) {
+                        console.log("xhr", xhr);
+                        if(xhr.status == 200){
+                            Swal.fire({
+                                title: 'Sucesso!',
+                                icon: 'success',
+                                text: resultAjax.result,
+                                confirmButtonText: 'Ok'
+                            }).then(() => {
+                                resetInfos();
+                                window.location.reload();
+    
+                            })
+
+                        }
+                        if(xhr.status == 201){
+                            Swal.fire({
+                                title: 'Opa!',
+                                icon: 'warning',
+                                text: resultAjax.result,
+                                confirmButtonText: 'Ok'
+                            }).then(() => {
+                                resetInfos();
+                                window.location.reload();
+    
+                            })
+
+                        }
+                        
+
+
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        var json = xhr.responseJSON;
+                        var lstErros = json.mensagens;
+                        if (lstErros.length > 0) {
+                            var html2 = "<h4>" + json.retorno + "</h4>";
+                            lstErros.forEach(element => {
+                                html2 += element;
+                                html2 += "<br>";
+                            });
+
+                            Swal.fire({
+                                title: 'Erro!',
+                                icon: 'error',
+                                html: html2,
+                                confirmButtonText: 'Ok'
+                            })
+                            resetInfos();
+                        }
+                    }
+                })
+
+            )
+
+        }
+        else {
+            console.log("Processo de criação abortado, limpando campos...");
+            resetInfos();
+        }
+
+
+
+
+
+    })
+}
+
+
+
+
+
+
+
+
+/* FIM MODAIS */
+
+//////////////////////////////////////////////////////
 
 
 $('#add, #add2').click(async function () {
@@ -676,335 +1161,323 @@ async function editRegister(tr) {
 
 async function updateMapper(data){
 
-    
-    await Object.keys(updateObj).map(v => updateObj[v] = data[v]);
+    var camposLista = ["RedesSociais", "Estilos", "Instrumentos"];
+    var camposObj = ["Endereco"]
+    await Object.keys(updateObj).map(v => updateObj[v] = data[v] != null ? data[v] : (camposLista.includes(v) ? [] : (camposObj.includes(v) ? {} : null) )  );
 }
 
-async function modalUpdate() {
-    var data = updateObj;
-    Swal.mixin({
-        showCancelButton: true,
-        progressSteps: ['1', '2', '3', '4', '5', '6'],
-        reverseButtons: true
-    }).queue([
-        {
-            title: "Informações básicas",
-            width: "50rem",
-            footer:'<span class="text-muted" >*Campos obrigatórios</span>',
-            confirmButtonText: 'Next &rarr;',
-            didOpen: ()=>{
-                $('#nome').val(data.Nome);
-                $('#email').val(data.Email);
-                $('#senha').val(data.Senha);
-                $('#confSenha').val(data.Senha);
-                $('#login').val(data.Login);
-                VerficadoresDeCampo(1);
-            },
-            html:
-            `<div class="row">
-            <div class="col">
-                <label style="padding-top: 10px;" for="nome">Nome*</label> 
-                <input  id="nome" class="form-control"> 
-                <div id="invFB-Nome" style="display: none" class="invalid-feedback"> 
-                </div> 
-                <label style="padding-top: 10px;" for="email">Email*</label> 
-                <input id="email" class="form-control"> 
-                <div  id="invFB-Email" style="display: none" class="invalid-feedback"> 
-                Formato de email inválido. 
-                </div> 
-                <label style="padding-top: 10px;" for="senha">Nova Senha &nbsp;<i onclick="showHide($(this))" title="Mostrar senha" class="fas fa-eye"></i></label> 
-                <input type="password" id="senha" class="form-control" value=""> 
-                <label style="padding-top: 10px;" for="confSenha">Confirmar Nova Senha* &nbsp;<i onclick="showHide($(this))" title="Mostrar senha" class="fas fa-eye"></i></label> 
-                <input type="password" id="confSenha" class="form-control" value=""> 
-                <div id="invFB-ConfSenha" style="display: none" class="invalid-feedback"> Senha e Confirmação de Senha não coincidem. </div> 
-                <label style="padding-top: 10px;" for="login">Nome de usuário*</label> 
-                <input id="login" class="form-control"> 
-                <div id="invFB-Login" style="display: none" class="invalid-feedback"> 
-                </div>
-            </div>
-            <div class="col">
-                <div class="alert alert-primary" role="alert" id="alert-senha">
-                    <h4 class="alert-heading">Força da senha</h4>
-                    <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui 8 a 20 caracteres. </span>
-                    <br>
-                    <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres maiúsculos. </span>
-                    <br>
-                    <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres minúsculos.</span>
-                    <br>
-                    <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui números.</span>
-                    <br>
-                    <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres especiais.</span>
-                    <br>
-                </div>
-            </div>
-        </div>`,
-            preConfirm: () => {
-                updateObj.Nome = document.getElementById('nome').value;
-                updateObj.Email = document.getElementById('email').value.toLowerCase();
-                updateObj.Senha = document.getElementById('senha').value;
-                updateObj.ConfSenha = document.getElementById('confSenha').value;
-                updateObj.Login = document.getElementById('login').value;
-            }
-        },
-        {
-            title: "Informações básicas",
-            footer:'<span class="text-muted" >*Campos obrigatórios</span>',
-            didOpen:()=>{ 
-                $('#desc').val(data.Descricao);
-                $('#telefone').val(data.Telefone);
-                $('#dataNasc').val(data.DataNascimento == null? "" : (data.DataNascimento.split("-").reverse().join("-")));
-                VerficadoresDeCampo(2);
-            },
-            html:
-                `<label style="padding-top: 10px;" for="desc">Sobre você</label>
-                <input  id="desc" class="form-control" value="${data.Descricao == null? "" : data.Descricao}">
-                <label style="padding-top: 10px;" for="telefone">Telefone</label>
-                <input  id="telefone" class="form-control" value="${data.Telefone == null? "" : data.Telefone}">
-                <label style="padding-top: 10px;" for="dataNasc">Data de Nascimento*</label>
-                <input type="date" id="dataNasc" class="form-control"  >`,
-            confirmButtonText: 'Next &rarr;',
-            preConfirm: () => {
-                updateObj.Descricao = document.getElementById('desc').value;
-                updateObj.Telefone = document.getElementById('telefone').value;
-                updateObj.DataNascimento = document.getElementById('dataNasc').value;
-                verificaDadosObrUpdate(); //TODO remover comentario
-            }
-        },
-        {
-            title: "Endereço",
-            confirmButtonText: 'Next &rarr;',
-            footer: '<span class="text-muted" id="invFB-Endereco"></span>',
-            didOpen:()=>{ 
-                console.log()
-                var teste = data.Endereco;
-                if(teste == null) {
-                    $('#cidade').value = "";
-                    $('#estados').value = "";
-                }
-                else{
-                    if(teste.Endereco.Cidade) $('#cidade').value = teste.Endereco.Cidade;
-                    if(teste.Endereco.UF) $('#estados').value = teste.Endereco.UF;
-                    //{"Cidade":"dsdas","UF":"AC","Estado":"Acre"}
-                }
+// async function modalUpdate() {
+//     var data = updateObj;
+//     Swal.mixin({
+//         showCancelButton: true,
+//         progressSteps: ['1', '2', '3', '4', '5', '6'],
+//         reverseButtons: true
+//     }).queue([
+//         {
+//             title: "Informações básicas",
+//             width: "50rem",
+//             footer:'<span class="text-muted" >*Campos obrigatórios</span>',
+//             confirmButtonText: 'Next &rarr;',
+//             didOpen: ()=>{
+//                 $('#nome').val(data.Nome);
+//                 $('#email').val(data.Email);
+//                 $('#senha').val(data.Senha);
+//                 $('#confSenha').val(data.Senha);
+//                 $('#login').val(data.Login);
+//                 VerficadoresDeCampo(1);
+//             },
+//             html:
+//             `<div class="row">
+//             <div class="col">
+//                 <label style="padding-top: 10px;" for="nome">Nome*</label> 
+//                 <input  id="nome" class="form-control"> 
+//                 <div id="invFB-Nome" style="display: none" class="invalid-feedback"> 
+//                 </div> 
+//                 <label style="padding-top: 10px;" for="email">Email*</label> 
+//                 <input id="email" class="form-control"> 
+//                 <div  id="invFB-Email" style="display: none" class="invalid-feedback"> 
+//                 Formato de email inválido. 
+//                 </div> 
+//                 <label style="padding-top: 10px;" for="senha">Nova Senha &nbsp;<i onclick="showHide($(this))" title="Mostrar senha" class="fas fa-eye"></i></label> 
+//                 <input type="password" id="senha" class="form-control" value=""> 
+//                 <label style="padding-top: 10px;" for="confSenha">Confirmar Nova Senha* &nbsp;<i onclick="showHide($(this))" title="Mostrar senha" class="fas fa-eye"></i></label> 
+//                 <input type="password" id="confSenha" class="form-control" value=""> 
+//                 <div id="invFB-ConfSenha" style="display: none" class="invalid-feedback"> Senha e Confirmação de Senha não coincidem. </div> 
+//                 <label style="padding-top: 10px;" for="login">Nome de usuário*</label> 
+//                 <input id="login" class="form-control"> 
+//                 <div id="invFB-Login" style="display: none" class="invalid-feedback"> 
+//                 </div>
+//             </div>
+//             <div class="col">
+//                 <div class="alert alert-primary" role="alert" id="alert-senha">
+//                     <h4 class="alert-heading">Força da senha</h4>
+//                     <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui 8 a 20 caracteres. </span>
+//                     <br>
+//                     <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres maiúsculos. </span>
+//                     <br>
+//                     <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres minúsculos.</span>
+//                     <br>
+//                     <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui números.</span>
+//                     <br>
+//                     <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres especiais.</span>
+//                     <br>
+//                 </div>
+//             </div>
+//         </div>`,
+//             preConfirm: () => {
+//                 updateObj.Nome = document.getElementById('nome').value;
+//                 updateObj.Email = document.getElementById('email').value.toLowerCase();
+//                 updateObj.Senha = document.getElementById('senha').value;
+//                 updateObj.ConfSenha = document.getElementById('confSenha').value;
+//                 updateObj.Login = document.getElementById('login').value;
+//             }
+//         },
+//         {
+//             title: "Informações básicas",
+//             footer:'<span class="text-muted" >*Campos obrigatórios</span>',
+//             didOpen:()=>{ 
+//                 $('#desc').val(data.Descricao);
+//                 $('#telefone').val(data.Telefone);
+//                 $('#dataNasc').val(data.DataNascimento == null? "" : (data.DataNascimento.split("-").reverse().join("-")));
+//                 VerficadoresDeCampo(2);
+//             },
+//             html:
+//                 `<label style="padding-top: 10px;" for="desc">Sobre você</label>
+//                 <input  id="desc" class="form-control" value="${data.Descricao == null? "" : data.Descricao}">
+//                 <label style="padding-top: 10px;" for="telefone">Telefone</label>
+//                 <input  id="telefone" class="form-control" value="${data.Telefone == null? "" : data.Telefone}">
+//                 <label style="padding-top: 10px;" for="dataNasc">Data de Nascimento*</label>
+//                 <input type="date" id="dataNasc" class="form-control"  >`,
+//             confirmButtonText: 'Next &rarr;',
+//             preConfirm: () => {
+//                 updateObj.Descricao = document.getElementById('desc').value;
+//                 updateObj.Telefone = document.getElementById('telefone').value;
+//                 updateObj.DataNascimento = document.getElementById('dataNasc').value;
+//                 verificaDadosObrUpdate(); //TODO remover comentario
+//             }
+//         },
+//         {
+//             title: "Endereço",
+//             confirmButtonText: 'Next &rarr;',
+//             footer: '<span class="text-muted" id="invFB-Endereco"></span>',
+//             didOpen:()=>{ 
+//                 console.log()
+//                 var teste = data.Endereco;
+//                 if(teste == null) {
+//                     $('#cidade').value = "";
+//                     $('#estados').value = "";
+//                 }
+//                 else{
+//                     if(teste.Endereco.Cidade) $('#cidade').value = teste.Endereco.Cidade;
+//                     if(teste.Endereco.UF) $('#estados').value = teste.Endereco.UF;
+//                     //{"Cidade":"dsdas","UF":"AC","Estado":"Acre"}
+//                 }
 
-                VerficadoresDeCampo(3)
+//                 VerficadoresDeCampo(3)
 
                 
-            },
-            html:
-                Estados +
-                `<label style="padding-top: 10px;" for="cidade">Cidade</label>
-                <input  id="cidade" class="form-control">`,
-            preConfirm: () => {
-                var e = document.getElementById("estados");
+//             },
+//             html:
+//                 Estados +
+//                 `<label style="padding-top: 10px;" for="cidade">Cidade</label>
+//                 <input  id="cidade" class="form-control">`,
+//             preConfirm: () => {
+//                 var e = document.getElementById("estados");
 
-                var value = e.value;
-                if (value == "") {
-                    updateObj.Endereco = null;
-                }
-                else {
-                    updateObj.Endereco = new Object();
-                    updateObj.Endereco.Cidade = document.getElementById('cidade').value;
-                    updateObj.Endereco.UF = e.value;
-                    updateObj.Endereco.Estado = e.options[e.selectedIndex].text;
-                }
+//                 var value = e.value;
+//                 if (value == "") {
+//                     updateObj.Endereco = null;
+//                 }
+//                 else {
+//                     updateObj.Endereco = new Object();
+//                     updateObj.Endereco.Cidade = document.getElementById('cidade').value;
+//                     updateObj.Endereco.UF = e.value;
+//                     updateObj.Endereco.Estado = e.options[e.selectedIndex].text;
+//                 }
 
-            }
-        },
-        {
-            title: "Redes Sociais",
-            confirmButtonText: 'Next &rarr;',
-            didOpen:()=>{
-                var redes =  data.RedesSociais;
-                if(redes == null) addRedeSemValorFirst();
-                else{
+//             }
+//         },
+//         {
+//             title: "Redes Sociais",
+//             confirmButtonText: 'Next &rarr;',
+//             didOpen:()=>{
+//                 var redes =  data.RedesSociais;
+//                 if(redes == null) addRedeSemValorFirst();
+//                 else{
 
-                    redes.forEach((element, index), function(){
+//                     redes.forEach((element, index), function(){
 
-                        if(index == 0) addRedeComValorFirst(element);
-                        else addRedeComValor(element);
+//                         if(index == 0) addRedeComValorFirst(element);
+//                         else addRedeComValor(element);
 
-                    })
-                }
+//                     })
+//                 }
 
-                VerficadoresDeCampo(4)
-            },
-            html:
-            `<div id="socials"> 
+//                 VerficadoresDeCampo(4)
+//             },
+//             html:
+//             `<div id="socials"> 
                 
-            </div> 
-            <br> 
-            <button id="add" type="button" onClick="addRedeSemValor()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>`,
-            preConfirm: () => {
+//             </div> 
+//             <br> 
+//             <button id="add" type="button" onClick="addRedeSemValor()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>`,
+//             preConfirm: () => {
 
-                for (let index = 1; index <= contRedesSociais; index++) {
-                    var nomeRedeSocial = document.getElementById("nomeRedeSocial" + index.toString());
-                    var linkRedeSocial = document.getElementById("linkRedeSocial" + index.toString());
-                    var obj = new Object();
-                    obj.nome = nomeRedeSocial.value;
-                    obj.link = linkRedeSocial.value;
-                    if (!checkEmptyString(obj.nome) && !checkEmptyString(obj.link)) updateObj.RedesSociais.push(obj);
-                }
+//                 for (let index = 1; index <= contRedesSociais; index++) {
+//                     var nomeRedeSocial = document.getElementById("nomeRedeSocial" + index.toString());
+//                     var linkRedeSocial = document.getElementById("linkRedeSocial" + index.toString());
+//                     var obj = new Object();
+//                     obj.nome = nomeRedeSocial.value;
+//                     obj.link = linkRedeSocial.value;
+//                     if (!checkEmptyString(obj.nome) && !checkEmptyString(obj.link)) updateObj.RedesSociais.push(obj);
+//                 }
 
-            }
-        },
-        {
-            title: "Estilos Musicais",
-            confirmButtonText: 'Next &rarr;',
-            didOpen:()=>{ 
-                var estilos =  data.Estilos;
-                if(estilos == null) addEstiloSemValorFirst();
-                else{
+//             }
+//         },
+//         {
+//             title: "Estilos Musicais",
+//             confirmButtonText: 'Next &rarr;',
+//             didOpen:()=>{ 
+//                 var estilos =  data.Estilos;
+//                 if(estilos == null) addEstiloSemValorFirst();
+//                 else{
 
-                    estilos.forEach((element, index), function(){
+//                     estilos.forEach((element, index), function(){
 
-                        if(index == 0) addEstiloComValorFirst(element);
-                        else addEstiloComValor(element);
+//                         if(index == 0) addEstiloComValorFirst(element);
+//                         else addEstiloComValor(element);
 
-                    })
-                }
-                VerficadoresDeCampo(5)
-            },
-            html:
-            `<div id="estilos"> 
+//                     })
+//                 }
+//                 VerficadoresDeCampo(5)
+//             },
+//             html:
+//             `<div id="estilos"> 
                 
-            </div> 
-            <br> 
-            <button id="add" type="button" onClick="addEstiloSemValor()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>`,
-            preConfirm: () => {
-                for (let index = 1; index <= contEstilosMusicais; index++) {
-                    var nomeEstiloMusical = document.getElementById("nomeEstiloMusical" + index.toString());
+//             </div> 
+//             <br> 
+//             <button id="add" type="button" onClick="addEstiloSemValor()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>`,
+//             preConfirm: () => {
+//                 for (let index = 1; index <= contEstilosMusicais; index++) {
+//                     var nomeEstiloMusical = document.getElementById("nomeEstiloMusical" + index.toString());
 
-                    if (!checkEmptyString(nomeEstiloMusical.value)) updateObj.Estilos.push(nomeEstiloMusical.value);
-                }
+//                     if (!checkEmptyString(nomeEstiloMusical.value)) updateObj.Estilos.push(nomeEstiloMusical.value);
+//                 }
 
-            }
-        },
-        {
-            title: "Instrumentos",
-            confirmButtonText: 'Enviar',
-            didOpen:()=>{ 
-                var instrumentos =  data.Instrumentos;
-                if(instrumentos == null) addInstrumentoSemValorFirst();
-                else{
+//             }
+//         },
+//         {
+//             title: "Instrumentos",
+//             confirmButtonText: 'Enviar',
+//             didOpen:()=>{ 
+//                 var instrumentos =  data.Instrumentos;
+//                 if(instrumentos == null) addInstrumentoSemValorFirst();
+//                 else{
 
-                    instrumentos.forEach((element, index), function(){
+//                     instrumentos.forEach((element, index), function(){
 
-                        if(index == 0) addInstrumentoComValorFirst(element);
-                        else addInstrumentoComValor(element);
+//                         if(index == 0) addInstrumentoComValorFirst(element);
+//                         else addInstrumentoComValor(element);
 
-                    })
-                }
-                VerficadoresDeCampo(6)
-            },
-            html:
-            `<div id="instrumentos"> 
-            </div> 
-            <br> 
-            <button id="add" type="button" onClick="addInstrumentoSemValor()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>`,
-            preConfirm: () => {
+//                     })
+//                 }
+//                 VerficadoresDeCampo(6)
+//             },
+//             html:
+//             `<div id="instrumentos"> 
+//             </div> 
+//             <br> 
+//             <button id="add" type="button" onClick="addInstrumentoSemValor()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>`,
+//             preConfirm: () => {
 
-                for (let index = 1; index <= contInstrumentos; index++) {
-                    var nomeInstrumento = document.getElementById("nomeInstrumentoMusical" + index.toString());
-                    if (!checkEmptyString(nomeInstrumento.value)) updateObj.Instrumentos.push(nomeInstrumento.value);
-                }
-                atualizar = true;
+//                 for (let index = 1; index <= contInstrumentos; index++) {
+//                     var nomeInstrumento = document.getElementById("nomeInstrumentoMusical" + index.toString());
+//                     if (!checkEmptyString(nomeInstrumento.value)) updateObj.Instrumentos.push(nomeInstrumento.value);
+//                 }
+//                 atualizar = true;
 
-            }
+//             }
 
-        },
-    ]).then(() => {
+//         },
+//     ]).then(() => {
 
-        console.log(updateObj   )
-        if (atualizar) {
-            verificaDadosUpdate();
-            console.log(JSON.stringify(updateObj));
-            Swal.fire({
-                title: 'Atualizando usuário...',
-                icon: 'info',
-                showConfirmButton: false
-            }).then(
-                $.ajax({
-                    url: "/musico/update",
-                    type: "POST",
-                    data: updateObj,
-                    dataType: "json",
-                    success: function (resultAjax) {
-                        Swal.fire({
-                            title: 'Sucesso!',
-                            icon: 'success',
-                            text: "Usuário atualizado com sucesso!",
-                            confirmButtonText: 'Ok'
-                        }).then(() => {
-                            resetInfos();
-                            window.location.reload();
+//         console.log(updateObj   )
+//         if (atualizar) {
+//             verificaDadosUpdate();
+//             console.log(JSON.stringify(updateObj));
+//             Swal.fire({
+//                 title: 'Atualizando usuário...',
+//                 icon: 'info',
+//                 showConfirmButton: false
+//             }).then(
+//                 $.ajax({
+//                     url: "/musico/update",
+//                     type: "POST",
+//                     data: updateObj,
+//                     dataType: "json",
+//                     success: function (resultAjax) {
+//                         Swal.fire({
+//                             title: 'Sucesso!',
+//                             icon: 'success',
+//                             text: "Usuário atualizado com sucesso!",
+//                             confirmButtonText: 'Ok'
+//                         }).then(() => {
+//                             resetInfos();
+//                             window.location.reload();
 
-                        })
-
-
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        var json = xhr.responseJSON;
-                        var lstErros = json.mensagens;
-                        if (lstErros.length > 0) {
-                            var html2 = "<h4>" + json.retorno + "</h4>";
-                            lstErros.forEach(element => {
-                                html2 += element;
-                                html2 += "<br>";
-                            });
-
-                            Swal.fire({
-                                title: 'Erro!',
-                                icon: 'error',
-                                html: html2,
-                                confirmButtonText: 'Ok'
-                            })
-                            resetInfos();
-                        }
-                    }
-                })
-
-            )
-
-        }
-        else {
-            console.log("Processo de criação abortado, limpando campos...");
-            resetInfos();
-        }
+//                         })
 
 
+//                     },
+//                     error: function (xhr, ajaxOptions, thrownError) {
+//                         var json = xhr.responseJSON;
+//                         var lstErros = json.mensagens;
+//                         if (lstErros.length > 0) {
+//                             var html2 = "<h4>" + json.retorno + "</h4>";
+//                             lstErros.forEach(element => {
+//                                 html2 += element;
+//                                 html2 += "<br>";
+//                             });
+
+//                             Swal.fire({
+//                                 title: 'Erro!',
+//                                 icon: 'error',
+//                                 html: html2,
+//                                 confirmButtonText: 'Ok'
+//                             })
+//                             resetInfos();
+//                         }
+//                     }
+//                 })
+
+//             )
+
+//         }
+//         else {
+//             console.log("Processo de criação abortado, limpando campos...");
+//             resetInfos();
+//         }
 
 
 
-    })
-}
+
+
+//     })
+// }
 
 $('.modal-redes-sociais').click(function () {
     var redes = JSON.parse(this.value);
-    var html2 =
-        '<div class="row">' +
-        '<div class="col">' +
-        'Nome' +
-        '</div>' +
-        '<div class="col">' +
-        'Link' +
-        '</div>' +
-        '</div>' +
-        '<hr>';
-
+    var html2 = `<hr>
+    `
     redes.forEach(function (rede, index) {
         html2 +=
             '<div style="padding-top: 0px;" class="row">' +
-            '<div style="padding-top: 0px;" class="col">' +
-            `${rede.nome}` +
-            '</div>' +
-            '<div class="col">' +
-            `<a target="_blank" href="${rede.link}">Link</a>` +
-            '</div>' +
+                '<div style="padding-top: 0px;" class="col">' +
+                    `<a target="_blank" href="${rede.link}">${rede.nome}</a>` +
+                '</div>' +
             '</div>';
         if (index < redes.length - 1) html2 += '<hr>';
     });
-
 
     console.log(redes);
     swal.fire({
@@ -1018,17 +1491,14 @@ $('.modal-redes-sociais').click(function () {
 
 $('.modal-estilos').click(function () {
     var estilos = JSON.parse(this.value);
-    var html2 =
-        '<div class="row">' +
-        '</div>' +
-        '<hr>';
+    var html2 = '<hr>';
 
     estilos.forEach(function (estilo, index) {
         html2 +=
             '<div style="padding-top: 0px;" class="row">' +
-            '<div style="padding-top: 0px;" class="col">' +
-            `${estilo}` +
-            '</div>' +
+                '<div style="padding-top: 0px;" class="col">' +
+                    `${estilo}` +
+                '</div>' +
             '</div>';
         if (index < estilos.length - 1) html2 += '<hr>';
     });
@@ -1042,17 +1512,14 @@ $('.modal-estilos').click(function () {
 
 $('.modal-instrumentos').click(function () {
     var instrumentos = JSON.parse(this.value);
-    var html2 =
-        '<div class="row">' +
-        '</div>' +
-        '<hr>';
+    var html2 = '<hr>';
 
     instrumentos.forEach(function (instrumento, index) {
         html2 +=
             '<div style="padding-top: 0px;" class="row">' +
-            '<div style="padding-top: 0px;" class="col">' +
-            `${instrumento}` +
-            '</div>' +
+                '<div style="padding-top: 0px;" class="col">' +
+                    `${instrumento}` +
+                '</div>' +
             '</div>';
         if (index < instrumentos.length - 1) html2 += '<hr>';
     });
@@ -1065,6 +1532,34 @@ $('.modal-instrumentos').click(function () {
 
 });
 
+$('.modal-endereco').click(function () {
+    var endereco = JSON.parse(this.value);
+    var html2 = `<hr>
+    <div class="row">
+        <div class="col"><b>Estado</b></div>
+        <div class="col">${endereco.Estado}</div>
+        
+    <div> 
+    <hr>
+    <div class="row">
+        <div class="col"><b>UF</b></div>
+        <div class="col">${endereco.UF}</div>
+    <div>
+    <hr>
+    <div class="row">
+        <div class="col"><b>Cidade</b></div>
+        <div class="col">${endereco.Cidade}</div>
+    <div>
+    `;
+    
+
+    swal.fire({
+        title: "Endereço",
+        html: html2
+
+    })
+
+});
 
 function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -1569,7 +2064,7 @@ function showInfo() {
 }
 
 function showInfoUpdate() {
-    console.log("updateObj = ", updateObj);
+    console.log("updateObj show info= ", updateObj);
 }
 
 function checkEmptyString(str) {
@@ -1740,7 +2235,292 @@ function allTrue(obj)
 
 function enableDisableConfirm(oks)
 {
+    console.log(oks);
     if(allTrue(oks)) $(".swal2-confirm").attr('disabled', false);
     else $(".swal2-confirm").attr('disabled', 'disabled');
 }
 
+
+function VerficadoresDeCampoUpdate(passo){
+
+    var DadosBasicos1 = function(){
+        //Dados Basicos 1
+        $(".swal2-confirm").attr('disabled', 'disabled'); // TODO remover comentario
+        var oks = new Object();
+        
+        oks.nome = eventTriggerUpdate("nomeUpdate");
+        oks.email = eventTriggerUpdate("emailUpdate");
+        oks.login =  eventTriggerUpdate("loginUpdate");
+        oks.dataNasc = eventTriggerUpdate("dataNascUpdate");
+
+        enableDisableConfirm(oks);
+
+        $('#nomeUpdate, #emailUpdate, #senhaUpdate, #confSenhaUpdate, #loginUpdate, #dataNascUpdate').on('change keyup paste',function () {
+            oks[this.id] = eventTriggerUpdate(this.id);
+            enableDisableConfirm(oks);
+        });
+    }
+
+    // var DadosBasicos2 = function(){
+    //     //Dados Basicos 2
+    //     $(".swal2-confirm").attr('disabled', 'disabled'); // TODO remover comentario
+    //     var oks = new Object();
+        
+    //     oks.dataNasc = eventTriggerUpdate("dataNascUpdate");
+
+    //     enableDisableConfirm(oks);
+
+    //     $('#dataNascUpdate').on('change keyup paste',function () {
+    //         oks[this.id] = eventTriggerUpdate(this.id);
+    //         enableDisableConfirm(oks);
+    //     });
+    // }
+    
+    var Endereco = function(){
+        // Endereço 
+        $(".swal2-confirm").attr('disabled', 'disabled'); // TODO remover comentario
+        var oks = new Object();
+        
+        oks.endereco = eventTriggerUpdate("enderecoUpdate");
+
+        enableDisableConfirm(oks);
+
+        $('#estadosUpdate, #cidadeUpdate').on('change keyup paste',function () {
+            console.log("entrou2");
+            oks["endereco"] = eventTriggerUpdate("enderecoUpdate");
+            enableDisableConfirm(oks);
+        });
+    }
+    
+    var RedesSociais = function(){
+        //Redes Sociais
+    
+        var targetNode = document.getElementById('socialsUpdate');
+        
+        var config = { attributes: false, childList: true };
+        
+        $('*[id*=nomeRedeSocial], *[id*=linkRedeSocial]').on('change keyup paste',function () {
+            checkNItemsRedeSocial(this.id)
+        });
+    
+    
+        var callback = function(mutationsList) {
+            for(var mutation of mutationsList) {
+                if (mutation.type == 'childList') {
+                    $('*[id*=nomeRedeSocial], *[id*=linkRedeSocial]').on('change keyup paste',function () {
+                        checkNItemsRedeSocial(this.id);
+                    });
+                }
+                else if (mutation.type == 'attributes') {
+                    console.log('The ' + mutation.attributeName + ' attribute was modified.');
+                }
+                else{
+                    console.log("bataaa")
+                }
+            }
+        };
+        
+        var observer = new MutationObserver(callback);
+        observer.observe(targetNode, config);
+    }
+    var EstilosMusicais = function(){
+        //Estilos Musicais
+    
+        var targetNode = document.getElementById('estilosUpdate');
+        var config = { attributes: false, childList: true };
+        
+        $('*[id*=nomeEstiloMusical]').on('change keyup paste',function () {
+            checkNItemsEstiloMusical(this.id)
+        });
+    
+    
+        var callback = function(mutationsList) {
+            for(var mutation of mutationsList) {
+                if (mutation.type == 'childList') {
+                    $('*[id*=nomeEstiloMusical]').on('change keyup paste',function () {
+                        checkNItemsEstiloMusical(this.id);
+                    });
+                }
+                else if (mutation.type == 'attributes') {
+                    console.log('The ' + mutation.attributeName + ' attribute was modified.');
+                }
+                else{
+                    console.log("bataaa")
+                }
+            }
+        };
+        
+        var observer = new MutationObserver(callback);
+        observer.observe(targetNode, config);
+    }
+    var InstrumentosMusicais = function(){
+        //Instrumentos Musicais
+    
+        var targetNode = document.getElementById('instrumentosUpdate');
+        var config = { attributes: false, childList: true };
+        
+        $('*[id*=nomeInstrumentoMusical]').on('change keyup paste',function () {
+            checkNItemsInstrumentoMusical(this.id)
+        });
+    
+    
+        var callback = function(mutationsList) {
+            for(var mutation of mutationsList) {
+                if (mutation.type == 'childList') {
+                    $('*[id*=nomeInstrumentoMusical]').on('change keyup paste',function () {
+                        checkNItemsInstrumentoMusical(this.id);
+                    });
+                }
+                else if (mutation.type == 'attributes') {
+                    console.log('The ' + mutation.attributeName + ' attribute was modified.');
+                }
+                else{
+                    console.log("bataaa")
+                }
+            }
+        };
+        
+        var observer = new MutationObserver(callback);
+        observer.observe(targetNode, config);
+    }
+
+    switch(passo)
+    {
+        case 1:
+            DadosBasicos1();
+            break;
+
+        case 2:
+            DadosBasicos2();
+            break;
+
+        case 3:
+            Endereco()
+            break;
+
+        case 4:
+            RedesSociais()
+            break;
+
+        case 5:
+            EstilosMusicais()
+            break;
+        case 6:
+            InstrumentosMusicais();
+            break;
+    }   
+}
+
+function eventTriggerUpdate(id){
+
+    switch (id) {
+        case "nomeUpdate":
+            var lenNome = document.getElementById('nomeUpdate').value.length;
+            var el = $('#invFB-NomeUpdate');
+            if (lenNome < 10 || lenNome > 100) {
+                if (lenNome < 10) {
+                    el.html("Nome muito curto.");
+                    el.show();
+
+                }
+                if (lenNome > 100) {
+                    el.html("Nome muito grande");
+                    el.show();
+                }
+                return false;
+            }
+            else {
+                el.html("");
+                el.hide();
+                return true;
+            }
+
+        case "emailUpdate":
+            var tempEmail = document.getElementById('emailUpdate').value;
+            if (validateEmail(tempEmail)) {
+                $('#invFB-EmailUpdate').hide();
+                return true;
+            }
+            else {
+                $('#invFB-EmailUpdate').show();
+                return false;
+            }
+
+        case "loginUpdate":
+            var tempLogin = document.getElementById('loginUpdate').value;
+            var tempLoginLen = tempLogin.length;
+            var hasNonalphas = /\W/.test(tempLogin);
+            var containsSpace = tempLogin.includes(" ");
+            var el = $('#invFB-LoginUpdate');
+            var html = `<ul>`;
+
+            if (tempLoginLen > 20 || tempLoginLen < 8 || hasNonalphas || containsSpace) {
+
+                if (tempLoginLen < 8) {
+                    html += "<li>Nome de usuário muito curto. Mínimo de 8 caracteres.</li>";
+                }
+
+                if (tempLoginLen > 20) {
+                    html += "<li>Nome de usuário muito longo. Máximo de 20 caracteres.</li>";
+                }
+
+                if (hasNonalphas || containsSpace) {
+                    html += "<li>Nome de usuário inválido. Contém caracteres inválidos.</li>";
+                }
+
+                html += "</ul>";
+                el.html(html);
+                el.show();
+                return false;
+            }
+            {
+
+                el.html("");
+                el.hide();
+                return true;
+            }
+
+        case "dataNascUpdate":
+            var dataValue = document.getElementById('dataNascUpdate').value;
+            var dataLen = dataValue.length;
+
+            if (dataLen > 0) {
+                if (dataValue[0] == "0") return false;
+                else return true;
+            }
+            else {
+                return false;
+            }
+        case "enderecoUpdate":
+            console.log("entrou");
+            var estadoValue = document.getElementById('estadosUpdate').value;
+            var estadoLen = estadoValue.length;
+
+            var cidadeValue = document.getElementById('cidadeUpdate').value;
+            var cidadeLen = cidadeValue.length;
+
+            if (estadoLen > 0 && cidadeLen > 0) {
+                $('#invFB-EnderecoUpdate').text("");
+                return true;
+            }
+            if (estadoLen > 0 && cidadeLen == 0) {
+                var texto = "É necessário preencher o campo 'Cidade'.";
+                $('#invFB-EnderecoUpdate').text(texto);
+                return false;
+
+            }
+            if (estadoLen == 0 && cidadeLen > 0) {
+                var texto = "É necessário selecionar uma opção em 'Estado'.";
+                $('#invFB-EnderecoUpdate').html(texto);
+                return false;
+
+            }
+            if (estadoLen == 0 && cidadeLen == 0) {
+                $('#invFB-EnderecoUpdate').text("");
+                return true;
+            }
+
+    }
+
+
+}
