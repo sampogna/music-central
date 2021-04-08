@@ -1,8 +1,5 @@
-import UserMusico from "../entities/UserMusico";
-import { NextFunction, Request, Response } from "express";
+import {Request, Response } from "express";
 import axios from "axios";
-import ErrorHandler from "../models/ErrorHandler";
-import { text } from "body-parser";
 import TiposUsuario from "../models/TiposUsuarios";
 
 const base_url: string = "http://localhost:3100/api/musico/";

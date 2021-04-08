@@ -160,7 +160,7 @@ MusicoController.prototype.Delete = function (app, request, response) {
   var userId = request.params.userId;
   var connection = app.config.db();
   var clientMySql = new app.models.MySQL_DAO(connection);
-  clientMySql.DeleteUsuario(userId, function (error, result) {
+  clientMySql.DeleteUsuario(userId, app.locals.tiposUsuarios.Musico, function (error, result) {
     if (!error) {
       if (result.affectedRows == 1) {
         response.status(200).json({result:"Usuário excluído com sucesso!"});

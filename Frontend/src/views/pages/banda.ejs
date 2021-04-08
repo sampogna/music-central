@@ -10,7 +10,7 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/scroller/2.0.3/css/scroller.bootstrap4.css"/>
     </head>
     <body>
-        <title>Músicos</title>
+        <title>Bandas</title>
         <%- include('../partials/header'); %>
         <div class="container-fluid">
             <div class="row justify-content-center mt-3">
@@ -28,7 +28,6 @@
                                         <th scope="col" class="text-light text-center">Nome</th>
                                         <th scope="col" class="text-light text-center">Email</th>
                                         <th scope="col" class="text-light text-center">Login</th>
-                                        <th scope="col" class="text-light text-center">Data de Nascimento</th>
                                         <th scope="col" class="text-light text-center">Endereço</th>
                                         <th scope="col" class="text-light text-center">Outras informações</th>
                                         <th scope="col" class="text-light text-center">Opções</th>
@@ -41,7 +40,6 @@
                                                 <td class="text-light text-left"><%= data[index].Nome ? data[index].Nome : "-" %></td>
                                                 <td class="text-light text-left"><%= data[index].Email ? data[index].Email : "-" %></td>
                                                 <td class="text-light text-left"><%= data[index].Login ? data[index].Login : "-" %></td>
-                                                <td class="text-light text-left"><%= data[index].DataNascimento ? data[index].DataNascimento : "-" %></td>
                                                 <td class="text-light text-center"><% if(data[index].Endereco != null){ %>
                                                     <button type='button' value="<%= JSON.stringify(data[index].Endereco)%>" class='btn btn-primary modal-endereco'> <i class="fas fa-eye"></i> </button>
                                                 <%}
@@ -55,7 +53,7 @@
                                                     infoObj.Telefone = data[index].Telefone;
                                                     infoObj.RedesSociais= data[index].RedesSociais;
                                                     infoObj.Estilos= data[index].Estilos;
-                                                    infoObj.Instrumentos= data[index].Instrumentos;
+                                                    infoObj.Integrantes= data[index].Integrantes;
                                                     infoObj.RedesSociais= data[index].RedesSociais;
                                                 %>
 
@@ -93,6 +91,6 @@
             </div>
         </div>
         <%- include('../partials/scripts'); %>
-        <script src="js/musico.js"></script>
+        <script src="js/banda.js"></script>
     </body>
 </html>
