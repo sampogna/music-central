@@ -12,7 +12,7 @@
         <%- include('../partials/header'); %>
         <div class="container-fluid">
             <div class="row justify-content-center mt-3">
-                <div class="col-12">
+                <div class="col-auto">
                     <div class="container p-3 body-page" style="height: 100%">
                         <div class="col-3 pull-right" style="padding: 1%;";>
                             <button id="add" type="button" class="btn btn-success"><i class="fas fa-plus text-light">&nbsp;Adicionar novo usuário</i></button>
@@ -20,20 +20,20 @@
                         
                         <% if(data){%>
                             
-                                <table class="table table-hover  table-dark" id="tabela">
+                                <table class="table table-responsive table-hover table-dark" id="tabela">
                                     <thead class="thead-dark">
                                         <th scope="col" class="text-light text-center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#</th>
                                         <th scope="col" class="text-light text-center">Nome</th>
                                         <th scope="col" class="text-light text-center">Email</th>
-                                        <th scope="col" class="text-light text-center">Senha</th>
                                         <th scope="col" class="text-light text-center">Login</th>
                                         <th scope="col" class="text-light text-center">Data de Nascimento</th>
-                                        <th scope="col" class="text-light text-center">Descrição</th>
-                                        <th scope="col" class="text-light text-center">Telefone</th>
                                         <th scope="col" class="text-light text-center">Endereço</th>
+                                        <th scope="col" class="text-light text-center">Outras informações</th>
+                                        <!-- <th scope="col" class="text-light text-center">Descrição</th>
+                                        <th scope="col" class="text-light text-center">Telefone</th>
                                         <th scope="col" class="text-light text-center">Redes Sociais</th>
                                         <th scope="col" class="text-light text-center">Estilos</th>
-                                        <th scope="col" class="text-light text-center">Instrumentos</th>
+                                        <th scope="col" class="text-light text-center">Instrumentos</th> -->
                                         <th scope="col" class="text-light text-center">Opções</th>
                                     </thead>
                                     <tbody id="list">
@@ -43,11 +43,8 @@
                                                 <td class="text-light text-center"><%= data[index].Id ? data[index].Id : "-" %> </td>
                                                 <td class="text-light text-left"><%= data[index].Nome ? data[index].Nome : "-" %></td>
                                                 <td class="text-light text-left"><%= data[index].Email ? data[index].Email : "-" %></td>
-                                                <td class="text-light text-left"><%= data[index].Senha ? data[index].Senha : "-" %></td>
                                                 <td class="text-light text-left"><%= data[index].Login ? data[index].Login : "-" %></td>
                                                 <td class="text-light text-left"><%= data[index].DataNascimento ? data[index].DataNascimento : "-" %></td>
-                                                <td class="text-light text-left"><%= data[index].Descricao ? data[index].Descricao : "-" %></td>
-                                                <td class="text-light text-left"><%= data[index].Telefone ? data[index].Telefone : "-" %></td>
                                                 <td class="text-light text-center"><% if(data[index].Endereco != null){ %>
                                                     <button type='button' value="<%= JSON.stringify(data[index].Endereco)%>" class='btn btn-primary modal-endereco'> <i class="fas fa-eye"></i> </button>
                                                 <%}
@@ -55,21 +52,18 @@
                                                     -
                                                 <%}%></td>
 
+                                                <%
+                                                    var infoObj = {};
+                                                    infoObj.Descricao = data[index].Descricao;
+                                                    infoObj.Telefone = data[index].Telefone;
+                                                    infoObj.RedesSociais= data[index].RedesSociais;
+                                                    infoObj.Estilos= data[index].Estilos;
+                                                    infoObj.Instrumentos= data[index].Instrumentos;
+                                                    infoObj.RedesSociais= data[index].RedesSociais;
+                                                %>
 
-                                                <td class="text-light text-left"><% if(data[index].RedesSociais){ %>
-                                                    <button type='button' value="<%= JSON.stringify(data[index].RedesSociais)%>" class='btn btn-primary modal-redes-sociais'> <i class="fas fa-eye"></i> </button>
-                                                <%}
-                                                else{%>
-                                                    -
-                                                <%}%></td>
-                                                <td class="text-light text-center"><% if(data[index].Estilos != null){ %>
-                                                    <button type='button' value="<%= JSON.stringify(data[index].Estilos)%>" class='btn btn-primary modal-estilos'> <i class="fas fa-eye"></i> </button>
-                                                <%}
-                                                else{%>
-                                                    -
-                                                <%}%></td>
-                                                <td class="text-light text-center"><% if(data[index].Instrumentos != null){ %>
-                                                    <button type='button' value="<%= JSON.stringify(data[index].Instrumentos)%>" class='btn btn-primary modal-instrumentos'> <i class="fas fa-eye"></i> </button>
+                                                <td class="text-light text-center"><% if(infoObj != null){ %>
+                                                    <button type='button' value="<%= JSON.stringify(infoObj)%>" class='btn btn-primary modal-infos'> <i class="fas fa-eye"></i> </button>
                                                 <%}
                                                 else{%>
                                                     -

@@ -7,6 +7,8 @@ $(document).ready( function () {
 
         });
     }
+
+    
     
     
 } );
@@ -245,27 +247,7 @@ function checkNItemsRedeSocial(id){
     }
 }
 
-$('.modal-redes-sociais').click(function () {
-    var redes = JSON.parse(this.value);
-    var html2 = `<hr>
-    `
-    redes.forEach(function (rede, index) {
-        html2 +=
-            '<div style="padding-top: 0px;" class="row">' +
-                '<div style="padding-top: 0px;" class="col">' +
-                    `<a target="_blank" href="${rede.link}">${rede.nome}</a>` +
-                '</div>' +
-            '</div>';
-        if (index < redes.length - 1) html2 += '<hr>';
-    });
 
-    console.log(redes);
-    swal.fire({
-        title: "Redes Sociais",
-        html: html2
-
-    })
-}); 
 /* FIM REDES */
 
 /* ESTILOS */
@@ -351,26 +333,6 @@ function checkNItemsEstiloMusical(id){
     }
 }
 
-$('.modal-estilos').click(function () {
-    var estilos = JSON.parse(this.value);
-    var html2 = '<hr>';
-
-    estilos.forEach(function (estilo, index) {
-        html2 +=
-            '<div style="padding-top: 0px;" class="row">' +
-                '<div style="padding-top: 0px;" class="col">' +
-                    `${estilo}` +
-                '</div>' +
-            '</div>';
-        if (index < estilos.length - 1) html2 += '<hr>';
-    });
-
-    swal.fire({
-        title: "Estilos",
-        html: html2
-
-    })
-});
 
 /* FIM ESTILOS */
 
@@ -458,27 +420,7 @@ function checkNItemsInstrumentoMusical(id){
     }
 }
 
-$('.modal-instrumentos').click(function () {
-    var instrumentos = JSON.parse(this.value);
-    var html2 = '<hr>';
 
-    instrumentos.forEach(function (instrumento, index) {
-        html2 +=
-            '<div style="padding-top: 0px;" class="row">' +
-                '<div style="padding-top: 0px;" class="col">' +
-                    `${instrumento}` +
-                '</div>' +
-            '</div>';
-        if (index < instrumentos.length - 1) html2 += '<hr>';
-    });
-
-    swal.fire({
-        title: "Instrumentos",
-        html: html2
-
-    })
-
-});
 /* FIM INSTRUMENTOS */
 
 /* MODAIS */
@@ -1288,73 +1230,6 @@ async function updateMapper(data){
 
 
 
-$('.modal-redes-sociais').click(function () {
-    var redes = JSON.parse(this.value);
-    var html2 = `<hr>
-    `
-    redes.forEach(function (rede, index) {
-        html2 +=
-            '<div style="padding-top: 0px;" class="row">' +
-                '<div style="padding-top: 0px;" class="col">' +
-                    `<a target="_blank" href="${rede.link}">${rede.nome}</a>` +
-                '</div>' +
-            '</div>';
-        if (index < redes.length - 1) html2 += '<hr>';
-    });
-
-    console.log(redes);
-    swal.fire({
-        title: "Redes Sociais",
-        html: html2
-
-    })
-});
-
-
-
-$('.modal-estilos').click(function () {
-    var estilos = JSON.parse(this.value);
-    var html2 = '<hr>';
-
-    estilos.forEach(function (estilo, index) {
-        html2 +=
-            '<div style="padding-top: 0px;" class="row">' +
-                '<div style="padding-top: 0px;" class="col">' +
-                    `${estilo}` +
-                '</div>' +
-            '</div>';
-        if (index < estilos.length - 1) html2 += '<hr>';
-    });
-
-    swal.fire({
-        title: "Estilos",
-        html: html2
-
-    })
-});
-
-$('.modal-instrumentos').click(function () {
-    var instrumentos = JSON.parse(this.value);
-    var html2 = '<hr>';
-
-    instrumentos.forEach(function (instrumento, index) {
-        html2 +=
-            '<div style="padding-top: 0px;" class="row">' +
-                '<div style="padding-top: 0px;" class="col">' +
-                    `${instrumento}` +
-                '</div>' +
-            '</div>';
-        if (index < instrumentos.length - 1) html2 += '<hr>';
-    });
-
-    swal.fire({
-        title: "Instrumentos",
-        html: html2
-
-    })
-
-});
-
 $('.modal-endereco').click(function () {
     var endereco = JSON.parse(this.value);
     var html2 = `<hr>
@@ -1378,6 +1253,238 @@ $('.modal-endereco').click(function () {
 
     swal.fire({
         title: "Endereço",
+        html: html2
+
+    })
+
+});
+
+$('.modal-infos').click(function () {
+    var infoObj = JSON.parse(this.value);
+    console.log("infoObj", infoObj)
+    var Descricao = infoObj.Descricao;
+    var Telefone = infoObj.Telefone;
+    var RedesSociais = infoObj.RedesSociais;
+    var Estilos = infoObj.Estilos;
+    var Instrumentos = infoObj.Instrumentos;
+    var html2 = `<hr>
+    <div class="row">
+        <div class="col"><b>Descrição</b></div>
+        <div class="col">${Descricao == null ? "Vazio" : Descricao}</div>
+        
+    <div> 
+    <hr>
+    <div class="row">
+        <div class="col"><b>Telefone</b></div>
+        <div class="col">${Telefone == null ? "Vazio" : Telefone}</div>
+    <div>
+    <hr>`;
+
+    if(RedesSociais!=null){
+        if(RedesSociais.length>0){
+
+            var opts = "";
+
+            RedesSociais.forEach(element => {
+                opts+=`<a href="${element.link}" class="dropdown-item">${element.nome}</a>`;
+            });
+            
+            html2+=`<div class="row">
+                        <div class="col"><b>Redes Sociais</b></div>
+                        <div class="col">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Visualizar
+                                    </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    ${opts}
+                                </div>
+                            </div>
+                    
+                        </div>
+                    </div>`;
+        }
+        else{
+            html2+=`<div class="row">
+                        <div class="col"><b>Redes Sociais</b></div>
+                        <div class="col">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Visualizar
+                                    </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a href="#" class="dropdown-item text-italic">Vazio</a>
+                                </div>
+                            </div>
+                    
+                        </div>
+                    </div>`;
+        }
+        
+    }
+    else{
+        html2+=`<div class="row">
+                    <div class="col"><b>Redes Sociais</b></div>
+                    <div class="col">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Visualizar
+                                </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a href="#" class="dropdown-item text-italic">Vazio</a>
+                            </div>
+                        </div>
+                
+                    </div>
+                </div>`;
+    }
+    html2+='<hr>';
+    if(Estilos!=null){
+        if(Estilos.length>0){
+
+            var opts = "";
+
+            Estilos.forEach(element => {
+                opts+=`<a href="#" class="dropdown-item">${element}</a>`;
+            });
+            
+            html2+=`<div class="row">
+                        <div class="col"><b>Estilos</b></div>
+                        <div class="col">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Visualizar
+                                    </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    ${opts}
+                                </div>
+                            </div>
+                    
+                        </div>
+                    </div>`;
+        }
+        else{
+            html2+=`<div class="row">
+                        <div class="col"><b>Estilos</b></div>
+                        <div class="col">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Visualizar
+                                    </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a href="#" class="dropdown-item text-italic">Vazio</a>
+                                </div>
+                            </div>
+                    
+                        </div>
+                    </div>`;
+        }
+        
+    }
+    else{
+        html2+=`<div class="row">
+                    <div class="col"><b>Estilos</b></div>
+                    <div class="col">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Visualizar
+                                </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a href="#" class="dropdown-item text-italic">Vazio</a>
+                            </div>
+                        </div>
+                
+                    </div>
+                </div>`;
+    }
+    html2+='<hr>';
+    if(Instrumentos !=null){
+        if(Instrumentos.length>0){
+
+            var opts = "";
+
+            Instrumentos.forEach(element => {
+                opts+=`<a href="#" class="dropdown-item">${element}</a>`;
+            });
+            
+            html2+=`<div class="row">
+                        <div class="col"><b>Instrumentos</b></div>
+                        <div class="col">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Visualizar
+                                    </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    ${opts}
+                                </div>
+                            </div>
+                    
+                        </div>
+                    </div>`;
+        }
+        else{
+            html2+=`<div class="row">
+                        <div class="col"><b>Instrumentos</b></div>
+                        <div class="col">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Visualizar
+                                    </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a href="#" class="dropdown-item text-italic">Vazio</a>
+                                </div>
+                            </div>
+                    
+                        </div>
+                    </div>`;
+        }
+        
+    }
+    else{
+        html2+=`<div class="row">
+                    <div class="col"><b>Instrumentos</b></div>
+                    <div class="col">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Visualizar
+                                </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a href="#" class="dropdown-item text-italic">Vazio</a>
+                            </div>
+                        </div>
+                
+                    </div>
+                </div>`;
+    }
+
+
+
+    
+    swal.fire({
+        title: "Informações Adicionais",
+        showCloseButton: true,
+        showConfirmButton: false,
+        didOpen: ()=>{
+            $(function() {
+                $( ".dropdown, .dropdown-toggle, .dropdown-item" ).hover(
+                    function(   ) {
+                        var el = $(this).closest('div').find('.dropdown-menu');
+                        el.show();
+                        
+                    }, function() {
+                        var el = $(this).closest('div').find('.dropdown-menu');
+                        setTimeout(function(){
+                            
+                            el.hide(); 
+
+                        },500)
+
+
+                        
+                    }
+                  );
+            });
+        },
         html: html2
 
     })
@@ -1913,8 +2020,8 @@ function showHide(){
             $( this ).removeClass("fas fa-eye-slash");
             $( this ).addClass("fas fa-eye");
         }
-      });
-    
+        
+    });
 
     // $("i[title='Mostrar senha']").each(element => {
     //     if(element.css("class") == "fas fa-eye") element.css("class","fas fa-eye-slash");
