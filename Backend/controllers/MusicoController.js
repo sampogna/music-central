@@ -93,7 +93,7 @@ MusicoController.prototype.Update = function (app, request, response) {
           }
           else
           {
-            response.status(500).json({ error: "Nenhum dado atualizado" });
+            response.status(200).json({ error: "Nenhum dado atualizado" });
           }
 
           

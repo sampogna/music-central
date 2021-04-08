@@ -32,7 +32,7 @@ class MusicoRouter {
     this._router.post(
       "/update",
       async (req: Request, res: Response, next: NextFunction) => {
-        await this._controller.adicionar(req, res);
+        await this._controller.alterar(req, res);
       }
     );
 

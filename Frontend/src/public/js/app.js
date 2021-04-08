@@ -44,7 +44,7 @@ var updateObj = {
     "DataNascimento": null,
     "Status": null,
     "Tipo": null,
-    "Endereco": null,
+    Endereco: null,
     "RedesSociais": [],
     "Estilos": [],
     "Instrumentos": [],
@@ -564,79 +564,6 @@ async function modalCreate() {
 
 
 
-function checkNItemsRedeSocial(id){
-    var cont = id[id.length-1];
-    var linkValue = document.getElementById('linkRedeSocial'+cont).value;
-    var linkLen = linkValue.length;
-    var fbEl = $('#invFB-RedeSocial'+cont);
-    var nomeValue = document.getElementById('nomeRedeSocial'+cont).value;
-    var nomeLen = nomeValue.length;
-
-    if(linkLen >0 && nomeLen >0) {
-        fbEl.hide();
-        $(".swal2-confirm").attr('disabled', false);
-    }
-    if(linkLen >0 && nomeLen ==0){
-        fbEl.show();
-        $(".swal2-confirm").attr('disabled', 'disabled');
-
-    }
-    if(linkLen == 0 && nomeLen >0){
-        fbEl.show();
-        $(".swal2-confirm").attr('disabled', 'disabled');
-
-    }
-    if(linkLen == 0 && nomeLen == 0){
-        fbEl.hide();
-        $(".swal2-confirm").attr('disabled', false);
-    }
-}
-
-function checkNItemsEstiloMusical(id){
-    var cont = id[id.length-1];
-    var fbEl = $('#invFB-EstiloMusical'+cont);
-    var nomeValue = document.getElementById(id).value;
-    var nomeLen = nomeValue.length;
-
-    if(nomeLen >0 && !checkEmptyString(nomeValue)) {
-        fbEl.hide();
-        $(".swal2-confirm").attr('disabled', false);
-    }
-
-    if(nomeLen == 0) {
-        fbEl.hide();
-        $(".swal2-confirm").attr('disabled', false);
-    }
-
-    if(nomeLen >0 && checkEmptyString(nomeValue)){
-        fbEl.show();
-        $(".swal2-confirm").attr('disabled', 'disabled');
-
-    }
-}
-
-function checkNItemsInstrumentoMusical(id){
-    var cont = id[id.length-1];
-    var fbEl = $('#invFB-InstrumentoMusical'+cont);
-    var nomeValue = document.getElementById(id).value;
-    var nomeLen = nomeValue.length;
-
-    if(nomeLen >0 && !checkEmptyString(nomeValue)) {
-        fbEl.hide();
-        $(".swal2-confirm").attr('disabled', false);
-    }
-
-    if(nomeLen == 0) {
-        fbEl.hide();
-        $(".swal2-confirm").attr('disabled', false);
-    }
-
-    if(nomeLen >0 && checkEmptyString(nomeValue)){
-        fbEl.show();
-        $(".swal2-confirm").attr('disabled', 'disabled');
-
-    }
-}
 
 
 
@@ -755,7 +682,6 @@ async function updateMapper(data){
 
 async function modalUpdate() {
     var data = updateObj;
-    console.log(data.DataNascimento.split("-").reverse().join("-"))
     Swal.mixin({
         showCancelButton: true,
         progressSteps: ['1', '2', '3', '4', '5', '6'],
@@ -767,17 +693,22 @@ async function modalUpdate() {
             footer:'<span class="text-muted" >*Campos obrigatórios</span>',
             confirmButtonText: 'Next &rarr;',
             didOpen: ()=>{
-                VerficadoresDeCampo(1)
+                $('#nome').val(data.Nome);
+                $('#email').val(data.Email);
+                $('#senha').val(data.Senha);
+                $('#confSenha').val(data.Senha);
+                $('#login').val(data.Login);
+                VerficadoresDeCampo(1);
             },
             html:
             `<div class="row">
             <div class="col">
                 <label style="padding-top: 10px;" for="nome">Nome*</label> 
-                <input  id="nome" class="form-control" value="${data.Nome}"> 
+                <input  id="nome" class="form-control"> 
                 <div id="invFB-Nome" style="display: none" class="invalid-feedback"> 
                 </div> 
                 <label style="padding-top: 10px;" for="email">Email*</label> 
-                <input id="email" class="form-control" value="${data.Email}"> 
+                <input id="email" class="form-control"> 
                 <div  id="invFB-Email" style="display: none" class="invalid-feedback"> 
                 Formato de email inválido. 
                 </div> 
@@ -787,7 +718,7 @@ async function modalUpdate() {
                 <input type="password" id="confSenha" class="form-control" value=""> 
                 <div id="invFB-ConfSenha" style="display: none" class="invalid-feedback"> Senha e Confirmação de Senha não coincidem. </div> 
                 <label style="padding-top: 10px;" for="login">Nome de usuário*</label> 
-                <input id="login" class="form-control" value="${data.Login}"> 
+                <input id="login" class="form-control"> 
                 <div id="invFB-Login" style="display: none" class="invalid-feedback"> 
                 </div>
             </div>
@@ -808,18 +739,21 @@ async function modalUpdate() {
             </div>
         </div>`,
             preConfirm: () => {
-                sendObj.Nome = document.getElementById('nome').value;
-                sendObj.Email = document.getElementById('email').value.toLowerCase();
-                sendObj.Senha = document.getElementById('senha').value;
-                sendObj.ConfSenha = document.getElementById('confSenha').value;
-                sendObj.Login = document.getElementById('login').value;
+                updateObj.Nome = document.getElementById('nome').value;
+                updateObj.Email = document.getElementById('email').value.toLowerCase();
+                updateObj.Senha = document.getElementById('senha').value;
+                updateObj.ConfSenha = document.getElementById('confSenha').value;
+                updateObj.Login = document.getElementById('login').value;
             }
         },
         {
             title: "Informações básicas",
             footer:'<span class="text-muted" >*Campos obrigatórios</span>',
             didOpen:()=>{ 
-                VerficadoresDeCampo(2)
+                $('#desc').val(data.Descricao);
+                $('#telefone').val(data.Telefone);
+                $('#dataNasc').val(data.DataNascimento == null? "" : (data.DataNascimento.split("-").reverse().join("-")));
+                VerficadoresDeCampo(2);
             },
             html:
                 `<label style="padding-top: 10px;" for="desc">Sobre você</label>
@@ -827,13 +761,13 @@ async function modalUpdate() {
                 <label style="padding-top: 10px;" for="telefone">Telefone</label>
                 <input  id="telefone" class="form-control" value="${data.Telefone == null? "" : data.Telefone}">
                 <label style="padding-top: 10px;" for="dataNasc">Data de Nascimento*</label>
-                <input type="date" id="dataNasc" class="form-control" value="${data.DataNascimento == null? "" : (data.DataNascimento.split("-").reverse().join("-"))}" >`,
+                <input type="date" id="dataNasc" class="form-control"  >`,
             confirmButtonText: 'Next &rarr;',
             preConfirm: () => {
-                sendObj.Descricao = document.getElementById('desc').value;
-                sendObj.Telefone = document.getElementById('telefone').value;
-                sendObj.DataNascimento = document.getElementById('dataNasc').value;
-                //verificaDadosObr(); //TODO remover comentario
+                updateObj.Descricao = document.getElementById('desc').value;
+                updateObj.Telefone = document.getElementById('telefone').value;
+                updateObj.DataNascimento = document.getElementById('dataNasc').value;
+                verificaDadosObrUpdate(); //TODO remover comentario
             }
         },
         {
@@ -841,36 +775,38 @@ async function modalUpdate() {
             confirmButtonText: 'Next &rarr;',
             footer: '<span class="text-muted" id="invFB-Endereco"></span>',
             didOpen:()=>{ 
-                VerficadoresDeCampo(3)
+                console.log()
                 var teste = data.Endereco;
                 if(teste == null) {
                     $('#cidade').value = "";
                     $('#estados').value = "";
                 }
                 else{
-                    if(data.Endereco.Cidade) $('#cidade').value = data.Endereco.Cidade;
-                    if(data.Endereco.UF) $('#estados').value = data.Endereco.UF;
+                    if(teste.Endereco.Cidade) $('#cidade').value = teste.Endereco.Cidade;
+                    if(teste.Endereco.UF) $('#estados').value = teste.Endereco.UF;
                     //{"Cidade":"dsdas","UF":"AC","Estado":"Acre"}
                 }
+
+                VerficadoresDeCampo(3)
 
                 
             },
             html:
                 Estados +
                 `<label style="padding-top: 10px;" for="cidade">Cidade</label>
-                <input  id="cidade" class="form-control" value="${data.Nome == null? "" : data.Nome}">`,
+                <input  id="cidade" class="form-control">`,
             preConfirm: () => {
                 var e = document.getElementById("estados");
 
                 var value = e.value;
                 if (value == "") {
-                    sendObj.Endereco = null;
+                    updateObj.Endereco = null;
                 }
                 else {
-                    sendObj.Endereco = new Object();
-                    sendObj.Endereco.Cidade = document.getElementById('cidade').value;
-                    sendObj.Endereco.UF = e.value;
-                    sendObj.Endereco.Estado = e.options[e.selectedIndex].text;
+                    updateObj.Endereco = new Object();
+                    updateObj.Endereco.Cidade = document.getElementById('cidade').value;
+                    updateObj.Endereco.UF = e.value;
+                    updateObj.Endereco.Estado = e.options[e.selectedIndex].text;
                 }
 
             }
@@ -907,7 +843,7 @@ async function modalUpdate() {
                     var obj = new Object();
                     obj.nome = nomeRedeSocial.value;
                     obj.link = linkRedeSocial.value;
-                    if (!checkEmptyString(obj.nome) && !checkEmptyString(obj.link)) sendObj.RedesSociais.push(obj);
+                    if (!checkEmptyString(obj.nome) && !checkEmptyString(obj.link)) updateObj.RedesSociais.push(obj);
                 }
 
             }
@@ -939,7 +875,7 @@ async function modalUpdate() {
                 for (let index = 1; index <= contEstilosMusicais; index++) {
                     var nomeEstiloMusical = document.getElementById("nomeEstiloMusical" + index.toString());
 
-                    if (!checkEmptyString(nomeEstiloMusical.value)) sendObj.Estilos.push(nomeEstiloMusical.value);
+                    if (!checkEmptyString(nomeEstiloMusical.value)) updateObj.Estilos.push(nomeEstiloMusical.value);
                 }
 
             }
@@ -970,7 +906,7 @@ async function modalUpdate() {
 
                 for (let index = 1; index <= contInstrumentos; index++) {
                     var nomeInstrumento = document.getElementById("nomeInstrumentoMusical" + index.toString());
-                    if (!checkEmptyString(nomeInstrumento.value)) sendObj.Instrumentos.push(nomeInstrumento.value);
+                    if (!checkEmptyString(nomeInstrumento.value)) updateObj.Instrumentos.push(nomeInstrumento.value);
                 }
                 atualizar = true;
 
@@ -979,9 +915,10 @@ async function modalUpdate() {
         },
     ]).then(() => {
 
-
+        console.log(updateObj   )
         if (atualizar) {
-            verificaDados();
+            verificaDadosUpdate();
+            console.log(JSON.stringify(updateObj));
             Swal.fire({
                 title: 'Atualizando usuário...',
                 icon: 'info',
@@ -996,7 +933,7 @@ async function modalUpdate() {
                         Swal.fire({
                             title: 'Sucesso!',
                             icon: 'success',
-                            text: "Usuário criado com sucesso!",
+                            text: "Usuário atualizado com sucesso!",
                             confirmButtonText: 'Ok'
                         }).then(() => {
                             resetInfos();
@@ -1041,143 +978,6 @@ async function modalUpdate() {
 
     })
 }
-
-// function makeRow() {
-//     var html = `
-//     <tr>
-//     <td class="text-light text-center">${1}</td>
-//     <td class="text-light text-center">${"a"}</td>
-//     <td class="text-light text-center">${"a"}</td>
-//     <td class="text-light text-center">${"a"}</td>
-//     <td class="text-light text-center">${"a"}</td>
-//     <td class="text-light text-center">${"a"}</td>
-//     <td class="text-light text-center">${"a"}</td>
-//     <td class="text-center"> 
-//         <i onclick="editRegister($(this).closest('td').closest('tr'))" class="text-warning fas fa-pencil-alt"></i>
-//         &nbsp;&nbsp;&nbsp;
-//         <i onclick="deleteRegister($(this).closest('td').closest('tr'))" class="text-danger fas fa-trash-alt"></i>
-//     </td>
-//     `;
-//     return html;
-
-
-// }
-
-function resetInfosUpdate() {
-
-    updateObj = {
-        "ConfSenha": null,
-        "Id": null,
-        "Nome": null,
-        "Email": null,
-        "Senha": null,
-        "Login": null,
-        "Descricao": null,
-        "Telefone": null,
-        "DataNascimento": null,
-        "Status": null,
-        "Tipo": null,
-        "Endereco": null,
-        "RedesSociais": [],
-        "Estilos": [],
-        "Instrumentos": [],
-        "Criador": null,
-        "Integrantes": null,
-        "TipoIndustria": null,
-        "Logradouro": null
-    }
-
-    contRedesSociaisUpdate = 0;
-    contEstilosMusicaisUpdate = 0;
-    contInstrumentosUpdate = 0;
-
-    atualizar = false;
-
-}
-
-function resetInfos() {
-
-    sendObj = {
-        "ConfSenha": null,
-        "Id": null,
-        "Nome": null,
-        "Email": null,
-        "Senha": null,
-        "Login": null,
-        "Descricao": null,
-        "Telefone": null,
-        "DataNascimento": null,
-        "Status": null,
-        "Tipo": null,
-        "Endereco": null,
-        "RedesSociais": [],
-        "Estilos": [],
-        "Instrumentos": [],
-        "Criador": null,
-        "Integrantes": null,
-        "TipoIndustria": null,
-        "Logradouro": null
-    }
-
-    contRedesSociais = 1;
-    contEstilosMusicais = 1;
-    contInstrumentos = 1;
-
-    criar = false;
-
-}
-
-function showInfo() {
-    console.log("sendObj = ", sendObj);
-}
-
-
-function checkEmptyString(str) {
-    if (str == null) return true;
-    const emptyStringRegex = /^\s+$/;
-    if (str.length == 0) return true;
-    var isEmptyString = emptyStringRegex.test(str);
-    return isEmptyString;
-}
-
-
-function verificaDadosObr() {
-    var lstErros = [];
-    var html2 = "";
-    if (checkEmptyString(sendObj.Nome)) lstErros.push("'Nome' é obrigatório e deve ser preenchido.");
-    if (checkEmptyString(sendObj.Email)) lstErros.push("'Email' é obrigatório e deve ser preenchido.");
-    if (checkEmptyString(sendObj.Senha)) lstErros.push("'Senha' é obrigatório e deve ser preenchido.");
-    if (checkEmptyString(sendObj.ConfSenha)) lstErros.push("'Confirmação de senha' é obrigatório e deve ser preenchido.");
-    if (checkEmptyString(sendObj.Login)) lstErros.push("'Nome de usuário' é obrigatório e deve ser preenchido.");
-    if (checkEmptyString(sendObj.DataNascimento)) lstErros.push("'Data de Nascimento' é obrigatório e deve ser preenchido.");
-    if (sendObj.Senha != sendObj.ConfSenha) lstErros.push("'Senhas' e 'Confirmação de senha' são diferentes.");
-    if (lstErros.length > 0) {
-        lstErros.forEach(element => {
-            html2 += element;
-            html2 += "<br>";
-        });
-
-        Swal.fire({
-            title: 'Erro!',
-            icon: 'error',
-            html: html2,
-            confirmButtonText: 'Ok'
-        })
-        resetInfos();
-    }
-}
-
-function verificaDados() {
-    sendObj.Descricao = checkEmptyString(sendObj.Descricao) ? null : sendObj.Descricao;
-    sendObj.Telefone = checkEmptyString(sendObj.Telefone) ? null : sendObj.Telefone;
-    sendObj.Endereco = typeof (sendObj.Endereco) == "object" ? sendObj.Endereco : null;
-    sendObj.RedesSociais = sendObj.RedesSociais.length > 0 ? sendObj.RedesSociais : null;
-    sendObj.Estilos = sendObj.Estilos.length > 0 ? sendObj.Estilos : null;
-    sendObj.Instrumentos = sendObj.Instrumentos.length > 0 ? sendObj.Instrumentos : null;
-    showInfo();
-    return sendObj;
-}
-
 
 $('.modal-redes-sociais').click(function () {
     var redes = JSON.parse(this.value);
@@ -1310,225 +1110,50 @@ function VerficadoresDeCampo(passo){
 
     var DadosBasicos1 = function(){
         //Dados Basicos 1
-        //$(".swal2-confirm").attr('disabled', 'disabled'); // TODO remover comentario
-        var okNome = false;
-        var okEmail = false;
-        var okSenha = false;
-        var okConfSenha = false;
-        var okLogin = false;
+        $(".swal2-confirm").attr('disabled', 'disabled'); // TODO remover comentario
+        var oks = new Object();
         
-        $('#nome').on('change keyup paste',function () {
-            var lenNome = document.getElementById('nome').value.length;
-            var el = $('#invFB-Nome');
-            if(lenNome<10 || lenNome>100){
-                if(lenNome<10){
-                    el.html("Nome muito curto.");
-                    el.show();
-                
-                }
-                if(lenNome>100){
-                    el.html("Nome muito grande");
-                    el.show();
-                }
-                okNome = false;
-            }
-            else{
-                el.html("");
-                el.hide();
-                okNome = true;
-            }
-        });
-    
-        $('#email').on('change keyup paste',function () {
-            var tempEmail = document.getElementById('email').value;
-            console.log("email", validateEmail(tempEmail)   );
-            if(validateEmail(tempEmail)){
-                $('#invFB-Email').hide();
-                okEmail = true;
-            }
-            else{
-                $('#invFB-Email').show();
-                okEmail = false;
-            }
-            
-        });
-    
-        $('#senha').on('change keyup paste',function () {
-            var tempSenha = this.value;
-            
-            var hasUpperCase = /[A-Z]/.test(tempSenha);
-            var hasLowerCase = /[a-z]/.test(tempSenha);
-            var hasNumbers = /\d/.test(tempSenha);
-            var hasNonalphas = /\W/.test(tempSenha);
-            var len = tempSenha.length;
-    
-            var lenOk = len>=8 && len <=20;
-    
-            if(hasUpperCase == true && hasLowerCase == true && hasNumbers == true && hasNonalphas == true && lenOk) okSenha = true;
-            else okSenha = false;
-    
-            var html =  '<h4 class="alert-heading">Força da senha</h4>';
-            if(lenOk)
-            {
-                html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui 8 a 20 caracteres. </span>';
-            }
-            else
-            {
-                html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui 8 a 20 caracteres. </span>';
-            }
-            html+='<br>';
-            if(hasUpperCase)
-            {
-                html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui caracteres maiúsculos.. </span>';
-            }
-            else
-            {
-                html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres maiúsculos.. </span>';
-            }
-            html+='<br>';
-            if(hasLowerCase)
-            {
-                html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui caracteres minúsculos. </span>';
-            }
-            else
-            {
-                html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres minúsculos. </span>';
-            }
-            html+='<br>';
-            if(hasNumbers)
-            {
-                html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui números. </span>';
-            }
-            else
-            {
-                html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui números. </span>';
-            }
-            html+='<br>';
-            if(hasNonalphas)
-            {
-                html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui caracteres especiais. </span>';
-            }
-            else
-            {
-                html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres especiais. </span>';
-            }
-            html+='<br>';
-            $('#alert-senha').html(html);
-    
-        });
-    
-        $('#confSenha').on('change keyup paste',function () {
-            var tempSenha = document.getElementById('senha').value;
-            var tempConfSenha = document.getElementById('confSenha').value;
-            if(tempSenha == tempConfSenha){
-                $('#invFB-ConfSenha').hide();
-                okConfSenha = true;
-            }
-            else{
-                $('#invFB-ConfSenha').show();
-                okConfSenha = false;
-    
-            }
-        });
-    
-        $('#login').on('change keyup paste',function () {
-            var tempLogin = document.getElementById('login').value;
-            var tempLoginLen = tempLogin.length;
-            var hasNonalphas = /\W/.test(tempLogin);
-            var containsSpace = tempLogin.includes(" ");
-            var el = $('#invFB-Login');
-            var html = `<ul>`;
+        oks.nome = eventTrigger("nome");
+        oks.email = eventTrigger("email");
+        oks.senha = eventTrigger("senha");
+        oks.confSenha = eventTrigger("confSenha");
+        oks.login =  eventTrigger("login");
 
-            if(tempLoginLen>20 || tempLoginLen<8 || hasNonalphas || containsSpace)
-            {
+        enableDisableConfirm(oks);
 
-                if(tempLoginLen<8) 
-                {
-                    html+= "<li>Nome de usuário muito curto. Mínimo de 8 caracteres.</li>";
-                }
-
-                if(tempLoginLen>20) 
-                {
-                    html+= "<li>Nome de usuário muito longo. Máximo de 20 caracteres.</li>";
-                }
-
-                if(hasNonalphas || containsSpace) 
-                {
-                    html+= "<li>Nome de usuário inválido. Contém caracteres inválidos.</li>";
-                }
-                
-                html+= "</ul>";
-                el.html(html);
-                el.show();
-                okLogin = false;
-            }
-            else
-            {
-                
-                el.html("");
-                el.hide();
-                okLogin = true;
-            }
-
-            
-
-            
-        });
-    
         $('#nome, #email, #senha, #confSenha, #login').on('change keyup paste',function () {
-            
-            if(okNome == true && okEmail == true && okSenha == true && okConfSenha == true && okLogin == true) $(".swal2-confirm").attr('disabled', false);
-            else $(".swal2-confirm").attr('disabled', 'disabled');
+            oks[this.id] = eventTrigger(this.id);
+            enableDisableConfirm(oks);
         });
     }
 
     var DadosBasicos2 = function(){
         //Dados Basicos 2
-        //$(".swal2-confirm").attr('disabled', 'disabled'); TODO remover comentario
+        $(".swal2-confirm").attr('disabled', 'disabled'); // TODO remover comentario
+        var oks = new Object();
+        
+        oks.dataNasc = eventTrigger("dataNasc");
+
+        enableDisableConfirm(oks);
+
         $('#dataNasc').on('change keyup paste',function () {
-            var dataValue = document.getElementById('dataNasc').value;
-            var dataLen = dataValue.length;
-    
-            if(dataLen>0){
-                if(dataValue[0] == "0") $(".swal2-confirm").attr('disabled', 'disabled');
-                else $(".swal2-confirm").attr('disabled', false);
-                
-            }
-            else{
-                $(".swal2-confirm").attr('disabled', 'disabled');
-            }
+            oks[this.id] = eventTrigger(this.id);
+            enableDisableConfirm(oks);
         });
     }
     
     var Endereco = function(){
         // Endereço 
+        $(".swal2-confirm").attr('disabled', 'disabled'); // TODO remover comentario
+        var oks = new Object();
+        
+        oks.endereco = eventTrigger("endereco");
+
+        enableDisableConfirm(oks);
+
         $('#estados, #cidade').on('change keyup paste',function () {
-            var estadoValue = document.getElementById('estados').value;
-            var estadoLen = estadoValue.length;
-    
-            var cidadeValue = document.getElementById('cidade').value;
-            var cidadeLen = cidadeValue.length;
-    
-            if(estadoLen >0 && cidadeLen >0) {
-                $('#invFB-Endereco').text("");
-                $(".swal2-confirm").attr('disabled', false);
-            }
-            if(estadoLen >0 && cidadeLen ==0){
-                var texto = "É necessário preencher o campo 'Cidade'.";
-                $('#invFB-Endereco').text(texto);
-                $(".swal2-confirm").attr('disabled', 'disabled');
-    
-            }
-            if(estadoLen == 0 && cidadeLen >0){
-                var texto = "É necessário selecionar uma opção em 'Estado'.";
-                $('#invFB-Endereco').html(texto);
-                $(".swal2-confirm").attr('disabled', 'disabled');
-    
-            }
-            if(estadoLen == 0 && cidadeLen == 0){
-                $('#invFB-Endereco').text("");
-                $(".swal2-confirm").attr('disabled', false);
-            }
+            oks["endereco"] = eventTrigger("endereco");
+            enableDisableConfirm(oks);
         });
     }
     
@@ -1648,286 +1273,203 @@ function VerficadoresDeCampo(passo){
         case 6:
             InstrumentosMusicais();
             break;
+    }   
+}
+
+function eventTrigger(id){
+
+    switch(id)
+    {
+        case "nome":
+            var lenNome = document.getElementById('nome').value.length;
+            var el = $('#invFB-Nome');
+            if(lenNome<10 || lenNome>100){
+                if(lenNome<10){
+                    el.html("Nome muito curto.");
+                    el.show();
+                
+                }
+                if(lenNome>100){
+                    el.html("Nome muito grande");
+                    el.show();
+                }
+                return false;
+            }
+            else{
+                el.html("");
+                el.hide();
+                return true;
+            }
+
+            case "email":
+            var tempEmail = document.getElementById('email').value;
+            if(validateEmail(tempEmail)){
+                $('#invFB-Email').hide();
+                return true;
+            }
+            else{
+                $('#invFB-Email').show();
+                return false;
+            }
+
+        case "senha":
+            var tempSenha = document.getElementById('senha').value;
+            var hasUpperCase = /[A-Z]/.test(tempSenha);
+            var hasLowerCase = /[a-z]/.test(tempSenha);
+            var hasNumbers = /\d/.test(tempSenha);
+            var hasNonalphas = /\W/.test(tempSenha);
+            var len = tempSenha.length;
+
+            var lenOk = len>=8 && len <=20;
+
+            var html =  '<h4 class="alert-heading">Força da senha</h4>';
+            if(lenOk)
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui 8 a 20 caracteres. </span>';
+            }
+            else
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui 8 a 20 caracteres. </span>';
+            }
+            html+='<br>';
+            if(hasUpperCase)
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui caracteres maiúsculos.. </span>';
+            }
+            else
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres maiúsculos.. </span>';
+            }
+            html+='<br>';
+            if(hasLowerCase)
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui caracteres minúsculos. </span>';
+            }
+            else
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres minúsculos. </span>';
+            }
+            html+='<br>';
+            if(hasNumbers)
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui números. </span>';
+            }
+            else
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui números. </span>';
+            }
+            html+='<br>';
+            if(hasNonalphas)
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui caracteres especiais. </span>';
+            }
+            else
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres especiais. </span>';
+            }
+            html+='<br>';
+            $('#alert-senha').html(html);
+            if(hasUpperCase == true && hasLowerCase == true && hasNumbers == true && hasNonalphas == true && lenOk) return true;
+            else return false;
+
+        case "confSenha":
+            var tempSenha = document.getElementById('senha').value;
+            var tempConfSenha = document.getElementById('confSenha').value;
+            if(tempSenha == tempConfSenha){
+                $('#invFB-ConfSenha').hide();
+                return true;
+            }
+            else{
+                $('#invFB-ConfSenha').show();
+                return false;
+
+            }
+
+        case "login":
+            var tempLogin = document.getElementById('login').value;
+            var tempLoginLen = tempLogin.length;
+            var hasNonalphas = /\W/.test(tempLogin);
+            var containsSpace = tempLogin.includes(" ");
+            var el = $('#invFB-Login');
+            var html = `<ul>`;
+
+            if(tempLoginLen>20 || tempLoginLen<8 || hasNonalphas || containsSpace)
+            {
+
+                if(tempLoginLen<8) 
+                {
+                    html+= "<li>Nome de usuário muito curto. Mínimo de 8 caracteres.</li>";
+                }
+
+                if(tempLoginLen>20) 
+                {
+                    html+= "<li>Nome de usuário muito longo. Máximo de 20 caracteres.</li>";
+                }
+
+                if(hasNonalphas || containsSpace) 
+                {
+                    html+= "<li>Nome de usuário inválido. Contém caracteres inválidos.</li>";
+                }
+                
+                html+= "</ul>";
+                el.html(html);
+                el.show();
+                return false;
+            }
+            {
+                
+                el.html("");
+                el.hide();
+                return true;
+            }
+        
+        case "dataNasc":
+            var dataValue = document.getElementById('dataNasc').value;
+            var dataLen = dataValue.length;
+    
+            if(dataLen>0){
+                if(dataValue[0] == "0") return false;
+                else return true; 
+            }
+            else{
+                return false;
+            }
+        case "endereco":
+            var estadoValue = document.getElementById('estados').value;
+            var estadoLen = estadoValue.length;
+    
+            var cidadeValue = document.getElementById('cidade').value;
+            var cidadeLen = cidadeValue.length;
+    
+            if(estadoLen >0 && cidadeLen >0) {
+                $('#invFB-Endereco').text("");
+                return true;
+            }
+            if(estadoLen >0 && cidadeLen ==0){
+                var texto = "É necessário preencher o campo 'Cidade'.";
+                $('#invFB-Endereco').text(texto);
+                return false;
+    
+            }
+            if(estadoLen == 0 && cidadeLen >0){
+                var texto = "É necessário selecionar uma opção em 'Estado'.";
+                $('#invFB-Endereco').html(texto);
+                return false;
+    
+            }
+            if(estadoLen == 0 && cidadeLen == 0){
+                $('#invFB-Endereco').text("");
+                return true;
+            }
+
     }
 
 
-    
-}   
-
-// function DadosBasicos1(){
-//     //Dados Basicos 1
-//     //$(".swal2-confirm").attr('disabled', 'disabled'); // TODO remover comentario
-//     var okNome = false;
-//     var okEmail = false;
-//     var okSenha = false;
-//     var okConfSenha = false;
-//     var okLogin = false;
-    
-//     $('#nome').on('change keyup paste',function () {
-//         var lenNome = document.getElementById('nome').value.length;
-//         if(lenNome>10 && lenNome<100){
-//             $('#invFB-Nome').hide();
-//             okNome = true;
-//         }
-//         else{
-//             $('#invFB-Nome').show();
-//             okNome = false;
-//         }
-//     });
-
-//     $('#email').on('change keyup paste',function () {
-//         var tempEmail = document.getElementById('email').value;
-//         console.log("email", validateEmail(tempEmail)   );
-//         if(validateEmail(tempEmail)){
-//             $('#invFB-Email').hide();
-//             okEmail = true;
-//         }
-//         else{
-//             $('#invFB-Email').show();
-//             okEmail = false;
-//         }
-        
-//     });
-
-//     $('#senha').on('change keyup paste',function () {
-//         var tempSenha = this.value;
-        
-//         var hasUpperCase = /[A-Z]/.test(tempSenha);
-//         var hasLowerCase = /[a-z]/.test(tempSenha);
-//         var hasNumbers = /\d/.test(tempSenha);
-//         var hasNonalphas = /\W/.test(tempSenha);
-//         var len = tempSenha.length;
-
-//         var lenOk = len>=8 && len <=20;
-
-//         if(hasUpperCase == true && hasLowerCase == true && hasNumbers == true && hasNonalphas == true && lenOk) okSenha = true;
-//         else okSenha = false;
-
-//         var html =  '<h4 class="alert-heading">Força da senha</h4>';
-//         if(lenOk)
-//         {
-//             html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui 8 a 20 caracteres. </span>';
-//         }
-//         else
-//         {
-//             html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui 8 a 20 caracteres. </span>';
-//         }
-//         html+='<br>';
-//         if(hasUpperCase)
-//         {
-//             html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui caracteres maiúsculos.. </span>';
-//         }
-//         else
-//         {
-//             html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres maiúsculos.. </span>';
-//         }
-//         html+='<br>';
-//         if(hasLowerCase)
-//         {
-//             html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui caracteres minúsculos. </span>';
-//         }
-//         else
-//         {
-//             html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres minúsculos. </span>';
-//         }
-//         html+='<br>';
-//         if(hasNumbers)
-//         {
-//             html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui números. </span>';
-//         }
-//         else
-//         {
-//             html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui números. </span>';
-//         }
-//         html+='<br>';
-//         if(hasNonalphas)
-//         {
-//             html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui caracteres especiais. </span>';
-//         }
-//         else
-//         {
-//             html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres especiais. </span>';
-//         }
-//         html+='<br>';
-//         console.log(html);
-//         $('#alert-senha').html(html);
-
-//     });
-
-//     $('#confSenha').on('change keyup paste',function () {
-//         var tempSenha = document.getElementById('senha').value;
-//         var tempConfSenha = document.getElementById('confSenha').value;
-//         if(tempSenha == tempConfSenha){
-//             $('#invFB-ConfSenha').hide();
-//             okConfSenha = true;
-//         }
-//         else{
-//             $('#invFB-ConfSenha').show();
-//             okConfSenha = false;
-
-//         }
-//     });
-
-//     $('#login').on('change keyup paste',function () {
-//         var tempLoginLen = document.getElementById('login').value.length;
-//         if(tempLoginLen>=8 && tempLoginLen<=20){
-//             $('#invFB-Login').hide();
-//             okLogin = true;
-//         }
-//         else{
-//             $('#invFB-Login').show();
-//             okLogin = false;
-//         }
-//     });
-
-//     $('#nome, #email, #senha, #confSenha, #login').on('change keyup paste',function () {
-        
-//         if(okNome == true && okEmail == true && okSenha == true && okConfSenha == true && okLogin == true) $(".swal2-confirm").attr('disabled', false);
-//         else $(".swal2-confirm").attr('disabled', 'disabled');
-//     });
-// }
-
-// function DadosBasicos2(){
-//     //Dados Basicos 2
-//     //$(".swal2-confirm").attr('disabled', 'disabled'); TODO remover comentario
-//     $('#dataNasc').on('change keyup paste',function () {
-//         var dataValue = document.getElementById('dataNasc').value;
-//         var dataLen = dataValue.length;
-
-//         if(dataLen>0){
-//             if(dataValue[0] == "0") $(".swal2-confirm").attr('disabled', 'disabled');
-//             else $(".swal2-confirm").attr('disabled', false);
-            
-//         }
-//         else{
-//             $(".swal2-confirm").attr('disabled', 'disabled');
-//         }
-//     });
-// }
-
-// function Endereco(){
-//     // Endereço 
-//     $('#estados, #cidade').on('change keyup paste',function () {
-//         var estadoValue = document.getElementById('estados').value;
-//         var estadoLen = estadoValue.length;
-
-//         var cidadeValue = document.getElementById('cidade').value;
-//         var cidadeLen = cidadeValue.length;
-
-//         if(estadoLen >0 && cidadeLen >0) {
-//             $('#invFB-Endereco').text("");
-//             $(".swal2-confirm").attr('disabled', false);
-//         }
-//         if(estadoLen >0 && cidadeLen ==0){
-//             var texto = "É necessário preencher o campo 'Cidade'.";
-//             $('#invFB-Endereco').text(texto);
-//             $(".swal2-confirm").attr('disabled', 'disabled');
-
-//         }
-//         if(estadoLen == 0 && cidadeLen >0){
-//             var texto = "É necessário selecionar uma opção em 'Estado'.";
-//             $('#invFB-Endereco').html(texto);
-//             $(".swal2-confirm").attr('disabled', 'disabled');
-
-//         }
-//         if(estadoLen == 0 && cidadeLen == 0){
-//             $('#invFB-Endereco').text("");
-//             $(".swal2-confirm").attr('disabled', false);
-//         }
-//     });
-// }
-
-// function RedesSociais(){
-//     //Redes Sociais
-
-//     var targetNode = document.getElementById('socials');
-    
-//     var config = { attributes: false, childList: true };
-    
-//     $('*[id*=nomeRedeSocial], *[id*=linkRedeSocial]').on('change keyup paste',function () {
-//         checkNItemsRedeSocial(this.id)
-//     });
+}
 
 
-//     var callback = function(mutationsList) {
-//         for(var mutation of mutationsList) {
-//             if (mutation.type == 'childList') {
-//                 $('*[id*=nomeRedeSocial], *[id*=linkRedeSocial]').on('change keyup paste',function () {
-//                     checkNItemsRedeSocial(this.id);
-//                 });
-//             }
-//             else if (mutation.type == 'attributes') {
-//                 console.log('The ' + mutation.attributeName + ' attribute was modified.');
-//             }
-//             else{
-//                 console.log("bataaa")
-//             }
-//         }
-//     };
-    
-//     var observer = new MutationObserver(callback);
-//     observer.observe(targetNode, config);
-// }
-// function EstilosMusicais(){
-//     //Estilos Musicais
-
-//     var targetNode = document.getElementById('estilos');
-//     var config = { attributes: false, childList: true };
-    
-//     $('*[id*=nomeEstiloMusical]').on('change keyup paste',function () {
-//         checkNItemsEstiloMusical(this.id)
-//     });
 
 
-//     var callback = function(mutationsList) {
-//         for(var mutation of mutationsList) {
-//             if (mutation.type == 'childList') {
-//                 $('*[id*=nomeEstiloMusical]').on('change keyup paste',function () {
-//                     checkNItemsEstiloMusical(this.id);
-//                 });
-//             }
-//             else if (mutation.type == 'attributes') {
-//                 console.log('The ' + mutation.attributeName + ' attribute was modified.');
-//             }
-//             else{
-//                 console.log("bataaa")
-//             }
-//         }
-//     };
-    
-//     var observer = new MutationObserver(callback);
-//     observer.observe(targetNode, config);
-// }
-// function InstrumentosMusicais(){
-//     //Instrumentos Musicais
-
-//     var targetNode = document.getElementById('instrumentos');
-//     var config = { attributes: false, childList: true };
-    
-//     $('*[id*=nomeInstrumentoMusical]').on('change keyup paste',function () {
-//         checkNItemsInstrumentoMusical(this.id)
-//     });
-
-
-//     var callback = function(mutationsList) {
-//         for(var mutation of mutationsList) {
-//             if (mutation.type == 'childList') {
-//                 $('*[id*=nomeInstrumentoMusical]').on('change keyup paste',function () {
-//                     checkNItemsInstrumentoMusical(this.id);
-//                 });
-//             }
-//             else if (mutation.type == 'attributes') {
-//                 console.log('The ' + mutation.attributeName + ' attribute was modified.');
-//             }
-//             else{
-//                 console.log("bataaa")
-//             }
-//         }
-//     };
-    
-//     var observer = new MutationObserver(callback);
-//     observer.observe(targetNode, config);
-// }
 
 function showHide(){
     if($('#confSenha').prop('type') == "text") $('#confSenha').prop('type', 'password');
@@ -1957,3 +1499,248 @@ function showHide(){
    
     
 }
+
+function resetInfosUpdate() {
+
+    updateObj = {
+        "ConfSenha": null,
+        "Id": null,
+        "Nome": null,
+        "Email": null,
+        "Senha": null,
+        "Login": null,
+        "Descricao": null,
+        "Telefone": null,
+        "DataNascimento": null,
+        "Status": null,
+        "Tipo": null,
+        "Endereco": null,
+        "RedesSociais": [],
+        "Estilos": [],
+        "Instrumentos": [],
+        "Criador": null,
+        "Integrantes": null,
+        "TipoIndustria": null,
+        "Logradouro": null
+    }
+
+    contRedesSociaisUpdate = 0;
+    contEstilosMusicaisUpdate = 0;
+    contInstrumentosUpdate = 0;
+
+    atualizar = false;
+
+}
+
+function resetInfos() {
+
+    sendObj = {
+        "ConfSenha": null,
+        "Id": null,
+        "Nome": null,
+        "Email": null,
+        "Senha": null,
+        "Login": null,
+        "Descricao": null,
+        "Telefone": null,
+        "DataNascimento": null,
+        "Status": null,
+        "Tipo": null,
+        "Endereco": null,
+        "RedesSociais": [],
+        "Estilos": [],
+        "Instrumentos": [],
+        "Criador": null,
+        "Integrantes": null,
+        "TipoIndustria": null,
+        "Logradouro": null
+    }
+
+    contRedesSociais = 1;
+    contEstilosMusicais = 1;
+    contInstrumentos = 1;
+
+    criar = false;
+
+}
+
+function showInfo() {
+    console.log("sendObj = ", sendObj);
+}
+
+function showInfoUpdate() {
+    console.log("updateObj = ", updateObj);
+}
+
+function checkEmptyString(str) {
+    if (str == null) return true;
+    const emptyStringRegex = /^\s+$/;
+    if (str.length == 0) return true;
+    var isEmptyString = emptyStringRegex.test(str);
+    return isEmptyString;
+}
+
+
+function verificaDadosObr() {
+    var lstErros = [];
+    var html2 = "";
+    if (checkEmptyString(sendObj.Nome)) lstErros.push("'Nome' é obrigatório e deve ser preenchido.");
+    if (checkEmptyString(sendObj.Email)) lstErros.push("'Email' é obrigatório e deve ser preenchido.");
+    if (checkEmptyString(sendObj.Senha)) lstErros.push("'Senha' é obrigatório e deve ser preenchido.");
+    if (checkEmptyString(sendObj.ConfSenha)) lstErros.push("'Confirmação de senha' é obrigatório e deve ser preenchido.");
+    if (checkEmptyString(sendObj.Login)) lstErros.push("'Nome de usuário' é obrigatório e deve ser preenchido.");
+    if (checkEmptyString(sendObj.DataNascimento)) lstErros.push("'Data de Nascimento' é obrigatório e deve ser preenchido.");
+    if (sendObj.Senha != sendObj.ConfSenha) lstErros.push("'Senhas' e 'Confirmação de senha' são diferentes.");
+    if (lstErros.length > 0) {
+        lstErros.forEach(element => {
+            html2 += element;
+            html2 += "<br>";
+        });
+
+        Swal.fire({
+            title: 'Erro!',
+            icon: 'error',
+            html: html2,
+            confirmButtonText: 'Ok'
+        })
+        resetInfos();
+    }
+}
+
+function verificaDados() {
+    sendObj.Descricao = checkEmptyString(sendObj.Descricao) ? null : sendObj.Descricao;
+    sendObj.Telefone = checkEmptyString(sendObj.Telefone) ? null : sendObj.Telefone;
+    sendObj.Endereco = typeof (sendObj.Endereco) == "object" ? sendObj.Endereco : null;
+    sendObj.RedesSociais = sendObj.RedesSociais.length > 0 ? sendObj.RedesSociais : null;
+    sendObj.Estilos = sendObj.Estilos.length > 0 ? sendObj.Estilos : null;
+    sendObj.Instrumentos = sendObj.Instrumentos.length > 0 ? sendObj.Instrumentos : null;
+    showInfo();
+    return sendObj;
+}
+
+function verificaDadosUpdate() {
+    showInfoUpdate();
+    updateObj.Descricao = checkEmptyString(updateObj.Descricao) ? null : updateObj.Descricao;
+    updateObj.Telefone = checkEmptyString(updateObj.Telefone) ? null : updateObj.Telefone;
+    updateObj.Endereco = typeof (updateObj.Endereco) == "object" ? updateObj.Endereco : null;
+    updateObj.RedesSociais = updateObj.RedesSociais.length > 0 ? updateObj.RedesSociais : null;
+    updateObj.Estilos = updateObj.Estilos.length > 0 ? updateObj.Estilos : null;
+    updateObj.Instrumentos = updateObj.Instrumentos.length > 0 ? updateObj.Instrumentos : null;
+
+    return updateObj;
+}
+
+function verificaDadosObrUpdate() {
+    var lstErros = [];
+    var html2 = "";
+    if (checkEmptyString(updateObj.Nome)) lstErros.push("'Nome' é obrigatório e deve ser preenchido.");
+    if (checkEmptyString(updateObj.Email)) lstErros.push("'Email' é obrigatório e deve ser preenchido.");
+    if (checkEmptyString(updateObj.Senha)) lstErros.push("'Senha' é obrigatório e deve ser preenchido.");
+    if (checkEmptyString(updateObj.ConfSenha)) lstErros.push("'Confirmação de senha' é obrigatório e deve ser preenchido.");
+    if (checkEmptyString(updateObj.Login)) lstErros.push("'Nome de usuário' é obrigatório e deve ser preenchido.");
+    if (checkEmptyString(updateObj.DataNascimento)) lstErros.push("'Data de Nascimento' é obrigatório e deve ser preenchido.");
+    if (updateObj.Senha != updateObj.ConfSenha) lstErros.push("'Senhas' e 'Confirmação de senha' são diferentes.");
+    if (lstErros.length > 0) {
+        lstErros.forEach(element => {
+            html2 += element;
+            html2 += "<br>";
+        });
+
+        Swal.fire({
+            title: 'Erro!',
+            icon: 'error',
+            html: html2,
+            confirmButtonText: 'Ok'
+        })
+        resetInfos();
+    }
+}
+
+function checkNItemsRedeSocial(id){
+    var cont = id[id.length-1];
+    var linkValue = document.getElementById('linkRedeSocial'+cont).value;
+    var linkLen = linkValue.length;
+    var fbEl = $('#invFB-RedeSocial'+cont);
+    var nomeValue = document.getElementById('nomeRedeSocial'+cont).value;
+    var nomeLen = nomeValue.length;
+
+    if(linkLen >0 && nomeLen >0) {
+        fbEl.hide();
+        $(".swal2-confirm").attr('disabled', false);
+    }
+    if(linkLen >0 && nomeLen ==0){
+        fbEl.show();
+        $(".swal2-confirm").attr('disabled', 'disabled');
+
+    }
+    if(linkLen == 0 && nomeLen >0){
+        fbEl.show();
+        $(".swal2-confirm").attr('disabled', 'disabled');
+
+    }
+    if(linkLen == 0 && nomeLen == 0){
+        fbEl.hide();
+        $(".swal2-confirm").attr('disabled', false);
+    }
+}
+
+function checkNItemsEstiloMusical(id){
+    var cont = id[id.length-1];
+    var fbEl = $('#invFB-EstiloMusical'+cont);
+    var nomeValue = document.getElementById(id).value;
+    var nomeLen = nomeValue.length;
+
+    if(nomeLen >0 && !checkEmptyString(nomeValue)) {
+        fbEl.hide();
+        $(".swal2-confirm").attr('disabled', false);
+    }
+
+    if(nomeLen == 0) {
+        fbEl.hide();
+        $(".swal2-confirm").attr('disabled', false);
+    }
+
+    if(nomeLen >0 && checkEmptyString(nomeValue)){
+        fbEl.show();
+        $(".swal2-confirm").attr('disabled', 'disabled');
+
+    }
+}
+
+function checkNItemsInstrumentoMusical(id){
+    var cont = id[id.length-1];
+    var fbEl = $('#invFB-InstrumentoMusical'+cont);
+    var nomeValue = document.getElementById(id).value;
+    var nomeLen = nomeValue.length;
+
+    if(nomeLen >0 && !checkEmptyString(nomeValue)) {
+        fbEl.hide();
+        $(".swal2-confirm").attr('disabled', false);
+    }
+
+    if(nomeLen == 0) {
+        fbEl.hide();
+        $(".swal2-confirm").attr('disabled', false);
+    }
+
+    if(nomeLen >0 && checkEmptyString(nomeValue)){
+        fbEl.show();
+        $(".swal2-confirm").attr('disabled', 'disabled');
+
+    }
+}
+
+function allTrue(obj)
+{
+    for(var o in obj)
+        if(!obj[o]) return false;
+    
+    return true;
+}
+
+function enableDisableConfirm(oks)
+{
+    if(allTrue(oks)) $(".swal2-confirm").attr('disabled', false);
+    else $(".swal2-confirm").attr('disabled', 'disabled');
+}
+

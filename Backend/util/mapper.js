@@ -104,10 +104,15 @@ module.exports =  class UserMapper{
     formatDate(str){
         var lst = str.split("-");
         var y,m,d;
-        y=lst[2];
-        m=lst[1];
-        d=lst[0];
-        return [y,m,d].join("-");
+
+        if(lst[2].length == 4){
+            y=lst[2];
+            m=lst[1];
+            d=lst[0];
+            return [y,m,d].join("-");
+        }
+        return str;
+        
 
     }
 
