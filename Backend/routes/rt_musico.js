@@ -11,6 +11,10 @@ module.exports = function(app){
 		_controller.Update(app,req, res);
 	});
 
+	app.post(route_prefix+"password/:userId", function(req, res) {
+		_controller.ChangePassword(app,req, res);
+	});
+
 	//////////////////////////////////////////////////////
 
 	app.get(route_prefix+"list", function(req, res) {

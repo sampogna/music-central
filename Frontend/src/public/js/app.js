@@ -701,7 +701,7 @@ async function modalCreate() {
                         Swal.fire({
                             title: 'Sucesso!',
                             icon: 'success',
-                            text: "Usuário criado com sucesso!",
+                            text: resultAjax.result,
                             confirmButtonText: 'Ok'
                         }).then(() => {
                             resetInfos();
@@ -973,7 +973,6 @@ async function modalUpdate() {
                     data: updateObj,
                     dataType: "json",
                     success: function (resultAjax,code,xhr) {
-                        console.log("xhr", xhr);
                         if(xhr.status == 200){
                             Swal.fire({
                                 title: 'Sucesso!',
@@ -1078,7 +1077,7 @@ function deleteRegister(tr) {
                     Swal.fire({
                         title: 'Sucesso!',
                         icon: 'success',
-                        text: "Usuário excluído com sucesso!",
+                        text: resultAjax.result,
                         confirmButtonText: 'Ok'
                     }).then(() => {
                         resetInfos();
@@ -1159,6 +1158,127 @@ async function editRegister(tr) {
 
 }
 
+async function alterarSenha(tr) {
+    var id = tr.find('td')[0].innerText;
+    var psswObj = new Object();
+    Swal.fire({
+        title: 'Atualizar senha do usuário '+id+"?",
+        width: "50rem",
+        footer:'<span class="text-muted" >*Campos obrigatórios</span>',
+        didOpen: ()=>{
+            VerficadoresDeCampo(7)
+        },
+        preConfirm: () => {
+            psswObj.newPass = document.getElementById('novaSenha').value;
+            psswObj.newPassConfirm = document.getElementById('novaConfSenha').value;
+            psswObj.oldPass = document.getElementById('atualSenha').value;
+            
+            
+        },
+        html:
+        `<div class="row">
+            <div class="col">
+                <label style="padding-top: 10px;" for="atualSenha">Senha Atual* &nbsp;<i onclick="showHide($(this))" title="Mostrar senha" class="fas fa-eye"></i></label> 
+                <input type="password" id="atualSenha" class="form-control">     
+                <div id="invFB-atualSenha" style="display: none" class="invalid-feedback"> Campo inválido. </div> 
+                <br>
+                <label style="padding-top: 10px;" for="novaSenha">Nova Senha* &nbsp;<i onclick="showHide($(this))" title="Mostrar senha" class="fas fa-eye"></i></label> 
+                <input type="password" id="novaSenha" class="form-control"> 
+                
+                <label style="padding-top: 10px;" for="novaConfSenha">Confirmar Nova Senha* &nbsp;<i onclick="showHide($(this))" title="Mostrar senha" class="fas fa-eye"></i></label> 
+                <input type="password" id="novaConfSenha" class="form-control"> 
+                <div id="invFB-novaConfSenha" style="display: none" class="invalid-feedback"> Senha e Confirmação de Senha não coincidem. </div> 
+            
+            </div>
+            <div class="col">
+                <div class="alert alert-primary" role="alert" id="alert-senha">
+                    <h4 class="alert-heading">Força da senha</h4>
+                    <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui 8 a 20 caracteres. </span>
+                    <br>
+                    <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres maiúsculos. </span>
+                    <br>
+                    <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres minúsculos.</span>
+                    <br>
+                    <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui números.</span>
+                    <br>
+                    <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres especiais.</span>
+                    <br>
+                </div>
+            </div>
+        </div>`,
+        showCancelButton: true,
+        confirmButtonText: 'Enviar',
+        reverseButtons: true,
+        showLoaderOnConfirm: true
+    }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "/musico/password/" + id,
+                type: "POST",
+                data: psswObj,
+                dataType: "json",
+                success: function (resultAjax, code, xhr) {
+                    if(xhr.status == 200){
+                            Swal.fire({
+                                title: 'Sucesso!',
+                                icon: 'success',
+                                text: resultAjax.result,
+                                confirmButtonText: 'Ok'
+                            }).then(() => {
+                                resetInfos();
+                                window.location.reload();
+    
+                            })
+
+                        }
+                        if(xhr.status == 201){
+                            Swal.fire({
+                                title: 'Opa!',
+                                icon: 'warning',
+                                text: resultAjax.result,
+                                confirmButtonText: 'Ok'
+                            }).then(() => {
+                                resetInfos();
+                                window.location.reload();
+    
+                            })
+
+                        }
+
+
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.responseJSON);
+                    console.log(xhr.thrownError);
+                    console.log(xhr.ajaxOptions);
+
+                    var json = xhr.responseJSON;
+                    var lstErros = json.mensagens;
+                    if (lstErros.length > 0) {
+                        var html2 = "<h4>" + json.retorno + "</h4>";
+                        lstErros.forEach(element => {
+                            html2 += element;
+                            html2 += "<br>";
+                        });
+
+                        Swal.fire({
+                            title: 'Erro!',
+                            icon: 'error',
+                            html: html2,
+                            confirmButtonText: 'Ok'
+                        })
+                        resetInfos();
+                    }
+                }
+            })
+        } else if (result.isDenied) {
+            Swal.fire('Usuário NÃO foi excluído', '', 'info')
+        }
+    })
+
+}
+
 async function updateMapper(data){
 
     var camposLista = ["RedesSociais", "Estilos", "Instrumentos"];
@@ -1166,304 +1286,7 @@ async function updateMapper(data){
     await Object.keys(updateObj).map(v => updateObj[v] = data[v] != null ? data[v] : (camposLista.includes(v) ? [] : (camposObj.includes(v) ? {} : null) )  );
 }
 
-// async function modalUpdate() {
-//     var data = updateObj;
-//     Swal.mixin({
-//         showCancelButton: true,
-//         progressSteps: ['1', '2', '3', '4', '5', '6'],
-//         reverseButtons: true
-//     }).queue([
-//         {
-//             title: "Informações básicas",
-//             width: "50rem",
-//             footer:'<span class="text-muted" >*Campos obrigatórios</span>',
-//             confirmButtonText: 'Next &rarr;',
-//             didOpen: ()=>{
-//                 $('#nome').val(data.Nome);
-//                 $('#email').val(data.Email);
-//                 $('#senha').val(data.Senha);
-//                 $('#confSenha').val(data.Senha);
-//                 $('#login').val(data.Login);
-//                 VerficadoresDeCampo(1);
-//             },
-//             html:
-//             `<div class="row">
-//             <div class="col">
-//                 <label style="padding-top: 10px;" for="nome">Nome*</label> 
-//                 <input  id="nome" class="form-control"> 
-//                 <div id="invFB-Nome" style="display: none" class="invalid-feedback"> 
-//                 </div> 
-//                 <label style="padding-top: 10px;" for="email">Email*</label> 
-//                 <input id="email" class="form-control"> 
-//                 <div  id="invFB-Email" style="display: none" class="invalid-feedback"> 
-//                 Formato de email inválido. 
-//                 </div> 
-//                 <label style="padding-top: 10px;" for="senha">Nova Senha &nbsp;<i onclick="showHide($(this))" title="Mostrar senha" class="fas fa-eye"></i></label> 
-//                 <input type="password" id="senha" class="form-control" value=""> 
-//                 <label style="padding-top: 10px;" for="confSenha">Confirmar Nova Senha* &nbsp;<i onclick="showHide($(this))" title="Mostrar senha" class="fas fa-eye"></i></label> 
-//                 <input type="password" id="confSenha" class="form-control" value=""> 
-//                 <div id="invFB-ConfSenha" style="display: none" class="invalid-feedback"> Senha e Confirmação de Senha não coincidem. </div> 
-//                 <label style="padding-top: 10px;" for="login">Nome de usuário*</label> 
-//                 <input id="login" class="form-control"> 
-//                 <div id="invFB-Login" style="display: none" class="invalid-feedback"> 
-//                 </div>
-//             </div>
-//             <div class="col">
-//                 <div class="alert alert-primary" role="alert" id="alert-senha">
-//                     <h4 class="alert-heading">Força da senha</h4>
-//                     <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui 8 a 20 caracteres. </span>
-//                     <br>
-//                     <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres maiúsculos. </span>
-//                     <br>
-//                     <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres minúsculos.</span>
-//                     <br>
-//                     <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui números.</span>
-//                     <br>
-//                     <span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres especiais.</span>
-//                     <br>
-//                 </div>
-//             </div>
-//         </div>`,
-//             preConfirm: () => {
-//                 updateObj.Nome = document.getElementById('nome').value;
-//                 updateObj.Email = document.getElementById('email').value.toLowerCase();
-//                 updateObj.Senha = document.getElementById('senha').value;
-//                 updateObj.ConfSenha = document.getElementById('confSenha').value;
-//                 updateObj.Login = document.getElementById('login').value;
-//             }
-//         },
-//         {
-//             title: "Informações básicas",
-//             footer:'<span class="text-muted" >*Campos obrigatórios</span>',
-//             didOpen:()=>{ 
-//                 $('#desc').val(data.Descricao);
-//                 $('#telefone').val(data.Telefone);
-//                 $('#dataNasc').val(data.DataNascimento == null? "" : (data.DataNascimento.split("-").reverse().join("-")));
-//                 VerficadoresDeCampo(2);
-//             },
-//             html:
-//                 `<label style="padding-top: 10px;" for="desc">Sobre você</label>
-//                 <input  id="desc" class="form-control" value="${data.Descricao == null? "" : data.Descricao}">
-//                 <label style="padding-top: 10px;" for="telefone">Telefone</label>
-//                 <input  id="telefone" class="form-control" value="${data.Telefone == null? "" : data.Telefone}">
-//                 <label style="padding-top: 10px;" for="dataNasc">Data de Nascimento*</label>
-//                 <input type="date" id="dataNasc" class="form-control"  >`,
-//             confirmButtonText: 'Next &rarr;',
-//             preConfirm: () => {
-//                 updateObj.Descricao = document.getElementById('desc').value;
-//                 updateObj.Telefone = document.getElementById('telefone').value;
-//                 updateObj.DataNascimento = document.getElementById('dataNasc').value;
-//                 verificaDadosObrUpdate(); //TODO remover comentario
-//             }
-//         },
-//         {
-//             title: "Endereço",
-//             confirmButtonText: 'Next &rarr;',
-//             footer: '<span class="text-muted" id="invFB-Endereco"></span>',
-//             didOpen:()=>{ 
-//                 console.log()
-//                 var teste = data.Endereco;
-//                 if(teste == null) {
-//                     $('#cidade').value = "";
-//                     $('#estados').value = "";
-//                 }
-//                 else{
-//                     if(teste.Endereco.Cidade) $('#cidade').value = teste.Endereco.Cidade;
-//                     if(teste.Endereco.UF) $('#estados').value = teste.Endereco.UF;
-//                     //{"Cidade":"dsdas","UF":"AC","Estado":"Acre"}
-//                 }
 
-//                 VerficadoresDeCampo(3)
-
-                
-//             },
-//             html:
-//                 Estados +
-//                 `<label style="padding-top: 10px;" for="cidade">Cidade</label>
-//                 <input  id="cidade" class="form-control">`,
-//             preConfirm: () => {
-//                 var e = document.getElementById("estados");
-
-//                 var value = e.value;
-//                 if (value == "") {
-//                     updateObj.Endereco = null;
-//                 }
-//                 else {
-//                     updateObj.Endereco = new Object();
-//                     updateObj.Endereco.Cidade = document.getElementById('cidade').value;
-//                     updateObj.Endereco.UF = e.value;
-//                     updateObj.Endereco.Estado = e.options[e.selectedIndex].text;
-//                 }
-
-//             }
-//         },
-//         {
-//             title: "Redes Sociais",
-//             confirmButtonText: 'Next &rarr;',
-//             didOpen:()=>{
-//                 var redes =  data.RedesSociais;
-//                 if(redes == null) addRedeSemValorFirst();
-//                 else{
-
-//                     redes.forEach((element, index), function(){
-
-//                         if(index == 0) addRedeComValorFirst(element);
-//                         else addRedeComValor(element);
-
-//                     })
-//                 }
-
-//                 VerficadoresDeCampo(4)
-//             },
-//             html:
-//             `<div id="socials"> 
-                
-//             </div> 
-//             <br> 
-//             <button id="add" type="button" onClick="addRedeSemValor()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>`,
-//             preConfirm: () => {
-
-//                 for (let index = 1; index <= contRedesSociais; index++) {
-//                     var nomeRedeSocial = document.getElementById("nomeRedeSocial" + index.toString());
-//                     var linkRedeSocial = document.getElementById("linkRedeSocial" + index.toString());
-//                     var obj = new Object();
-//                     obj.nome = nomeRedeSocial.value;
-//                     obj.link = linkRedeSocial.value;
-//                     if (!checkEmptyString(obj.nome) && !checkEmptyString(obj.link)) updateObj.RedesSociais.push(obj);
-//                 }
-
-//             }
-//         },
-//         {
-//             title: "Estilos Musicais",
-//             confirmButtonText: 'Next &rarr;',
-//             didOpen:()=>{ 
-//                 var estilos =  data.Estilos;
-//                 if(estilos == null) addEstiloSemValorFirst();
-//                 else{
-
-//                     estilos.forEach((element, index), function(){
-
-//                         if(index == 0) addEstiloComValorFirst(element);
-//                         else addEstiloComValor(element);
-
-//                     })
-//                 }
-//                 VerficadoresDeCampo(5)
-//             },
-//             html:
-//             `<div id="estilos"> 
-                
-//             </div> 
-//             <br> 
-//             <button id="add" type="button" onClick="addEstiloSemValor()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>`,
-//             preConfirm: () => {
-//                 for (let index = 1; index <= contEstilosMusicais; index++) {
-//                     var nomeEstiloMusical = document.getElementById("nomeEstiloMusical" + index.toString());
-
-//                     if (!checkEmptyString(nomeEstiloMusical.value)) updateObj.Estilos.push(nomeEstiloMusical.value);
-//                 }
-
-//             }
-//         },
-//         {
-//             title: "Instrumentos",
-//             confirmButtonText: 'Enviar',
-//             didOpen:()=>{ 
-//                 var instrumentos =  data.Instrumentos;
-//                 if(instrumentos == null) addInstrumentoSemValorFirst();
-//                 else{
-
-//                     instrumentos.forEach((element, index), function(){
-
-//                         if(index == 0) addInstrumentoComValorFirst(element);
-//                         else addInstrumentoComValor(element);
-
-//                     })
-//                 }
-//                 VerficadoresDeCampo(6)
-//             },
-//             html:
-//             `<div id="instrumentos"> 
-//             </div> 
-//             <br> 
-//             <button id="add" type="button" onClick="addInstrumentoSemValor()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>`,
-//             preConfirm: () => {
-
-//                 for (let index = 1; index <= contInstrumentos; index++) {
-//                     var nomeInstrumento = document.getElementById("nomeInstrumentoMusical" + index.toString());
-//                     if (!checkEmptyString(nomeInstrumento.value)) updateObj.Instrumentos.push(nomeInstrumento.value);
-//                 }
-//                 atualizar = true;
-
-//             }
-
-//         },
-//     ]).then(() => {
-
-//         console.log(updateObj   )
-//         if (atualizar) {
-//             verificaDadosUpdate();
-//             console.log(JSON.stringify(updateObj));
-//             Swal.fire({
-//                 title: 'Atualizando usuário...',
-//                 icon: 'info',
-//                 showConfirmButton: false
-//             }).then(
-//                 $.ajax({
-//                     url: "/musico/update",
-//                     type: "POST",
-//                     data: updateObj,
-//                     dataType: "json",
-//                     success: function (resultAjax) {
-//                         Swal.fire({
-//                             title: 'Sucesso!',
-//                             icon: 'success',
-//                             text: "Usuário atualizado com sucesso!",
-//                             confirmButtonText: 'Ok'
-//                         }).then(() => {
-//                             resetInfos();
-//                             window.location.reload();
-
-//                         })
-
-
-//                     },
-//                     error: function (xhr, ajaxOptions, thrownError) {
-//                         var json = xhr.responseJSON;
-//                         var lstErros = json.mensagens;
-//                         if (lstErros.length > 0) {
-//                             var html2 = "<h4>" + json.retorno + "</h4>";
-//                             lstErros.forEach(element => {
-//                                 html2 += element;
-//                                 html2 += "<br>";
-//                             });
-
-//                             Swal.fire({
-//                                 title: 'Erro!',
-//                                 icon: 'error',
-//                                 html: html2,
-//                                 confirmButtonText: 'Ok'
-//                             })
-//                             resetInfos();
-//                         }
-//                     }
-//                 })
-
-//             )
-
-//         }
-//         else {
-//             console.log("Processo de criação abortado, limpando campos...");
-//             resetInfos();
-//         }
-
-
-
-
-
-//     })
-// }
 
 $('.modal-redes-sociais').click(function () {
     var redes = JSON.parse(this.value);
@@ -1744,6 +1567,22 @@ function VerficadoresDeCampo(passo){
         observer.observe(targetNode, config);
     }
 
+    var AlterarSenha = function(){
+        //Dados Basicos 1
+        $(".swal2-confirm").attr('disabled', 'disabled'); // TODO remover comentario
+        var oks = new Object();
+        
+        oks.novaSenha = eventTrigger("novaSenha");
+        oks.novaConfSenha = eventTrigger("novaConfSenha");
+        oks.atualSenha =  eventTrigger("atualSenha");
+
+        enableDisableConfirm(oks);
+
+        $('#novaSenha, #novaConfSenha, #atualSenha').on('change keyup paste',function () {
+            oks[this.id] = eventTrigger(this.id);
+            enableDisableConfirm(oks);
+        });
+    }
     switch(passo)
     {
         case 1:
@@ -1767,6 +1606,9 @@ function VerficadoresDeCampo(passo){
             break;
         case 6:
             InstrumentosMusicais();
+            break;
+        case 7:
+            AlterarSenha();
             break;
     }   
 }
@@ -1955,6 +1797,94 @@ function eventTrigger(id){
             if(estadoLen == 0 && cidadeLen == 0){
                 $('#invFB-Endereco').text("");
                 return true;
+            }
+        case "novaSenha":
+            var tempSenha = document.getElementById('novaSenha').value;
+            var hasUpperCase = /[A-Z]/.test(tempSenha);
+            var hasLowerCase = /[a-z]/.test(tempSenha);
+            var hasNumbers = /\d/.test(tempSenha);
+            var hasNonalphas = /\W/.test(tempSenha);
+            var len = tempSenha.length;
+
+            var lenOk = len>=8 && len <=20;
+
+            var html =  '<h4 class="alert-heading">Força da senha</h4>';
+            if(lenOk)
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui 8 a 20 caracteres. </span>';
+            }
+            else
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui 8 a 20 caracteres. </span>';
+            }
+            html+='<br>';
+            if(hasUpperCase)
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui caracteres maiúsculos.. </span>';
+            }
+            else
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres maiúsculos.. </span>';
+            }
+            html+='<br>';
+            if(hasLowerCase)
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui caracteres minúsculos. </span>';
+            }
+            else
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres minúsculos. </span>';
+            }
+            html+='<br>';
+            if(hasNumbers)
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui números. </span>';
+            }
+            else
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui números. </span>';
+            }
+            html+='<br>';
+            if(hasNonalphas)
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-check text-success "></i> Possui caracteres especiais. </span>';
+            }
+            else
+            {
+                html+='<span style="float: left;" class="text-dark"><i class="fas fa-times text-danger "></i> Possui caracteres especiais. </span>';
+            }
+            html+='<br>';
+            $('#alert-senha').html(html);
+            if(hasUpperCase == true && hasLowerCase == true && hasNumbers == true && hasNonalphas == true && lenOk) return true;
+            else return false;
+       
+       case "novaConfSenha":
+        var tempSenha = document.getElementById('novaSenha').value;
+        var tempnovaConfSenha = document.getElementById('novaConfSenha').value;
+        console.log(tempSenha);
+        console.log(tempnovaConfSenha);
+
+        if(tempSenha == tempnovaConfSenha && tempSenha != "" && tempnovaConfSenha != ""){
+            $('#invFB-novaConfSenha').hide();
+            return true;
+        }
+        else{
+            $('#invFB-novaConfSenha').show();
+            return false;
+
+        }
+
+        case "atualSenha":
+            var tempSenha = document.getElementById('atualSenha').value;
+            
+            if(tempSenha.length>=8 && tempSenha.length<=20){
+                $('#invFB-atualSenha').hide();
+                return true;
+            }
+            else{
+                $('#invFB-atualSenha').show();
+                return false;
+    
             }
 
     }

@@ -76,9 +76,11 @@
                                                 <%}%></td>
                                                 
                                                 <td class="text-center"> 
-                                                    <i onclick="editRegister($(this).closest('td').closest('tr'))" class="text-warning fas fa-pencil-alt"></i>
-                                                    &nbsp;&nbsp;&nbsp;
-                                                    <i onclick="deleteRegister($(this).closest('td').closest('tr'))" class="text-danger fas fa-trash-alt"></i>
+                                                    <i title="Editar Usuário" onclick="editRegister($(this).closest('td').closest('tr'))" class="text-primary fas fa-pencil-alt"></i>
+                                                    
+                                                    <i title="Alterar Senha do Usuário" onclick="alterarSenha($(this).closest('td').closest('tr'))" class="text-warning fas fa-key"></i>
+                                                    
+                                                    <i title="Remover Usuário" onclick="deleteRegister($(this).closest('td').closest('tr'))" class="text-danger fas fa-trash-alt"></i>
                                                 </td>
                                             </tr>
                                         <% } %>

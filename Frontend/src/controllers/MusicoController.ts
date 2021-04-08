@@ -28,7 +28,7 @@ class MusicoController {
       dataBody.DataNascimento = this.formatDate(dataBody.DataNascimento);
       const response = await axios.post(base_url + "create", req.body);
       console.log("response axios", response.data);
-      res.status(200).json(response.data);
+      res.status(response.status).json(response.data);
     } catch (exception) {
       res.status(500).json({retorno: "Algo inesperado aconteceu", mensagens: ["Internal Server Error"]});
       process.stderr.write(
@@ -51,12 +51,27 @@ class MusicoController {
     }
   }
 
+  async changePasword(req: Request, res: Response) {
+    try {
+      var userId = req.params.userId;
+      console.log("req.body", req.body);
+      const response = await axios.post(base_url + "password/"+userId, req.body);
+      console.log("response axios", response.data);
+      res.status(response.status).json(response.data);
+    } catch (exception) {
+      res.status(500).json({retorno: "Algo inesperado aconteceu", mensagens: ["Internal Server Error"]});
+      process.stderr.write(
+        `ERROR received from ${base_url + "alterar"}: ${exception}\n`
+      );
+    }
+  }
+
   async delete(req: Request, res: Response) {
     try {
       var userId = req.params.userId;
       const response = await axios.delete(base_url + "delete/"+userId);
       console.log("response axios", response.data);
-      res.status(200).json(response.data);
+      res.status(response.status).json(response.data);
     } catch (exception) {
       res.status(500).json({retorno: "Algo inesperado aconteceu", mensagens: ["Internal Server Error"]});
       process.stderr.write(

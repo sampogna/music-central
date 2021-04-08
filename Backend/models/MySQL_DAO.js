@@ -49,6 +49,14 @@ DataBaseDAO.prototype.DeleteUsuario = function (id, callback) {
 
 };
 
+DataBaseDAO.prototype.UpdateSenhaUsuario = function (id, novaSenha, oldeSenha, callback) {
+  this._conn.query('UPDATE usuarios\
+                  SET Senha = ? \
+                  WHERE id = ? AND Senha = ?',[novaSenha,id,oldeSenha],
+    callback)
+
+};
+
 DataBaseDAO.prototype.ListUsuarioPorTipo = function (tipo, callback) {
   this._conn.query('SELECT * FROM usuarios\
                     WHERE Tipo = ? and Ativo = 1',tipo,

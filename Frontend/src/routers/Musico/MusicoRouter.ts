@@ -50,6 +50,13 @@ class MusicoRouter {
       }
     );
 
+    this._router.post(
+      "/password/:userId",
+      async (req: Request, res: Response, next: NextFunction) => {
+        await this._controller.changePasword(req, res);
+      }
+    );
+
   }
 }
 

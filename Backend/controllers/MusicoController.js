@@ -1,3 +1,5 @@
+var MD5 = require('md5.js')
+
 function MusicoController() {
 }
 
@@ -8,9 +10,10 @@ MusicoController.prototype.Create = function (app, request, response) {
   var data = request.body;
   var map = new UserMapper(app, data);
   var isValid = map.verifyFields();
-  if(!isValid.Success) return response.status(200).json({errors: isValid.Errors});
+  if(!isValid.Success) return response.status(201).json({errors: isValid.Errors});
   var musico = map.UserToMusico(data);
 
+  musico.Senha = new MD5().update(musico.Senha).digest('hex');
   var connection = app.config.db();
   var clientMySql = new app.models.MySQL_DAO(connection);
   clientMySql.CreateUsuario(musico, function (error, result) {
@@ -109,6 +112,49 @@ MusicoController.prototype.Update = function (app, request, response) {
       
 
   }
+
+MusicoController.prototype.ChangePassword = function (app, request, response) {
+  var userId = request.params.userId;
+  var newPass = request.body.newPass;
+  var newPassConfirm = request.body.newPassConfirm;
+  if(newPass != newPassConfirm) return response.status(201).json({errors: "Senhas e Confirmação de Senha não coincidem."});
+  var oldPass = request.body.oldPass;
+  var oldPassMD5 = new MD5().update(oldPass).digest('hex');
+  
+
+  var connection = app.config.db();
+  var clientMySql = new app.models.MySQL_DAO(connection);
+  clientMySql.GetUserById(userId, function (error, result) {
+    if (!error) {
+      if (result.length == 1) {
+        var actual = result[0].Senha;
+        if(actual != oldPassMD5) return response.status(201).json({errors: "Senhas atual incorreta."});
+        var newPassMD5 = new MD5().update(newPass).digest('hex');
+        clientMySql.UpdateSenhaUsuario(userId, newPassMD5,oldPassMD5,  function (error, result) {
+          if (!error) {
+            if (result.affectedRows == 1) {
+              response.status(200).json({result:"Senha do usuário alterada com sucesso!!"});
+            } else {
+              response.status(500).json({ error: "Usuário não encontrado." });
+            }
+          } else {
+            var res = new Object();
+            res.error = error;
+            console.log(error);
+            response.status(400).json(res);
+          }
+        });
+      } else {
+        response.status(500).json({ error: "Usuário não encontrado." });
+      }
+    } else {
+      var res = new Object();
+      res.error = error;
+      response.status(400).json(res);
+    }
+  });
+
+}
 
 MusicoController.prototype.Delete = function (app, request, response) {
   var userId = request.params.userId;
