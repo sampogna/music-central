@@ -79,7 +79,7 @@ BandaController.prototype.Update = function (app, request, response) {
               clientMySql.UpdateUsuario(updateObj, user.Id, function (error, result) {
                 if (!error) {
                   if (result.affectedRows > 0) {
-                    response.status(200).json({result: "Músico atualizado com sucesso!"});
+                    response.status(200).json({result: "Banda atualizada com sucesso!"});
                   } else {
                     response.status(500).json({ error: "Internal Server Error" });
                   }
@@ -200,36 +200,3 @@ BandaController.prototype.Get = function (app, request, response) {
 
 
 module.exports = new BandaController();
-
-/*
-MODELO?
-
-connection.beginTransaction(function(err) {
-  if (err) { throw err; }
-  connection.query('INSERT INTO posts SET title=?', title, function (error, results, fields) {
-    if (error) {
-      return connection.rollback(function() {
-        throw error;
-      });
-    }
-
-    var log = 'Post ' + results.insertId + ' added';
-
-    connection.query('INSERT INTO log SET data=?', log, function (error, results, fields) {
-      if (error) {
-        return connection.rollback(function() {
-          throw error;
-        });
-      }
-      connection.commit(function(err) {
-        if (err) {
-          return connection.rollback(function() {
-            throw err;
-          });
-        }
-        console.log('success!');
-      });
-    });
-  });
-});
-*/

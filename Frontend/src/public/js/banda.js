@@ -1051,6 +1051,7 @@ async function editRegister(tr) {
     Swal.fire({
         title: 'Atualizar a banda '+id+"?",
         showCancelButton: true,
+        icon: 'warning',
         confirmButtonText: 'Sim',
         showLoaderOnConfirm: true,
         preConfirm: () => {

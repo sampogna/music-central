@@ -93,8 +93,8 @@ module.exports =  class UserMapper{
         var dstTemp = this.UserBasicFields(src);
         // Particularidades Industria
         dstTemp.Tipo = app.locals.tiposUsuarios.Industria;
-        dstTemp.TipoIndustria = this.convertTipoIndustria(src.TipoIndustria);
-        dstTemp.Logradouro = src.Logradouro? (src.Logradouro.length>0 ? JSON.stringify(src.Logradouro) : null): null;
+        dstTemp.TipoIndustria = src.TipoIndustria;
+        dstTemp.Logradouro = src.Logradouro? (src.Logradouro.length>0 ? src.Logradouro : null): null;
         //this.dest = dstTemp;
         return dstTemp;
     }
@@ -263,7 +263,7 @@ module.exports =  class UserMapper{
             if(nova.RedesSociais.length >0){
                 var newLst = [];
                 nova.RedesSociais.forEach(element => {
-                    if(element.length>0){
+                    if(element.nome.length>0 && element.link.length>0){
                         newLst.push(element);
                     }
                 });
@@ -383,12 +383,12 @@ module.exports =  class UserMapper{
         }
 
     
-
+        
         if(nova.RedesSociais!=null){
             if(nova.RedesSociais.length >0){
                 var newLst = [];
                 nova.RedesSociais.forEach(element => {
-                    if(element.length>0){
+                    if(element.nome.length>0 && element.link.length>0){
                         newLst.push(element);
                     }
                 });
@@ -463,6 +463,72 @@ module.exports =  class UserMapper{
             var teste = dstTemp.Estilos;
             var teste2 = JSON.stringify(teste);
             dstTemp.Estilos = teste2;
+        }
+
+        return dstTemp;
+
+
+
+    }
+
+    teste3(bd, nova){
+        var dstTemp = new Object();
+
+        if(bd.Nome!= null) if(bd.Nome != nova.Nome) dstTemp.Nome = nova.Nome;
+        if(bd.Email!= null) if(bd.Email != nova.Email) dstTemp.Email = nova.Email;
+        if(bd.Login!= null) if(bd.Login != nova.Login) dstTemp.Login = nova.Login;
+        if(bd.Descricao!= null) if(bd.Descricao != nova.Descricao) dstTemp.Descricao = nova.Descricao;
+        if(bd.Telefone!= null) if(bd.Telefone != nova.Telefone) dstTemp.Telefone = nova.Telefone;
+        if(bd.TipoIndustria!= null) if(bd.TipoIndustria != nova.TipoIndustria) dstTemp.TipoIndustria = nova.TipoIndustria;
+        if(bd.Logradouro!= null) if(bd.Logradouro != nova.Logradouro) dstTemp.Logradouro = nova.Logradouro;
+        
+        if(bd.Endereco!=null){
+            var newEnderceo = new Object();
+            var fromBlobVar = this.fromBlob(bd.Endereco);
+            var keys = Object.keys(fromBlobVar);
+            keys.forEach(key => {
+                if(fromBlobVar[key] != nova.Endereco[key])
+                {
+                    newEnderceo[key] = nova.Endereco[key];
+                }
+            });
+
+            if(Object.keys(newEnderceo).length>0) dstTemp.Endereco = newEnderceo;
+        }
+        else{
+            dstTemp.Endereco = nova.Endereco;
+        }
+
+    
+
+        if(nova.RedesSociais!=null){
+            if(nova.RedesSociais.length >0){
+                var newLst = [];
+                nova.RedesSociais.forEach(element => {
+                    if(element.nome.length>0 && element.link.length>0){
+                        newLst.push(element);
+                    }
+                });
+                
+                if(newLst.length>0) dstTemp.RedesSociais = newLst;
+                
+            }
+            
+        }
+    
+        var keys = Object.keys(dstTemp);
+        if(keys.includes("Endereco"))
+        {
+            var teste = dstTemp.Endereco;
+            var teste2 = JSON.stringify(teste);
+            dstTemp.Endereco = teste2;
+        }
+
+        if(keys.includes("RedesSociais"))
+        {
+            var teste = dstTemp.RedesSociais;
+            var teste2 = JSON.stringify(teste);
+            dstTemp.RedesSociais = teste2;
         }
 
         return dstTemp;

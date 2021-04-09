@@ -7,16 +7,13 @@ $(document).ready( function () {
 
         });
     }
-
-    
-    
-    
 } );
 
 /* CRIAR VARS*/ 
 
 var sendObj = {
     "ConfSenha": null,
+
     "Id": null,
     "Nome": null,
     "Email": null,
@@ -24,56 +21,67 @@ var sendObj = {
     "Login": null,
     "Descricao": null,
     "Telefone": null,
-    "DataNascimento": null,
-    "Status": null,
     "Tipo": null,
     "Endereco": null,
     "RedesSociais": [],
-    "Estilos": [],
-    "Instrumentos": [],
-    "Criador": null,
-    "Integrantes": null,
     "TipoIndustria": null,
-    "Logradouro": null
+    "Logradouro": null,
+
+    "Estilos": null,
+    "Integrantes": null,
+    "Instrumentos": null,
+    "DataNascimento": null,
+    "Criador":null
 }
 
 var contRedesSociais = 1;
 var contEstilosMusicais = 1;
-var contInstrumentos = 1;
+var contIntegrantes = 1;
 var criar = false;
 const Estados =
-    '<label style="padding-top: 10px;" for="estados">UF</label>' +
-    '<select id="estados" class="form-control" name="estados-brasil">' +
-    '<option selected value="">Selecione uma opção</option>' +
-    '<option value="AC">Acre</option>' +
-    '<option value="AL">Alagoas</option>' +
-    '<option value="AP">Amapá</option>' +
-    '<option value="AM">Amazonas</option>' +
-    '<option value="BA">Bahia</option>' +
-    '<option value="CE">Ceará</option>' +
-    '<option value="DF">Distrito Federal</option>' +
-    '<option value="ES">Espírito Santo</option>' +
-    '<option value="GO">Goiás</option>' +
-    '<option value="MA">Maranhão</option>' +
-    '<option value="MT">Mato Grosso</option>' +
-    '<option value="MS">Mato Grosso do Sul</option>' +
-    '<option value="MG">Minas Gerais</option>' +
-    '<option value="PA">Pará</option>' +
-    '<option value="PB">Paraíba</option>' +
-    '<option value="PR">Paraná</option>' +
-    '<option value="PE">Pernambuco</option>' +
-    '<option value="PI">Piauí</option>' +
-    '<option value="RJ">Rio de Janeiro</option>' +
-    '<option value="RN">Rio Grande do Norte</option>' +
-    '<option value="RS">Rio Grande do Sul</option>' +
-    '<option value="RO">Rondônia</option>' +
-    '<option value="RR">Roraima</option>' +
-    '<option value="SC">Santa Catarina</option>' +
-    '<option value="SP">São Paulo</option>' +
-    '<option value="SE">Sergipe</option>' +
-    '<option value="TO">Tocantins</option>' +
-    '</select>'
+    `<label style="padding-top: 10px;" for="estados">UF</label>
+    <select id="estados" class="form-control" name="estados-brasil">
+    <option selected value="">Selecione uma opção</option>
+    <option value="AC">Acre</option>
+    <option value="AL">Alagoas</option>
+    <option value="AP">Amapá</option>
+    <option value="AM">Amazonas</option>
+    <option value="BA">Bahia</option>
+    <option value="CE">Ceará</option>
+    <option value="DF">Distrito Federal</option>
+    <option value="ES">Espírito Santo</option>
+    <option value="GO">Goiás</option>
+    <option value="MA">Maranhão</option>
+    <option value="MT">Mato Grosso</option>
+    <option value="MS">Mato Grosso do Sul</option>
+    <option value="MG">Minas Gerais</option>
+    <option value="PA">Pará</option>
+    <option value="PB">Paraíba</option>
+    <option value="PR">Paraná</option>
+    <option value="PE">Pernambuco</option>
+    <option value="PI">Piauí</option>
+    <option value="RJ">Rio de Janeiro</option>
+    <option value="RN">Rio Grande do Norte</option>
+    <option value="RS">Rio Grande do Sul</option>
+    <option value="RO">Rondônia</option>
+    <option value="RR">Roraima</option>
+    <option value="SC">Santa Catarina</option>
+    <option value="SP">São Paulo</option>
+    <option value="SE">Sergipe</option>
+    <option value="TO">Tocantins</option>
+    </select>`
 
+const Industrias =
+    `<label style="padding-top: 10px;" for="tiposIndustrias">Tipo de Indústria</label>
+    <select id="tiposIndustrias" class="form-control" name="estados-brasil">
+    <option selected value="">Selecione uma opção</option>
+    <option value="GRAVADORA">Gravadora</option>
+    <option value="PRODUTOR">Produtor</option>
+    <option value="HOLDING">Holding</option>
+    <option value="LOCAL">Local</option>
+    <option value="ESTUDIO">Estudio</option>
+    
+    </select>`
 /* FIM CRIAR VARS*/ 
 
 
@@ -81,6 +89,7 @@ const Estados =
 
 var updateObj = {
     "ConfSenha": null,
+
     "Id": null,
     "Nome": null,
     "Email": null,
@@ -88,23 +97,23 @@ var updateObj = {
     "Login": null,
     "Descricao": null,
     "Telefone": null,
-    "DataNascimento": null,
-    "Status": null,
     "Tipo": null,
     "Endereco": null,
     "RedesSociais": [],
-    "Estilos": [],
-    "Instrumentos": [],
-    "Criador": null,
-    "Integrantes": null,
     "TipoIndustria": null,
-    "Logradouro": null
+    "Logradouro": null,
+
+    "Estilos": null,
+    "Integrantes": null,
+    "Instrumentos": null,
+    "DataNascimento": null,
+    "Criador":null
 }
 
 
 var contRedesSociaisUpdate = 0;
 var contEstilosMusicaisUpdate = 0;
-var contInstrumentosUpdate = 0;
+var contIntegrantesUpdate = 0;
 var atualizar = false;
 
 const EstadosUpdate =
@@ -139,6 +148,19 @@ const EstadosUpdate =
     <option value="SE">Sergipe</option> 
     <option value="TO">Tocantins</option> 
     </select>`;
+
+const IndustriasUpdate =
+    `<label style="padding-top: 10px;" for="tiposIndustriasUpdate">Tipo de Indústria</label>
+    <select id="tiposIndustriasUpdate" class="form-control" name="estados-brasil">
+    <option selected value="">Selecione uma opção</option>
+    <option value="GRAVADORA">Gravadora</option>
+    <option value="PRODUTOR">Produtor</option>
+    <option value="HOLDING">Holding</option>
+    <option value="LOCAL">Local</option>
+    <option value="ESTUDIO">Estudio</option>
+    
+    </select>`;
+
 /* FIM UPDATE VARS*/ 
 
 
@@ -250,188 +272,16 @@ function checkNItemsRedeSocial(id){
 
 /* FIM REDES */
 
-/* ESTILOS */
-function novoEstilo(cont) {
-    return `<hr> 
-            <div style="padding-top: 0px;" class="EstilosMusicais"> 
-                <label style="padding-top: 10px;" for="nomeEstiloMusical${cont.toString()}">Nome Estilo Musical ${cont.toString()}</label> 
-                <input id="nomeEstiloMusical${cont.toString()}" class="form-control"> 
-                <div id="invFB-EstiloMusical${cont.toString()}" style="display: none" class="invalid-feedback"> 
-            'Estilo' não pode conter apenas espaços.
-        </div>
-            </div>`;
-}
-
-function novoEstiloComValor(cont, val) {
-    return `<hr> 
-    <div style="padding-top: 0px;" class="EstilosMusicais"> 
-        <label style="padding-top: 10px;" for="nomeEstiloMusical${cont.toString()}">Nome Estilo Musical ${cont.toString()}</label> 
-        <input id="nomeEstiloMusical${cont.toString()}" class="form-control" value="${val ? val : ""}"> 
-        <div id="invFB-EstiloMusical${cont.toString()}" style="display: none" class="invalid-feedback"> 
-            'Estilo' não pode conter apenas espaços.
-        </div>
-    </div>`;
-}
-
-function novoEstiloComValorFirst(cont, val) {
-    return `<div style="padding-top: 0px;" class="EstilosMusicais"> 
-        <label style="padding-top: 10px; for="nomeEstiloMusical${cont.toString()}">Nome Estilo Musical ${cont.toString()}</label> 
-        <input id="nomeEstiloMusical${cont.toString()}" class="form-control" value="${val ? val : ""}"> 
-        <div id="invFB-EstiloMusical${cont.toString()}" style="display: none" class="invalid-feedback"> 
-            'Estilo' não pode conter apenas espaços.
-        </div>
-    </div>`;
-}
-
-function addEstiloComValor(val) {
-    contEstilosMusicaisUpdate++;
-    $('#estilosUpdate').append(novoEstiloComValor(contEstilosMusicaisUpdate, val));
-}
-
-function addEstiloComValorFirst(val) {
-    contEstilosMusicaisUpdate++;    
-    $('#estilosUpdate').append(novoEstiloComValorFirst(contEstilosMusicaisUpdate, val));
-}
-
-function addEstiloSemValor() {
-    contEstilosMusicaisUpdate++;
-    var val = "";
-    $('#estilosUpdate').append(novoEstiloComValor(contEstilosMusicaisUpdate, val));
-}
-
-function addEstiloSemValorFirst() {
-    contEstilosMusicaisUpdate++;
-    var val = "";
-    $('#estilosUpdate').append(novoEstiloComValorFirst(contEstilosMusicaisUpdate, val));
-}
-
-function addEstilo() {
-    contEstilosMusicais++;
-    $('#estilos').append(novoEstilo(contEstilosMusicais));
-}
-
-function checkNItemsEstiloMusical(id){
-    var cont = id[id.length-1];
-    var fbEl = $('#invFB-EstiloMusical'+cont);
-    var nomeValue = document.getElementById(id).value;
-    var nomeLen = nomeValue.length;
-
-    if(nomeLen >0 && !checkEmptyString(nomeValue)) {
-        fbEl.hide();
-        $(".swal2-confirm").attr('disabled', false);
-    }
-
-    if(nomeLen == 0) {
-        fbEl.hide();
-        $(".swal2-confirm").attr('disabled', false);
-    }
-
-    if(nomeLen >0 && checkEmptyString(nomeValue)){
-        fbEl.show();
-        $(".swal2-confirm").attr('disabled', 'disabled');
-
-    }
-}
-
-
-/* FIM ESTILOS */
-
-/* INSTRUMENTOS */
-function novoInstrumento(cont) {
-    return `<hr> 
-    <div style="padding-top: 0px; class="InstrumentosMusicais"> 
-        <label style="padding-top: 10px;">Nome Instrumento Musical ${cont.toString()}</label> 
-        <input id="nomeInstrumentoMusical${cont.toString()}" class="form-control"> 
-        <div id="invFB-InstrumentoMusical${cont.toString()}" style="display: none" class="invalid-feedback"> 
-                'Instrumento' não pode conter apenas espaços.
-            </div>
-    </div>`;
-}
-
-function novoInstrumentoComValor(cont, val) {
-    return `<hr> 
-    <div style="padding-top: 0px; class="InstrumentosMusicais"> 
-        <label style="padding-top: 10px;" for="nomeInstrumentoMusical${cont.toString()}">Nome Instrumento Musical ${cont.toString()}</label> 
-        <input id="nomeInstrumentoMusical${cont.toString()}" class="form-control" value="${val ? val : ""}"> 
-        <div id="invFB-InstrumentoMusical${cont.toString()}" style="display: none" class="invalid-feedback"> 
-            'Instrumento' não pode conter apenas espaços.
-        </div>
-    </div>`
-}
-
-function novoInstrumentoComValorFirst(cont, val) {
-    return `<div style="padding-top: 0px; class="InstrumentosMusicais"> 
-        <label style="padding-top: 10px;" for="nomeInstrumentoMusical${cont.toString()}">Nome Instrumento Musical ${cont.toString()}</label> 
-        <input id="nomeInstrumentoMusical${cont.toString()}" class="form-control" value="${val ? val : ""}"> 
-        <div id="invFB-InstrumentoMusical${cont.toString()}" style="display: none" class="invalid-feedback"> 
-            'Instrumento' não pode conter apenas espaços.
-        </div>
-    </div>`
-}
-
-function addInstrumento() {
-    contInstrumentos++;
-    $('#instrumentos').append(novoInstrumento(contInstrumentos));
-}
-
-function addInstrumentoComValor(val) {
-    contInstrumentosUpdate++;
-    $('#instrumentosUpdate').append(novoInstrumentoComValor(contInstrumentosUpdate, val));
-}
-
-function addInstrumentoComValorFirst(val) {
-    contInstrumentosUpdate++;
-    
-    $('#instrumentosUpdate').append(novoInstrumentoComValorFirst(contInstrumentosUpdate, val));
-}
-
-function addInstrumentoSemValor() {
-    contInstrumentosUpdate++;
-    var val = "";
-    $('#instrumentosUpdate').append(novoInstrumentoComValor(contInstrumentosUpdate, val));
-}
-
-function addInstrumentoSemValorFirst() {
-    contInstrumentosUpdate++;
-    var val = "";
-    $('#instrumentosUpdate').append(novoInstrumentoComValorFirst(contInstrumentosUpdate, val));
-}
-
-function checkNItemsInstrumentoMusical(id){
-    var cont = id[id.length-1];
-    var fbEl = $('#invFB-InstrumentoMusical'+cont);
-    var nomeValue = document.getElementById(id).value;
-    var nomeLen = nomeValue.length;
-
-    if(nomeLen >0 && !checkEmptyString(nomeValue)) {
-        fbEl.hide();
-        $(".swal2-confirm").attr('disabled', false);
-    }
-
-    if(nomeLen == 0) {
-        fbEl.hide();
-        $(".swal2-confirm").attr('disabled', false);
-    }
-
-    if(nomeLen >0 && checkEmptyString(nomeValue)){
-        fbEl.show();
-        $(".swal2-confirm").attr('disabled', 'disabled');
-
-    }
-}
-
-
-/* FIM INSTRUMENTOS */
 
 /* MODAIS */
 async function modalCreate() {
     Swal.mixin({
         showCancelButton: true,
-        progressSteps: ['1', '2', '3', '4', '5', '6'],
+        progressSteps: ['1', '2', '3', '4'],
         reverseButtons: true
     }).queue([
         {
-            title: "Informações básicas",
+            title: "Cadastro de Indústria",
             width: "50rem",
             footer:'<span class="text-muted" >*Campos obrigatórios</span>',
             confirmButtonText: 'Next &rarr;',
@@ -497,14 +347,28 @@ async function modalCreate() {
                 <input  id="desc" class="form-control">
                 <label style="padding-top: 10px;" for="telefone">Telefone</label>
                 <input  id="telefone" class="form-control">
-                <label style="padding-top: 10px;" for="dataNasc">Data de Nascimento*</label>
-                <input type="date" id="dataNasc" class="form-control">`,
+                <label style="padding-top: 10px;" for="tiposIndustrias">Tipo de Indústria</label>
+                <select id="tiposIndustrias" class="form-control" name="estados-brasil">
+                    <option selected value="">Selecione uma opção</option>
+                    <option value="GRAVADORA">Gravadora</option>
+                    <option value="PRODUTOR">Produtor</option>
+                    <option value="HOLDING">Holding</option>
+                    <option value="LOCAL">Local</option>
+                    <option value="ESTUDIO">Estudio</option>
+                
+                </select>
+                <div id="invFB-tiposIndustrias" style="display: none" class="invalid-feedback"> 
+                    É necessários escolher o tipo da indústria.
+                </div> 
+                `
+                ,
             confirmButtonText: 'Next &rarr;',
             preConfirm: () => {
                 sendObj.Descricao = document.getElementById('desc').value;
                 sendObj.Telefone = document.getElementById('telefone').value;
-                sendObj.DataNascimento = document.getElementById('dataNasc').value;
-                //verificaDadosObr(); //TODO remover comentario
+                sendObj.TipoIndustria = document.getElementById('tiposIndustrias').value;
+            
+
             }
         },
         {
@@ -517,15 +381,19 @@ async function modalCreate() {
             html:
                 Estados +
                 `<label style="padding-top: 10px;" for="cidade">Cidade</label>
-                <input  id="cidade" class="form-control">`,
+                <input  id="cidade" class="form-control">
+                <label style="padding-top: 10px;" for="logradouro">Logradouro</label>
+                <input  id="logradouro" class="form-control">`,
             preConfirm: () => {
                 var e = document.getElementById("estados");
-
+                
                 var value = e.value;
                 if (value == "") {
                     sendObj.Endereco = null;
+                    sendObj.Logradouro = null;
                 }
                 else {
+                    sendObj.Logradouro = document.getElementById('logradouro').value;
                     sendObj.Endereco = new Object();
                     sendObj.Endereco.Cidade = document.getElementById('cidade').value;
                     sendObj.Endereco.UF = e.value;
@@ -564,61 +432,6 @@ async function modalCreate() {
                     obj.link = linkRedeSocial.value;
                     if (!checkEmptyString(obj.nome) && !checkEmptyString(obj.link)) sendObj.RedesSociais.push(obj);
                 }
-
-            }
-
-        },
-        {
-            title: "Estilos Musicais",
-            confirmButtonText: 'Next &rarr;',
-            didOpen:()=>{ 
-                VerficadoresDeCampo(5)
-            },
-            html:
-            `<div id="estilos"> 
-                <div class="EstilosMusicais"> 
-                    <label style="padding-top: 10px; for="nomeEstiloMusical${contEstilosMusicais.toString()}">Nome Estilo Musical ${contEstilosMusicais.toString()}</label> 
-                    <input id="nomeEstiloMusical${contEstilosMusicais.toString()}" class="form-control"> 
-                    </div> 
-                    <div id="invFB-EstiloMusical${contRedesSociais.toString()}" style="display: none" class="invalid-feedback"> 
-                        'Estilo' não pode conter apenas espaços.
-                    </div>
-                </div> 
-            <br> 
-            <button id="add" type="button" onClick="addEstilo()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>`,
-            preConfirm: () => {
-                for (let index = 1; index <= contEstilosMusicais; index++) {
-                    var nomeEstiloMusical = document.getElementById("nomeEstiloMusical" + index.toString());
-
-                    if (!checkEmptyString(nomeEstiloMusical.value)) sendObj.Estilos.push(nomeEstiloMusical.value);
-                }
-
-            }
-        },
-        {
-            title: "Instrumentos",
-            confirmButtonText: 'Enviar',
-            didOpen:()=>{ 
-                VerficadoresDeCampo(6)
-            },
-            html:
-            `<div id="instrumentos"> 
-                <div class="InstrumentosMusicais"> 
-                    <label style="padding-top: 10px;" for="nomeInstrumentoMusical${contInstrumentos.toString()}">Nome Instrumento Musical ${contInstrumentos.toString()}</label> 
-                    <input id="nomeInstrumentoMusical${contInstrumentos.toString()}" class="form-control"> 
-                    <div id="invFB-InstrumentoMusical${contInstrumentos.toString()}" style="display: none" class="invalid-feedback"> 
-                        'Instrumento' não pode conter apenas espaços.
-                    </div>
-                    </div> 
-                </div> 
-            <br> 
-            <button id="add" type="button" onClick="addInstrumento()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>`,
-            preConfirm: () => {
-
-                for (let index = 1; index <= contInstrumentos; index++) {
-                    var nomeInstrumento = document.getElementById("nomeInstrumentoMusical" + index.toString());
-                    if (!checkEmptyString(nomeInstrumento.value)) sendObj.Instrumentos.push(nomeInstrumento.value);
-                }
                 criar = true;
 
             }
@@ -635,7 +448,7 @@ async function modalCreate() {
                 showConfirmButton: false
             }).then(
                 $.ajax({
-                    url: "/musico/create",
+                    url: "/industria/create",
                     type: "POST",
                     data: sendObj,
                     dataType: "json",
@@ -678,7 +491,7 @@ async function modalCreate() {
 
         }
         else {
-            console.log("Processo de criação abortado, limpando campos...");
+        
             resetInfos();
         }
 
@@ -693,10 +506,10 @@ async function modalCreate() {
 
 async function modalUpdate() {
     var data = updateObj;
-    //console.log("data", data);
+
     Swal.mixin({
         showCancelButton: true,
-        progressSteps: ['1', '2', '3', '4', '5'],
+        progressSteps: ['1', '2', '3'],
         reverseButtons: true
     }).queue([
         {
@@ -710,7 +523,7 @@ async function modalUpdate() {
                 $('#loginUpdate').val(data.Login);
                 $('#descUpdate').val(data.Descricao);
                 $('#telefoneUpdate').val(data.Telefone);
-                $('#dataNascUpdate').val(data.DataNascimento == null? "" : (data.DataNascimento.split("-").reverse().join("-")));
+                $('#tiposIndustriasUpdate').val(data.TipoIndustria);
                 VerficadoresDeCampoUpdate(1);
             },
             html:
@@ -740,11 +553,15 @@ async function modalUpdate() {
                 <label style="padding-top: 10px;" for="telefoneUpdate">Telefone</label>
                 <input  id="telefoneUpdate" class="form-control">
 
-                <label style="padding-top: 10px;" for="dataNascUpdate">Data de Nascimento*</label>
-                <input type="date" id="dataNascUpdate" class="form-control">
-                <div id="invFB-DataNascUpdate" style="display: none" class="invalid-feedback"> 
-                </div>
-
+                <label style="padding-top: 10px;" for="tiposIndustriasUpdate">Tipo de Indústria</label>
+                <select id="tiposIndustriasUpdate" class="form-control" name="estados-brasil">
+                    <option selected value="">Selecione uma opção</option>
+                    <option value="GRAVADORA">Gravadora</option>
+                    <option value="PRODUTOR">Produtor</option>
+                    <option value="HOLDING">Holding</option>
+                    <option value="LOCAL">Local</option>
+                    <option value="ESTUDIO">Estudio</option>
+                </select>
             </div>
         </div>`,
             preConfirm: () => {
@@ -753,7 +570,7 @@ async function modalUpdate() {
                 updateObj.Login = document.getElementById('loginUpdate').value;
                 updateObj.Descricao = document.getElementById('descUpdate').value;
                 updateObj.Telefone = document.getElementById('telefoneUpdate').value;
-                updateObj.DataNascimento = document.getElementById('dataNascUpdate').value;
+                updateObj.TipoIndustria = document.getElementById('tiposIndustriasUpdate').value;
                 
             }
         },
@@ -780,19 +597,23 @@ async function modalUpdate() {
             html:
             EstadosUpdate +
                 `<label style="padding-top: 10px;" for="cidadeUpdate">Cidade</label>
-                <input  id="cidadeUpdate" class="form-control">`,
+                <input  id="cidadeUpdate" class="form-control">
+                <label style="padding-top: 10px;" for="logradouroUpdate">Logradouro</label>
+                <input  id="logradouroUpdate" class="form-control">`,
             preConfirm: () => {
                 var e = document.getElementById("estadosUpdate");
 
                 var value = e.value;
                 if (value == "") {
                     updateObj.Endereco = null;
+                    updateObj.Logradouro = null;
                 }
                 else {
                     updateObj.Endereco = new Object();
                     updateObj.Endereco.Cidade = document.getElementById('cidadeUpdate').value;
                     updateObj.Endereco.UF = e.value;
                     updateObj.Endereco.Estado = e.options[e.selectedIndex].text;
+                    updateObj.Logradouro = document.getElementById('logradouroUpdate').value;;
                 }
 
             }
@@ -803,7 +624,7 @@ async function modalUpdate() {
             didOpen:()=>{
 
                 var redes =  data.RedesSociais;
-                console.log("redes", redes)
+            
                 if(redes == null || redes.length == 0) addRedeSemValorFirst();
                 else{
                     redes.forEach((element, index) =>{
@@ -832,85 +653,21 @@ async function modalUpdate() {
                     obj.link = linkRedeSocial.value;
                     if (!checkEmptyString(obj.nome) && !checkEmptyString(obj.link)) updateObj.RedesSociais.push(obj);
                 }
-
-            }
-        },
-        {
-            title: "Estilos Musicais",
-            confirmButtonText: 'Next &rarr;',
-            didOpen:()=>{ 
-                var estilos =  data.Estilos;
-                if(estilos == null || estilos.length == 0) addEstiloSemValorFirst();
-                else{
-
-                    estilos.forEach((element, index) =>{
-
-                        if(index == 0) addEstiloComValorFirst(element);
-                        else addEstiloComValor(element);
-
-                    })
-                }
-                VerficadoresDeCampoUpdate(5)
-            },
-            html:
-            `<div id="estilosUpdate"> 
-                
-            </div> 
-            <br> 
-            <button id="add" type="button" onClick="addEstiloSemValor()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>`,
-            preConfirm: () => {
-                for (let index = 1; index <= contEstilosMusicais; index++) {
-                    var nomeEstiloMusical = document.getElementById("nomeEstiloMusical" + index.toString());
-
-                    if (!checkEmptyString(nomeEstiloMusical.value)) updateObj.Estilos.push(nomeEstiloMusical.value);
-                }
-
-            }
-        },
-        {
-            title: "Instrumentos",
-            confirmButtonText: 'Enviar',
-            didOpen:()=>{ 
-                var instrumentos =  data.Instrumentos;
-                if(instrumentos == null || instrumentos.length == 0) addInstrumentoSemValorFirst();
-                else{
-
-                    instrumentos.forEach((element, index) =>{
-
-                        if(index == 0) addInstrumentoComValorFirst(element);
-                        else addInstrumentoComValor(element);
-
-                    })
-                }
-                VerficadoresDeCampoUpdate(6)
-            },
-            html:
-            `<div id="instrumentosUpdate"> 
-            </div> 
-            <br> 
-            <button id="add" type="button" onClick="addInstrumentoSemValor()" class="btn btn-success"><i class="fas fa-plus text-light"></i></button>`,
-            preConfirm: () => {
-
-                for (let index = 1; index <= contInstrumentos; index++) {
-                    var nomeInstrumento = document.getElementById("nomeInstrumentoMusical" + index.toString());
-                    if (!checkEmptyString(nomeInstrumento.value)) updateObj.Instrumentos.push(nomeInstrumento.value);
-                }
                 atualizar = true;
 
             }
-
         },
     ]).then(() => {
         if (atualizar) {
             verificaDadosUpdate();
-            console.log("after info", JSON.stringify(updateObj));
+        
             Swal.fire({
                 title: 'Atualizando usuário...',
                 icon: 'info',
                 showConfirmButton: false
             }).then(
                 $.ajax({
-                    url: "/musico/update",
+                    url: "/industria/update",
                     type: "POST",
                     data: updateObj,
                     dataType: "json",
@@ -970,7 +727,7 @@ async function modalUpdate() {
 
         }
         else {
-            console.log("Processo de criação abortado, limpando campos...");
+        
             resetInfos();
         }
 
@@ -1004,7 +761,7 @@ $('#add, #add2').click(async function () {
 function deleteRegister(tr) {
     let id = tr.find('td')[0].innerText;
     Swal.fire({
-        titleText: 'Tem certeza que deseja excluir o usuário de id ' + id + '?',
+        titleText: 'Tem certeza que deseja excluir a industria de id ' + id + '?',
         html: '<b>Essa ação é irreversível!<b>',
         icon: 'warning',
         showCancelButton: true,
@@ -1013,7 +770,7 @@ function deleteRegister(tr) {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
             $.ajax({
-                url: "/musico/delete/" + id,
+                url: "/industria/delete/" + id,
                 type: "DELETE",
                 success: function (resultAjax) {
                     Swal.fire({
@@ -1030,9 +787,9 @@ function deleteRegister(tr) {
 
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    console.log(xhr.responseJSON);
-                    console.log(xhr.thrownError);
-                    console.log(xhr.ajaxOptions);
+                
+                
+                
 
                     var json = xhr.responseJSON;
                     var lstErros = json.mensagens;
@@ -1065,12 +822,13 @@ async function editRegister(tr) {
     var id = tr.find('td')[0].innerText;
     
     Swal.fire({
-        title: 'Atualizar o usuário '+id+"?",
+        title: 'Atualizar a industria '+id+"?",
         showCancelButton: true,
+        icon: 'warning',
         confirmButtonText: 'Sim',
         showLoaderOnConfirm: true,
         preConfirm: () => {
-          return fetch(`/musico/${id}`)
+          return fetch(`/industria/${id}`)
             .then(response => {
               if (!response.ok) {
                 throw new Error(response.statusText)
@@ -1087,14 +845,7 @@ async function editRegister(tr) {
       }).then(async (result) => {
         if (result.isConfirmed) {
             var mapeado = await updateMapper(result.value);
-            
-          Swal.fire({
-            html: JSON.stringify(result.value)
-          }).then(async () =>{
-
             await modalUpdate();
-
-          });
         }
     });
 
@@ -1104,7 +855,7 @@ async function alterarSenha(tr) {
     var id = tr.find('td')[0].innerText;
     var psswObj = new Object();
     Swal.fire({
-        title: 'Atualizar senha do usuário '+id+"?",
+        title: 'Atualizar senha da industria '+id+"?",
         width: "50rem",
         footer:'<span class="text-muted" >*Campos obrigatórios</span>',
         didOpen: ()=>{
@@ -1120,14 +871,14 @@ async function alterarSenha(tr) {
         html:
         `<div class="row">
             <div class="col">
-                <label style="padding-top: 10px;" for="atualSenha">Senha Atual* &nbsp;<i onclick="showHide($(this))" title="Mostrar senha" class="fas fa-eye"></i></label> 
+                <label style="padding-top: 10px;" for="atualSenha">Senha Atual* &nbsp;<i onclick="showHideChange($(this))" title="Mostrar senha" class="fas fa-eye"></i></label> 
                 <input type="password" id="atualSenha" class="form-control">     
                 <div id="invFB-atualSenha" style="display: none" class="invalid-feedback"> Campo inválido. </div> 
                 <br>
-                <label style="padding-top: 10px;" for="novaSenha">Nova Senha* &nbsp;<i onclick="showHide($(this))" title="Mostrar senha" class="fas fa-eye"></i></label> 
+                <label style="padding-top: 10px;" for="novaSenha">Nova Senha* &nbsp;<i onclick="showHideChange($(this))" title="Mostrar senha" class="fas fa-eye"></i></label> 
                 <input type="password" id="novaSenha" class="form-control"> 
                 
-                <label style="padding-top: 10px;" for="novaConfSenha">Confirmar Nova Senha* &nbsp;<i onclick="showHide($(this))" title="Mostrar senha" class="fas fa-eye"></i></label> 
+                <label style="padding-top: 10px;" for="novaConfSenha">Confirmar Nova Senha* &nbsp;<i onclick="showHideChange($(this))" title="Mostrar senha" class="fas fa-eye"></i></label> 
                 <input type="password" id="novaConfSenha" class="form-control"> 
                 <div id="invFB-novaConfSenha" style="display: none" class="invalid-feedback"> Senha e Confirmação de Senha não coincidem. </div> 
             
@@ -1156,7 +907,7 @@ async function alterarSenha(tr) {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
             $.ajax({
-                url: "/musico/password/" + id,
+                url: "/industria/password/" + id,
                 type: "POST",
                 data: psswObj,
                 dataType: "json",
@@ -1191,9 +942,9 @@ async function alterarSenha(tr) {
 
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    console.log(xhr.responseJSON);
-                    console.log(xhr.thrownError);
-                    console.log(xhr.ajaxOptions);
+                
+                
+                
 
                     var json = xhr.responseJSON;
                     var lstErros = json.mensagens;
@@ -1223,7 +974,7 @@ async function alterarSenha(tr) {
 
 async function updateMapper(data){
 
-    var camposLista = ["RedesSociais", "Estilos", "Instrumentos"];
+    var camposLista = ["RedesSociais"];
     var camposObj = ["Endereco"]
     await Object.keys(updateObj).map(v => updateObj[v] = data[v] != null ? data[v] : (camposLista.includes(v) ? [] : (camposObj.includes(v) ? {} : null) )  );
 }
@@ -1261,12 +1012,12 @@ $('.modal-endereco').click(function () {
 
 $('.modal-infos').click(function () {
     var infoObj = JSON.parse(this.value);
-    console.log("infoObj", infoObj)
+
     var Descricao = infoObj.Descricao;
     var Telefone = infoObj.Telefone;
     var RedesSociais = infoObj.RedesSociais;
     var Estilos = infoObj.Estilos;
-    var Instrumentos = infoObj.Instrumentos;
+    var Integrantes = infoObj.Integrantes;
     var html2 = `<hr>
     <div class="row">
         <div class="col"><b>Descrição</b></div>
@@ -1398,17 +1149,17 @@ $('.modal-infos').click(function () {
                 </div>`;
     }
     html2+='<hr>';
-    if(Instrumentos !=null){
-        if(Instrumentos.length>0){
+    if(Integrantes !=null){
+        if(Integrantes.length>0){
 
             var opts = "";
 
-            Instrumentos.forEach(element => {
+            Integrantes.forEach(element => {
                 opts+=`<a href="#" class="dropdown-item">${element}</a>`;
             });
             
             html2+=`<div class="row">
-                        <div class="col"><b>Instrumentos</b></div>
+                        <div class="col"><b>Integrantes</b></div>
                         <div class="col">
                             <div class="dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -1424,7 +1175,7 @@ $('.modal-infos').click(function () {
         }
         else{
             html2+=`<div class="row">
-                        <div class="col"><b>Instrumentos</b></div>
+                        <div class="col"><b>Integrantes</b></div>
                         <div class="col">
                             <div class="dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -1442,7 +1193,7 @@ $('.modal-infos').click(function () {
     }
     else{
         html2+=`<div class="row">
-                    <div class="col"><b>Instrumentos</b></div>
+                    <div class="col"><b>Integrantes</b></div>
                     <div class="col">
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -1525,7 +1276,7 @@ function passwordStrenghHTML(tempSenha)
     '<span style="float: left;" class="text-dark">'+hasNonalphas? iconOk : iconNotOk+' Possui caracteres especiais.</span>'+
     '<br>'+
     '<hr>';
-    console.log(html);
+
     $('#alert-senha').html(html);
 
 
@@ -1557,11 +1308,11 @@ function VerficadoresDeCampo(passo){
         $(".swal2-confirm").attr('disabled', 'disabled'); // TODO remover comentario
         var oks = new Object();
         
-        oks.dataNasc = eventTrigger("dataNasc");
+        oks.tiposIndustrias = eventTrigger("tiposIndustrias");
 
         enableDisableConfirm(oks);
 
-        $('#dataNasc').on('change keyup paste',function () {
+        $('#tiposIndustrias').on('change keyup paste',function () {
             oks[this.id] = eventTrigger(this.id);
             enableDisableConfirm(oks);
         });
@@ -1602,10 +1353,10 @@ function VerficadoresDeCampo(passo){
                     });
                 }
                 else if (mutation.type == 'attributes') {
-                    console.log('The ' + mutation.attributeName + ' attribute was modified.');
+                
                 }
                 else{
-                    console.log("bataaa")
+                
                 }
             }
         };
@@ -1632,10 +1383,10 @@ function VerficadoresDeCampo(passo){
                     });
                 }
                 else if (mutation.type == 'attributes') {
-                    console.log('The ' + mutation.attributeName + ' attribute was modified.');
+                
                 }
                 else{
-                    console.log("bataaa")
+                
                 }
             }
         };
@@ -1643,29 +1394,29 @@ function VerficadoresDeCampo(passo){
         var observer = new MutationObserver(callback);
         observer.observe(targetNode, config);
     }
-    var InstrumentosMusicais = function(){
+    var Integrantes = function(){
         //Instrumentos Musicais
     
-        var targetNode = document.getElementById('instrumentos');
+        var targetNode = document.getElementById('integrantes');
         var config = { attributes: false, childList: true };
         
-        $('*[id*=nomeInstrumentoMusical]').on('change keyup paste',function () {
-            checkNItemsInstrumentoMusical(this.id)
+        $('*[id*=nomeIntegrante]').on('change keyup paste',function () {
+            checkNItemsIntegrante(this.id)
         });
     
     
         var callback = function(mutationsList) {
             for(var mutation of mutationsList) {
                 if (mutation.type == 'childList') {
-                    $('*[id*=nomeInstrumentoMusical]').on('change keyup paste',function () {
+                    $('*[id*=nomeIntegrante]').on('change keyup paste',function () {
                         checkNItemsInstrumentoMusical(this.id);
                     });
                 }
                 else if (mutation.type == 'attributes') {
-                    console.log('The ' + mutation.attributeName + ' attribute was modified.');
+                
                 }
                 else{
-                    console.log("bataaa")
+                
                 }
             }
         };
@@ -1712,7 +1463,7 @@ function VerficadoresDeCampo(passo){
             EstilosMusicais()
             break;
         case 6:
-            InstrumentosMusicais();
+            Integrantes();
             break;
         case 7:
             AlterarSenha();
@@ -1727,13 +1478,13 @@ function eventTrigger(id){
         case "nome":
             var lenNome = document.getElementById('nome').value.length;
             var el = $('#invFB-Nome');
-            if(lenNome<10 || lenNome>100){
-                if(lenNome<10){
+            if(lenNome<5 || lenNome>20){
+                if(lenNome<5){
                     el.html("Nome muito curto.");
                     el.show();
                 
                 }
-                if(lenNome>100){
+                if(lenNome>20){
                     el.html("Nome muito grande");
                     el.show();
                 }
@@ -1884,27 +1635,29 @@ function eventTrigger(id){
     
             var cidadeValue = document.getElementById('cidade').value;
             var cidadeLen = cidadeValue.length;
+
+            var logradouroValue = document.getElementById('logradouro').value;
+            var logradouroLen = logradouroValue.length;
     
-            if(estadoLen >0 && cidadeLen >0) {
-                $('#invFB-Endereco').text("");
+            if(estadoLen >0 && cidadeLen >0 && logradouroLen>0 || estadoLen == 0 && cidadeLen == 0 && logradouroLen== 0 ){
+                $('#invFB-Endereco').html("");
                 return true;
             }
-            if(estadoLen >0 && cidadeLen ==0){
-                var texto = "É necessário preencher o campo 'Cidade'.";
-                $('#invFB-Endereco').text(texto);
+            else{
+                var html = 
+                `
+                <ul>
+                `;
+                
+                if(estadoLen == 0) html+= "<li>É necessário selecionar uma opção em 'Estado'.</li>";
+                if(cidadeLen == 0) html+= "<li>É necessário preencher o campo 'Cidade'.</li>";
+                if(logradouroLen == 0) html+= "<li>É necessário preencher o campo 'Logradouro'.</li>";
+
+                $('#invFB-Endereco').html(html);
                 return false;
-    
             }
-            if(estadoLen == 0 && cidadeLen >0){
-                var texto = "É necessário selecionar uma opção em 'Estado'.";
-                $('#invFB-Endereco').html(texto);
-                return false;
-    
-            }
-            if(estadoLen == 0 && cidadeLen == 0){
-                $('#invFB-Endereco').text("");
-                return true;
-            }
+
+
         case "novaSenha":
             var tempSenha = document.getElementById('novaSenha').value;
             var hasUpperCase = /[A-Z]/.test(tempSenha);
@@ -1968,8 +1721,8 @@ function eventTrigger(id){
        case "novaConfSenha":
         var tempSenha = document.getElementById('novaSenha').value;
         var tempnovaConfSenha = document.getElementById('novaConfSenha').value;
-        console.log(tempSenha);
-        console.log(tempnovaConfSenha);
+    
+    
 
         if(tempSenha == tempnovaConfSenha && tempSenha != "" && tempnovaConfSenha != ""){
             $('#invFB-novaConfSenha').hide();
@@ -1990,6 +1743,19 @@ function eventTrigger(id){
             }
             else{
                 $('#invFB-atualSenha').show();
+                return false;
+    
+            }
+
+        case "tiposIndustrias":
+            var tempValue = document.getElementById('tiposIndustrias').value;
+            
+            if(tempValue.length>=0 && tempValue != ""){
+                $('#invFB-tiposIndustrias').hide();
+                return true;
+            }
+            else{
+                $('#invFB-tiposIndustrias').show();
                 return false;
     
             }
@@ -2032,10 +1798,35 @@ function showHide(){
     
 }
 
+function showHideChange(){
+    if($('#atualSenha').prop('type') == "text") $('#atualSenha').prop('type', 'password');
+    else $('#atualSenha').prop('type', 'text');
+
+    if($('#novaSenha').prop('type') == "text") $('#novaSenha').prop('type', 'password');
+    else $('#novaSenha').prop('type', 'text');
+
+    if($('#novaConfSenha').prop('type') == "text") $('#novaConfSenha').prop('type', 'password');
+    else $('#novaConfSenha').prop('type', 'text');
+   
+    $("i[title='Mostrar senha']").each(function() {
+        
+        if($( this ).attr("class") == "fas fa-eye"){
+            $( this ).removeClass("fas fa-eye");
+            $( this ).addClass("fas fa-eye-slash");
+        }
+        else{
+            $( this ).removeClass("fas fa-eye-slash");
+            $( this ).addClass("fas fa-eye");
+        }
+        
+    });    
+}
+
 function resetInfosUpdate() {
 
     updateObj = {
         "ConfSenha": null,
+
         "Id": null,
         "Nome": null,
         "Email": null,
@@ -2043,22 +1834,20 @@ function resetInfosUpdate() {
         "Login": null,
         "Descricao": null,
         "Telefone": null,
-        "DataNascimento": null,
-        "Status": null,
         "Tipo": null,
         "Endereco": null,
         "RedesSociais": [],
-        "Estilos": [],
-        "Instrumentos": [],
-        "Criador": null,
-        "Integrantes": null,
         "TipoIndustria": null,
-        "Logradouro": null
+        "Logradouro": null,
+
+        "Estilos": null,
+        "Integrantes": null,
+        "Instrumentos": null,
+        "DataNascimento": null,
+        "Criador":null
     }
 
     contRedesSociaisUpdate = 0;
-    contEstilosMusicaisUpdate = 0;
-    contInstrumentosUpdate = 0;
 
     atualizar = false;
 
@@ -2068,6 +1857,7 @@ function resetInfos() {
 
     sendObj = {
         "ConfSenha": null,
+
         "Id": null,
         "Nome": null,
         "Email": null,
@@ -2075,33 +1865,33 @@ function resetInfos() {
         "Login": null,
         "Descricao": null,
         "Telefone": null,
-        "DataNascimento": null,
-        "Status": null,
         "Tipo": null,
         "Endereco": null,
         "RedesSociais": [],
-        "Estilos": [],
-        "Instrumentos": [],
-        "Criador": null,
-        "Integrantes": null,
         "TipoIndustria": null,
-        "Logradouro": null
+        "Logradouro": null,
+
+        "Estilos": null,
+        "Integrantes": null,
+        "Instrumentos": null,
+        "DataNascimento": null,
+        "Criador":null
     }
 
+    
     contRedesSociais = 1;
-    contEstilosMusicais = 1;
-    contInstrumentos = 1;
+
 
     criar = false;
 
 }
 
 function showInfo() {
-    console.log("sendObj = ", sendObj);
+
 }
 
 function showInfoUpdate() {
-    console.log("updateObj show info= ", updateObj);
+
 }
 
 function checkEmptyString(str) {
@@ -2121,7 +1911,6 @@ function verificaDadosObr() {
     if (checkEmptyString(sendObj.Senha)) lstErros.push("'Senha' é obrigatório e deve ser preenchido.");
     if (checkEmptyString(sendObj.ConfSenha)) lstErros.push("'Confirmação de senha' é obrigatório e deve ser preenchido.");
     if (checkEmptyString(sendObj.Login)) lstErros.push("'Nome de usuário' é obrigatório e deve ser preenchido.");
-    if (checkEmptyString(sendObj.DataNascimento)) lstErros.push("'Data de Nascimento' é obrigatório e deve ser preenchido.");
     if (sendObj.Senha != sendObj.ConfSenha) lstErros.push("'Senhas' e 'Confirmação de senha' são diferentes.");
     if (lstErros.length > 0) {
         lstErros.forEach(element => {
@@ -2144,8 +1933,7 @@ function verificaDados() {
     sendObj.Telefone = checkEmptyString(sendObj.Telefone) ? null : sendObj.Telefone;
     sendObj.Endereco = typeof (sendObj.Endereco) == "object" ? sendObj.Endereco : null;
     sendObj.RedesSociais = sendObj.RedesSociais.length > 0 ? sendObj.RedesSociais : null;
-    sendObj.Estilos = sendObj.Estilos.length > 0 ? sendObj.Estilos : null;
-    sendObj.Instrumentos = sendObj.Instrumentos.length > 0 ? sendObj.Instrumentos : null;
+    sendObj.TipoIndustria = sendObj.TipoIndustria.length > 0 ? sendObj.TipoIndustria : null;
     showInfo();
     return sendObj;
 }
@@ -2156,8 +1944,7 @@ function verificaDadosUpdate() {
     updateObj.Telefone = checkEmptyString(updateObj.Telefone) ? null : updateObj.Telefone;
     updateObj.Endereco = typeof (updateObj.Endereco) == "object" ? updateObj.Endereco : null;
     updateObj.RedesSociais = updateObj.RedesSociais.length > 0 ? updateObj.RedesSociais : null;
-    updateObj.Estilos = updateObj.Estilos.length > 0 ? updateObj.Estilos : null;
-    updateObj.Instrumentos = updateObj.Instrumentos.length > 0 ? updateObj.Instrumentos : null;
+    updateObj.TipoIndustria = updateObj.TipoIndustria.length > 0 ? updateObj.TipoIndustria : null;
 
     return updateObj;
 }
@@ -2167,11 +1954,7 @@ function verificaDadosObrUpdate() {
     var html2 = "";
     if (checkEmptyString(updateObj.Nome)) lstErros.push("'Nome' é obrigatório e deve ser preenchido.");
     if (checkEmptyString(updateObj.Email)) lstErros.push("'Email' é obrigatório e deve ser preenchido.");
-    if (checkEmptyString(updateObj.Senha)) lstErros.push("'Senha' é obrigatório e deve ser preenchido.");
-    if (checkEmptyString(updateObj.ConfSenha)) lstErros.push("'Confirmação de senha' é obrigatório e deve ser preenchido.");
     if (checkEmptyString(updateObj.Login)) lstErros.push("'Nome de usuário' é obrigatório e deve ser preenchido.");
-    if (checkEmptyString(updateObj.DataNascimento)) lstErros.push("'Data de Nascimento' é obrigatório e deve ser preenchido.");
-    if (updateObj.Senha != updateObj.ConfSenha) lstErros.push("'Senhas' e 'Confirmação de senha' são diferentes.");
     if (lstErros.length > 0) {
         lstErros.forEach(element => {
             html2 += element;
@@ -2272,7 +2055,7 @@ function allTrue(obj)
 
 function enableDisableConfirm(oks)
 {
-    console.log(oks);
+
     if(allTrue(oks)) $(".swal2-confirm").attr('disabled', false);
     else $(".swal2-confirm").attr('disabled', 'disabled');
 }
@@ -2285,14 +2068,14 @@ function VerficadoresDeCampoUpdate(passo){
         $(".swal2-confirm").attr('disabled', 'disabled'); // TODO remover comentario
         var oks = new Object();
         
-        oks.nome = eventTriggerUpdate("nomeUpdate");
-        oks.email = eventTriggerUpdate("emailUpdate");
-        oks.login =  eventTriggerUpdate("loginUpdate");
-        oks.dataNasc = eventTriggerUpdate("dataNascUpdate");
+        oks.nomeUpdate = eventTriggerUpdate("nomeUpdate");
+        oks.emailUpdate = eventTriggerUpdate("emailUpdate");
+        oks.loginUpdate =  eventTriggerUpdate("loginUpdate");
+        oks.tiposIndustriasUpdate =  eventTriggerUpdate("tiposIndustriasUpdate");
 
         enableDisableConfirm(oks);
 
-        $('#nomeUpdate, #emailUpdate, #senhaUpdate, #confSenhaUpdate, #loginUpdate, #dataNascUpdate').on('change keyup paste',function () {
+        $('#nomeUpdate, #emailUpdate, #tiposIndustriasUpdate, #loginUpdate').on('change keyup paste',function () {
             oks[this.id] = eventTriggerUpdate(this.id);
             enableDisableConfirm(oks);
         });
@@ -2323,7 +2106,7 @@ function VerficadoresDeCampoUpdate(passo){
         enableDisableConfirm(oks);
 
         $('#estadosUpdate, #cidadeUpdate').on('change keyup paste',function () {
-            console.log("entrou2");
+        
             oks["endereco"] = eventTriggerUpdate("enderecoUpdate");
             enableDisableConfirm(oks);
         });
@@ -2349,10 +2132,10 @@ function VerficadoresDeCampoUpdate(passo){
                     });
                 }
                 else if (mutation.type == 'attributes') {
-                    console.log('The ' + mutation.attributeName + ' attribute was modified.');
+                
                 }
                 else{
-                    console.log("bataaa")
+                
                 }
             }
         };
@@ -2379,10 +2162,10 @@ function VerficadoresDeCampoUpdate(passo){
                     });
                 }
                 else if (mutation.type == 'attributes') {
-                    console.log('The ' + mutation.attributeName + ' attribute was modified.');
+                
                 }
                 else{
-                    console.log("bataaa")
+                
                 }
             }
         };
@@ -2390,13 +2173,13 @@ function VerficadoresDeCampoUpdate(passo){
         var observer = new MutationObserver(callback);
         observer.observe(targetNode, config);
     }
-    var InstrumentosMusicais = function(){
+    var Integrantes = function(){
         //Instrumentos Musicais
     
-        var targetNode = document.getElementById('instrumentosUpdate');
+        var targetNode = document.getElementById('integrantesUpdate');
         var config = { attributes: false, childList: true };
         
-        $('*[id*=nomeInstrumentoMusical]').on('change keyup paste',function () {
+        $('*[id*=nomeIntegrante]').on('change keyup paste',function () {
             checkNItemsInstrumentoMusical(this.id)
         });
     
@@ -2404,15 +2187,15 @@ function VerficadoresDeCampoUpdate(passo){
         var callback = function(mutationsList) {
             for(var mutation of mutationsList) {
                 if (mutation.type == 'childList') {
-                    $('*[id*=nomeInstrumentoMusical]').on('change keyup paste',function () {
+                    $('*[id*=nomeIntegrante]').on('change keyup paste',function () {
                         checkNItemsInstrumentoMusical(this.id);
                     });
                 }
                 else if (mutation.type == 'attributes') {
-                    console.log('The ' + mutation.attributeName + ' attribute was modified.');
+                
                 }
                 else{
-                    console.log("bataaa")
+                
                 }
             }
         };
@@ -2443,7 +2226,7 @@ function VerficadoresDeCampoUpdate(passo){
             EstilosMusicais()
             break;
         case 6:
-            InstrumentosMusicais();
+            Integrantes();
             break;
     }   
 }
@@ -2454,13 +2237,13 @@ function eventTriggerUpdate(id){
         case "nomeUpdate":
             var lenNome = document.getElementById('nomeUpdate').value.length;
             var el = $('#invFB-NomeUpdate');
-            if (lenNome < 10 || lenNome > 100) {
-                if (lenNome < 10) {
+            if (lenNome < 5 || lenNome > 20) {
+                if (lenNome < 5) {
                     el.html("Nome muito curto.");
                     el.show();
 
                 }
-                if (lenNome > 100) {
+                if (lenNome > 20) {
                     el.html("Nome muito grande");
                     el.show();
                 }
@@ -2529,33 +2312,36 @@ function eventTriggerUpdate(id){
                 return false;
             }
         case "enderecoUpdate":
-            console.log("entrou");
             var estadoValue = document.getElementById('estadosUpdate').value;
             var estadoLen = estadoValue.length;
-
+    
             var cidadeValue = document.getElementById('cidadeUpdate').value;
             var cidadeLen = cidadeValue.length;
 
-            if (estadoLen > 0 && cidadeLen > 0) {
-                $('#invFB-EnderecoUpdate').text("");
+            var logradouroValue = document.getElementById('logradouroUpdate').value;
+            var logradouroLen = logradouroValue.length;
+    
+            if(estadoLen >0 && cidadeLen >0 && logradouroLen>0 || estadoLen == 0 && cidadeLen == 0 && logradouroLen== 0 ){
+                $('#invFB-EnderecoUpdate').html("");
                 return true;
             }
-            if (estadoLen > 0 && cidadeLen == 0) {
-                var texto = "É necessário preencher o campo 'Cidade'.";
-                $('#invFB-EnderecoUpdate').text(texto);
-                return false;
+            else{
+                var html = 
+                `
+                <ul>
+                `;
+                
+                if(estadoLen == 0) html+= "<li>É necessário selecionar uma opção em 'Estado'.</li>";
+                if(cidadeLen == 0) html+= "<li>É necessário preencher o campo 'Cidade'.</li>";
+                if(logradouroLen == 0) html+= "<li>É necessário preencher o campo 'Logradouro'.</li>";
 
-            }
-            if (estadoLen == 0 && cidadeLen > 0) {
-                var texto = "É necessário selecionar uma opção em 'Estado'.";
-                $('#invFB-EnderecoUpdate').html(texto);
+                $('#invFB-EnderecoUpdate').html(html);
                 return false;
-
             }
-            if (estadoLen == 0 && cidadeLen == 0) {
-                $('#invFB-EnderecoUpdate').text("");
-                return true;
-            }
+        case "tiposIndustriasUpdate":
+            var estadoValue = document.getElementById('tiposIndustriasUpdate').value;
+            if(estadoValue != "") return true;
+            else return false;
 
     }
 

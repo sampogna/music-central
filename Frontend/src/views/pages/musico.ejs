@@ -14,15 +14,18 @@
         <%- include('../partials/header'); %>
         <div class="container-fluid">
             <div class="row justify-content-center mt-3">
-                <div class="col-auto">
+                <div class="col-10">
                     <div class="container p-3 body-page" style="height: 100%">
                         <div class="col-3 pull-right" style="padding: 1%;";>
                             <button id="add" type="button" class="btn btn-success"><i class="fas fa-plus text-light">&nbsp;Adicionar novo usuário</i></button>
                         </div>
                         
-                        <% if(data){%>
+                        <%
+                        var Ok = data != null ? (data.length>0? true: false) : false;
+                        
+                        if(Ok){%>
                             
-                                <table class="table table-responsive table-hover table-dark" id="tabela">
+                                <table style="width: 100%;" class="table table-responsive table-hover table-dark" id="tabela">
                                     <thead class="thead-dark">
                                         <th scope="col" class="text-light text-center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#</th>
                                         <th scope="col" class="text-light text-center">Nome</th>

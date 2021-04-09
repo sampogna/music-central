@@ -1067,6 +1067,7 @@ async function editRegister(tr) {
     Swal.fire({
         title: 'Atualizar o usuário '+id+"?",
         showCancelButton: true,
+        icon: 'warning',
         confirmButtonText: 'Sim',
         showLoaderOnConfirm: true,
         preConfirm: () => {
