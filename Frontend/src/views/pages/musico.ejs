@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <%- include('../partials/head'); %>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.css"/>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/scroller/2.0.3/css/scroller.bootstrap4.css"/>
+    </head>
+    <body>
+        <title>Músicos</title>
+        <%- include('../partials/header'); %>
+        <div class="container-fluid">
+            <div class="row justify-content-center mt-3">
+                <div class="col-10">
+                    <div class="container p-3 body-page" style="height: 100%">
+                        <div class="col-3 pull-right" style="padding: 1%;";>
+                            <button id="add" type="button" class="btn btn-success"><i class="fas fa-plus text-light">&nbsp;Adicionar novo usuário</i></button>
+                        </div>
+                        
+                        <%
+                        var Ok = data != null ? (data.length>0? true: false) : false;
+                        
+                        if(Ok){%>
+                            
+                                <table style="width: 100%;" class="table table-responsive table-hover table-dark" id="tabela">
+                                    <thead class="thead-dark">
+                                        <th scope="col" class="text-light text-center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#</th>
+                                        <th scope="col" class="text-light text-center">Nome</th>
+                                        <th scope="col" class="text-light text-center">Email</th>
+                                        <th scope="col" class="text-light text-center">Login</th>
+                                        <th scope="col" class="text-light text-center">Data de Nascimento</th>
+                                        <th scope="col" class="text-light text-center">Endereço</th>
+                                        <th scope="col" class="text-light text-center">Outras informações</th>
+                                        <th scope="col" class="text-light text-center">Opções</th>
+                                    </thead>
+                                    <tbody id="list">
+                                        <% for( let index = 0; index < data.length; index++ ) { 
+                                            %>
+                                            <tr>
+                                                <td class="text-light text-center"><%= data[index].Id ? data[index].Id : "-" %> </td>
+                                                <td class="text-light text-left"><%= data[index].Nome ? data[index].Nome : "-" %></td>
+                                                <td class="text-light text-left"><%= data[index].Email ? data[index].Email : "-" %></td>
+                                                <td class="text-light text-left"><%= data[index].Login ? data[index].Login : "-" %></td>
+                                                <td class="text-light text-left"><%= data[index].DataNascimento ? data[index].DataNascimento : "-" %></td>
+                                                <td class="text-light text-center"><% if(data[index].Endereco != null){ %>
+                                                    <button type='button' value="<%= JSON.stringify(data[index].Endereco)%>" class='btn btn-primary modal-endereco'> <i class="fas fa-eye"></i> </button>
+                                                <%}
+                                                else{%>
+                                                    -
+                                                <%}%></td>
+
+                                                <%
+                                                    var infoObj = {};
+                                                    infoObj.Descricao = data[index].Descricao;
+                                                    infoObj.Telefone = data[index].Telefone;
+                                                    infoObj.RedesSociais= data[index].RedesSociais;
+                                                    infoObj.Estilos= data[index].Estilos;
+                                                    infoObj.Instrumentos= data[index].Instrumentos;
+                                                    infoObj.RedesSociais= data[index].RedesSociais;
+                                                %>
+
+                                                <td class="text-light text-center"><% if(infoObj != null){ %>
+                                                    <button type='button' value="<%= JSON.stringify(infoObj)%>" class='btn btn-primary modal-infos'> <i class="fas fa-eye"></i> </button>
+                                                <%}
+                                                else{%>
+                                                    -
+                                                <%}%></td>
+                                                
+                                                <td class="text-center"> 
+                                                    <i title="Editar Usuário" onclick="editRegister($(this).closest('td').closest('tr'))" class="text-primary fas fa-pencil-alt"></i>
+                                                    
+                                                    <i title="Alterar Senha do Usuário" onclick="alterarSenha($(this).closest('td').closest('tr'))" class="text-warning fas fa-key"></i>
+                                                    
+                                                    <i title="Remover Usuário" onclick="deleteRegister($(this).closest('td').closest('tr'))" class="text-danger fas fa-trash-alt"></i>
+                                                </td>
+                                            </tr>
+                                        <% } %>
+
+                                    </tbody>
+                                </table>
+                            
+                        <%} 
+                        else{ %>
+                            <div class="alert alert-primary" role="alert">
+                                <h4 class="alert-heading">Ainda não há usuários cadastrados nessa categoria <i class="far fa-frown-open"></i>.</h4>
+                                <p>Adicione um clicando no botão abaixo ou no acima.</p>
+                                <hr>
+                                <button id="add2" type="button" class="btn btn-success"><i class="fas fa-plus text-light">&nbsp;Adicionar novo usuário</i></button>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%- include('../partials/scripts'); %>
+        <script src="js/musico.js"></script>
+    </body>
+</html>

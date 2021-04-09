@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+
+<head>
+    <%- include('../partials/head'); %>
+</head>
+
+<body>
+    <title>Músicos</title>
+    <%- include('../partials/header'); %>
+        <div class="container-fluid">
+            <div class="row justify-content-center mt-3">
+                <div class="col-auto">
+                    <div class="alert alert-primary" role="alert">
+                        <h4 class="alert-heading">Bem vindo à plataforma Music Central! </i>.</h4>
+                        <p>Clique em qualquer um desses botões para gerenciar usuários daquele tipo.</p>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-3">
+                    <a title="Gerenciar Músicos" href="/musico">
+                        <div class="card text-white bg-primary" style="max-width: 18rem;">
+                            <div class="card-body text-center">
+                                <i class="fas fa-guitar text-center fa-10x"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+
+                <div class="col-3">
+                    <a title="Gerenciar Bandas" href="/banda">
+                        <div class="card text-white bg-primary" style="max-width: 18rem;">
+                            <div class="card-body text-center">
+                                <i class="fas fa-users text-center fa-10x"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+
+                <div class="col-3">
+                    <a title="Gerenciar Indústrias" href="/industria">
+                        <div class="card text-white bg-primary" style="max-width: 18rem;">
+                            <div class="card-body text-center">
+                                <i class="fas fa-industry text-center fa-10x"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+            
+            </div>
+        </div>
+</body>
+
+</html>

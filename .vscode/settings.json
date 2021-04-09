@@ -1,0 +1,11 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/node_modules": true,
+        "**/_old": true,
+    },
+    "debug.console.closeOnEnd": true,
+    "terminal.explorerKind": "external",
+    "workbench.editor.tabSizing": "shrink",
+    "git.enabled": false,
+}
